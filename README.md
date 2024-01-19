@@ -58,3 +58,6 @@ Schedule a call with me through [IANS Research](https://www.iansresearch.com/)
 
 The code is not for sale of for commercial use. If you'd like to license
 the proprietary inventions contact me for more information on LinkedIn: [Teri Radichel](https://linkedin.com/in/teriradichel)
+
+Please read the License. 
+Thank you!
