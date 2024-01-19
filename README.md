@@ -1,7 +1,18 @@
 # 2sl-jobexecframework
 2nd Sight Lab (2sl) Job Execution Framework
 
-This is the core engine that runs jobs. The jobs are created in separate repositories so anyone can create a new job without altering this code.
+# Benefits of this framework
+
+* An organization can have an approved set of templates that can be used to deploy resources to help prevent misconfigurations.
+* AWS users can quickly configure new jobs without requiring additional approval if they are using defined templates.
+* Organizations can enforce segregation of duties allowing only certain people to run certain jobs or change certain code.
+* The framework enforces a naming convention for CloudFormation stacks, session names in CloudTrail and other resources.
+* A standard naming convention simplifies policy enforcement, auditing, and security incident response.
+
+# How it works
+This repository contains the core engine that runs jobs. Containers that run jobs leverage this framework for core execution tasks.
+
+The job-specific code exists in separate repositories so anyone can create a new job without altering this core code.
 
 For example, see these two repositories which have jobs that use this core code:
 
@@ -13,7 +24,7 @@ The job configuration is in a separate repository from the job so people can add
 
 [2sl-jobconfig-awsdeploy](https://github.com/tradichel/2sl-jobconfig-awsdeploy) - a repository that contains jobs configured to deploy resources using the awsdeploy job (job-awsdeploy)
 
-For example, the awsdelpoy job can have many different jobs configured to run using that job container:
+For example, the awsdeploy job might have the following different jobs configured to run using that job container:
 
 - Deploy an IAM role
 - Deploy an AWS account
@@ -21,7 +32,7 @@ For example, the awsdelpoy job can have many different jobs configured to run us
 - Deploy an environment
 - Deploy an EC2 instance
 
-There would be a separate job config for each of the above but they will all use the same container to deploy the resources (when I'm done).
+There would be a separate job config for each of the above but they can all use the same container to deploy resources.
 
 Also, different containers can be created for different use cases. For example you might have jobs to do the following:
 
@@ -30,7 +41,7 @@ Also, different containers can be created for different use cases. For example y
 - Deploy a GitHub repository
 - Process data and genereate a report (another thing I do when performing penetration tests)
   
-Each of those "jobs" can be executed multipe times with different configurations.
+Each of those "jobs" can be executed multiple times with different configurations, for example in different accounts or environments or for different applications.
 
 The explanation of how to use the framework in its latest iteration starts with this post:
 [Separate Repositories for a Job Execution Framework, Job Images, and Job Configurations](https://medium.com/cloud-security/separate-repositories-for-a-job-execution-framework-job-images-and-job-configurations-77913e1c968d)
