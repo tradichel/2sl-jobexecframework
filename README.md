@@ -9,6 +9,8 @@ For example, see these two repositories which have jobs that use this core code:
 
 [2sl-job-awsdeploy](https://github.com/tradichel/2sl-job-awsdeploy) - a job to deploy resources on AWS using a CloudFormation template and a job configuration that defines the parameters to pass into the template.
 
+The job configuration is in a separate repository from the job so people can add new job configurations without having access to the code that runs the job:
+
 [2sl-jobconfig-awsdeploy](https://github.com/tradichel/2sl-jobconfig-awsdeploy) - a repository that contains jobs configured to deploy resources using the awsdeploy job (job-awsdeploy)
 
 For example, the awsdepoy job can have many different jobs configured to run using that job container:
