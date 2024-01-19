@@ -30,7 +30,7 @@ Also, different containers can be created for different use cases. For example y
   
 Each of those "jobs" can be executed multipe times with different configurations.
 
-The explanation of how to use the framework in it's latest iteration starts with this post:
+The explanation of how to use the framework in its latest iteration starts with this post:
 [Separate Repositories for a Job Execution Framework, Job Images, and Job Configurations](https://medium.com/cloud-security/separate-repositories-for-a-job-execution-framework-job-images-and-job-configurations-77913e1c968d)
 
 This code leverages code written in prior posts in the whole series which you can find here:
