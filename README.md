@@ -8,6 +8,7 @@
 * Organizations can enforce segregation of duties allowing only certain people to run certain jobs or change certain code.
 * The framework enforces a naming convention for CloudFormation stacks, session names in CloudTrail and other resources.
 * A standard naming convention simplifies policy enforcement, auditing, and security incident response.
+* Use of [Micro-templates](https://medium.com/cloud-security/cloudformation-micro-templates-ae70236ae2d1) and the related beneifts.
 
 # How it works
 This repository contains the core engine that runs jobs. Containers that run jobs leverage this framework for core execution tasks.
