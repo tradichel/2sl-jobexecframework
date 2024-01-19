@@ -13,7 +13,7 @@ The job configuration is in a separate repository from the job so people can add
 
 [2sl-jobconfig-awsdeploy](https://github.com/tradichel/2sl-jobconfig-awsdeploy) - a repository that contains jobs configured to deploy resources using the awsdeploy job (job-awsdeploy)
 
-For example, the awsdepoy job can have many different jobs configured to run using that job container:
+For example, the awsdelpoy job can have many different jobs configured to run using that job container:
 
 - Deploy an IAM role
 - Deploy an AWS account
