@@ -1,0 +1,37 @@
+Parameters:
+  cfn_param_admins:
+    Type: CommaDelimitedList
+
+Resources:
+  role:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: ec2jobrole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action: "sts:AssumeRole"
+            Principal:
+              AWS:
+                !Ref cfn_param_admins
+            Condition:
+              "Bool":
+                "aws:MultiFactorAuthPresent": "true"
+
+          - Effect: "Allow"
+            Action: "sts:AssumeRole"
+            Principal:
+              Service: ec2.amazonaws.com
+
+Outputs:
+  roleid:
+    Value: !Ref role
+    Export:
+     Name: !Sub id-iam-role-ec2jobrole
+  rolearn:
+    Value: !GetAtt role.Arn
+    Export:
+     Name: !Sub arn-iam-role-ec2jobrole
+
+

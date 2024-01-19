@@ -1,0 +1,21 @@
+source container/shared/functions.sh
+source container/shared/validate.sh
+
+deploy_{{resourcetype}}() {
+
+  {{resourcetype}}name="$1"
+  env="$2"
+
+  function=${FUNCNAME[0]}
+  validate_set "$function" "{{resourcetype}}name" "${{resourcetype}}name"
+	validate_environment "$function" $env
+
+  {{resourcetype}}name="$env-${{resourcetype}}name"
+
+  parameters=$(add_parameter "NameParam" ${{resourcetype}}name)
+
+  deploy_stack ${{resourcetype}}name "{{resourcecategory}}" "{{resourcetype}}" $parameters
+
+}
+
+

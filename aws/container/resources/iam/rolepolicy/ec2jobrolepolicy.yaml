@@ -1,0 +1,24 @@
+Type: AWS::IAM::RolePolicy
+  Properties:
+    RoleName: root-adminrole
+    PolicyName: root-adminrolepolicy
+    PolicyDocument:
+      Version: "2012-10-17"
+      Statement:
+        - Sid: "AllowSecretActions"
+          Effect: Allow
+          Action: 
+            - secretsmanager:GetSecretValue
+            - secretsmanager:ListSecrets
+          Resource: 
+            - arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:job-*
+        - Sid: "AllowParameterActions"
+          Effect: Allow
+          Action: 
+            - secretsmanager:GetParameter
+            - secretsmanager:DescribeParameters
+          Resource: 
+            - arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/job-*
+
+
+
