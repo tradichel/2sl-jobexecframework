@@ -5,7 +5,7 @@ This is the core engine that runs jobs. The jobs are created in separate reposit
 
 For example, see these two repositories which have jobs that use this core code:
 
-(2sl-job-awsorginit](https://github.com/tradichel/2sl-job-awsorginit) - the initial job run in a new AWS account when no resources exist.
+[2sl-job-awsorginit](https://github.com/tradichel/2sl-job-awsorginit) - the initial job run in a new AWS account when no resources exist.
 
 [2sl-job-awsdeploy](https://github.com/tradichel/2sl-job-awsdeploy) - a job to deploy resources on AWS using a CloudFormation template and a job configuration that defines the parameters to pass into the template.
 
