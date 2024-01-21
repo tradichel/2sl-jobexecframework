@@ -43,7 +43,7 @@ source resources/ssm/parameter/parameter_functions.sh
 
 #execute the job
 	echo "### execute the job - the execution script has container specific execution code ###"
-	./job/execute.sh $job_config_ssm_parameter
+	./execute.sh $job_config_ssm_parameter
 
 
 
