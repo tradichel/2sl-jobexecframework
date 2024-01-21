@@ -4,7 +4,7 @@
 # author: @teriradichel @2ndsightlab
 # Description: Generate initial code for new resource types
 ##############################################################
-source container/shared/validate.sh
+source shared/validate.sh
 
 rolename=""
 resourcategory=""
@@ -29,8 +29,8 @@ replace_vars(){
 echo "Process to add a new set of resource files for a resource type"
 echo "Add the values that will be part of the file names:"
 echo "deploy/[role]/[cat]_[type]_[name].sh:"
-echo "container/resources/[cat]/[type]/[type]_functions.sh"
-echo "container/resources/[cat]/[type]/[type.yaml"
+echo "resources/[cat]/[type]/[type]_functions.sh"
+echo "resources/[cat]/[type]/[type.yaml"
 echo ""
 echo "Roles (matching rolename and subdirectory of deploy):"
 ls deploy
@@ -71,8 +71,8 @@ if [ "$a" == "y" ]; then
  	fi
 fi
 
-typedir='container/resources/'$resourcecategory'/'$resourcetype
-functionsfile='container/resources/'$resourcecategory'/'$resourcetype'/'$resourcetype'_functions.sh'
+typedir='resources/'$resourcecategory'/'$resourcetype
+functionsfile='resources/'$resourcecategory'/'$resourcetype'/'$resourcetype'_functions.sh'
 echo "Do you want to add a functions file: $functionsfile?"
 read a
 if [ "$a" == "y" ]; then
@@ -95,9 +95,9 @@ if [ "$a" == "y" ]; then
 	read a
 
 	if [ "$a" == "y" ]; then
-		templatefile='container/resources/'$resourcecategory'/'$resourcetype'/'$resourcename'.yaml'
+		templatefile='resources/'$resourcecategory'/'$resourcetype'/'$resourcename'.yaml'
 	else
-		templatefile='container/resources/'$resourcecategory'/'$resourcetype'/'$resourcetype'.yaml'
+		templatefile='resources/'$resourcecategory'/'$resourcetype'/'$resourcetype'.yaml'
 	fi
 
 	echo "Do you want to add the file: $templatefile?"

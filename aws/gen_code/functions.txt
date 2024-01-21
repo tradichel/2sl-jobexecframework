@@ -1,5 +1,5 @@
-source container/shared/functions.sh
-source container/shared/validate.sh
+source shared/functions.sh
+source shared/validate.sh
 
 deploy_{{resourcetype}}() {
 

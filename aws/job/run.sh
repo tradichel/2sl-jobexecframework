@@ -6,9 +6,9 @@
 ##############################################################
  
 #include files
-source /job/shared/validate.sh
-source /job/shared/functions.sh
-source /job/resources/ssm/parameter/parameter_functions.sh
+source shared/validate.sh
+source shared/functions.sh
+source resources/ssm/parameter/parameter_functions.sh
 
 #configure job role CLI profile
 	parameters="$1"

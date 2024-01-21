@@ -4,10 +4,10 @@
 # author: @tradichel @2ndsightlab
 # description: Test code in container outside an EC2 instance
 ##############################################################
-source container/shared/validate.sh
-source container/shared/functions.sh
-source container/resources/organizations/organization/organization_functions.sh 
-source container/resources/organizations/account/account_functions.sh 
+source shared/validate.sh
+source shared/functions.sh
+source resources/organizations/organization/organization_functions.sh 
+source resources/organizations/account/account_functions.sh 
 
 #used in validation routine to report the code source
 #that produced a validation error

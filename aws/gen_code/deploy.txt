@@ -1,6 +1,6 @@
-source container/resources/{{resourcecategory}}/{{resourcetype}}/{{resourcetype}}_functions.sh
-source container/shared/functions.sh
-source container/shared/validate.sh
+source resources/{{resourcecategory}}/{{resourcetype}}/{{resourcetype}}_functions.sh
+source shared/functions.sh
+source shared/validate.sh
 
 profile="$1"
 region="$2"

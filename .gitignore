@@ -1,0 +1,9 @@
+*.pem
+*.log
+*.DS_Store
+__pycache__
+*.pyc
+*.pyo
+*.ppk
+1
+~
