@@ -12,14 +12,14 @@
 image="$1"
 echo "Building docker image: $image"
 
-dockerfile="../../2sl-job-$image/Dockerfile"
+dockerfile="../2sl-job-$image/Dockerfile"
 if [ ! -f $dockerfile ]; then 
 	echo "Dockerfile: $dockerfile does not exist"
 	exit 1
 fi
 
-framework="../../2sl-jobexecframework/aws"
-job="../../2sl-job-$image/"
+framework="../2sl-jobexecframework/aws"
+job="../2sl-job-$image/"
 
 echo "Dockerfile: $dockerfile"
 
