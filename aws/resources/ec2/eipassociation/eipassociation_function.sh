@@ -5,8 +5,8 @@
 # description: deploy a VPC
 ##############################################################
 
-source shared/functions.sh
-source shared/validate.sh
+source execute/shared/functions.sh
+source execute/shared/validate.sh
 source resources/ec2/routetable/routetable_functions.sh
 
 deploy_eip_association(){

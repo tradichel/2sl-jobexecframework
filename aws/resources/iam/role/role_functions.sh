@@ -5,7 +5,7 @@
 # Description: Role to manage the organization for the root-orgadmin user in the root-org account
 ##############################################################
 
-source shared/functions.sh
+source execute/shared/functions.sh
 
 deploy_role() {
 

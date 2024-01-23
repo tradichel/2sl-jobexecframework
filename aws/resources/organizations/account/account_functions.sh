@@ -5,7 +5,7 @@
 # description: Functions to deploy accounts
 ##############################################################
 
-source shared/functions.sh
+source execute/shared/functions.sh
 source resources/organizations/organization/organization_functions.sh
 source resources/organizations/organizationalunit/organizationalunit_functions.sh
 

@@ -18,7 +18,7 @@ source resources/ssm/parameter/parameter_functions.sh
 	session_token=$(get_container_parameter_value $parameters "sessiontoken")
 	region=$(get_container_parameter_value $parameters "region")
 	job_config_ssm_parameter=$(get_container_parameter_value $parameters "jobconfig")
-
+  	
 	s="job/run.sh"
 	validate_set $s "profile" $profile
 	validate_set $s "access_key" $access_key
@@ -44,6 +44,6 @@ source resources/ssm/parameter/parameter_functions.sh
 #execute the job
 	echo "### execute the job - the execution script has container specific execution code ###"
 	./execute.sh $profile $job_config_ssm_parameter
-
+	
 
 

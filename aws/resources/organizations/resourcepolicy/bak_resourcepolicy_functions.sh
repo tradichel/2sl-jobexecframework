@@ -6,8 +6,8 @@
 ##############################################################
 
 
-source shared/functions.sh
-source shared/validate.sh
+source execute/shared/functions.sh
+source execute/shared/validate.sh
 source resources/organizations/account/account_functions.sh
 
 deploy_resourcepolicy() {

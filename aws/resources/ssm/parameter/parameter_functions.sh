@@ -5,7 +5,7 @@
 # description: Functions for AWS::SSM::Parameter
 # and CLI scripts to deploy secure string parameters
 ##############################################################
-source shared/functions.sh
+source execute/shared/functions.sh
 
 #depoy with cloudformation
 deploy_ssm_parameter(){

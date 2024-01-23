@@ -3,8 +3,8 @@
 # author: @tradichel @2ndsightlab
 ##############################################################
 
-source shared/functions.sh
-source shared/validate.sh
+source execute/shared/functions.sh
+source execute/shared/validate.sh
 
 get_key_id(){
   alias="$1"

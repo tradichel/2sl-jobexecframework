@@ -3,7 +3,7 @@
 # resources/s3/bucket/bucket_functions.sh
 # author: @teriradichel @2ndsightlab
 ##############################################################
-source shared/functions.sh
+source execute/shared/functions.sh
 
 deploy_bucket() {
  

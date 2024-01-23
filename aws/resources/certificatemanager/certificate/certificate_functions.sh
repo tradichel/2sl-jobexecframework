@@ -4,8 +4,8 @@
 # author: @teriradichel @2ndsightlab
 # description: Functions to deploy tls certificates
 ##############################################################
-source shared/functions.sh
-source shared/validate.sh
+source execute/shared/functions.sh
+source execute/shared/validate.sh
 source resources/route53/hostedzone/hostedzone_functions.sh
 source resources/route53/cname/cname_functions.sh
 

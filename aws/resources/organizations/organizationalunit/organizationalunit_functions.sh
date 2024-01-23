@@ -4,9 +4,9 @@
 # author: @teriradichel @2ndsightlab
 # description: Functions used to deploy an organizationa unit
 ##############################################################
-source shared/functions.sh
+source execute/shared/functions.sh
 source resources/organizations/organization/organization_functions.sh
-source shared/validate.sh
+source execute/shared/validate.sh
 
 deploy_organizationalunit(){
  	

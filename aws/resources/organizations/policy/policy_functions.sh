@@ -5,9 +5,9 @@
 # description: Functions for organizations policy deployment
 # including service control policies
 ##############################################################
-source shared/functions.sh
+source execute/shared/functions.sh
 source resources/organizations/organization/organization_functions.sh
-source shared/validate.sh
+source execute/shared/validate.sh
 
 deploy_administrator_scps(){
 
