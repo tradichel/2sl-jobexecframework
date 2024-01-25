@@ -29,13 +29,21 @@ deploy_resource_config(){
 	r_job_parameter="$1"	
 	r_config="$2"
 
+	echo "Validate job parameter"
 	validate_job_param_name	$r_job_parameter
 
+	echo "get variables"
   resource=$(echo $r_job_parameter | cut -d "/" -f5)
   rcat=$(echo $resource | cut -d "-" -f1)
   rtype=$(echo $resource | cut -d "-" -f2)
   rname=$(echo $resource | cut -d "-" -f3)
 
+	echo "Resource: $resource"
+	echo "Category: $rcat"
+	echo "Type: $rtype"
+	echo "Name: $rname"
+
+	echo "loop through config lines"
   for i in "${r_config[@]}"
   do
      pname=$(echo $i | cut -d "=" -f1)
@@ -67,6 +75,9 @@ deploy_resource_config(){
    done
 
    p=$(add_parameter "cfparamName" $rname $p)
+
+	 echo "Env: $env"
+	 echo "Region: $region"
 
    f=${FUNCNAME[0]}	 
 	 validate_set $f "rname" $rname
@@ -103,6 +114,7 @@ deploy() {
 	if [ "$rcat" == "stack" ]; then
     deploy_stack_config $config
 	else
+		echo "deploy resource $job_parameter"
 		deploy_resource_config $job_parameter $config
 	fi
 }
