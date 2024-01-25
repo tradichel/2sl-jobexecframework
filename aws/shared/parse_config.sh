@@ -48,13 +48,16 @@ deploy(){
 		 echo $pname
 
      if [ "$pname" == "env" ];
-         then set env=$pvalue;
-         if [ "$rname" != "$env" ]; then set rname=$env'-'$rname; fi
-     		 continue
+         then env=$pvalue;
+         if [ "$rname" != "$enva"]; then rname=$env'-'$rname; fi
+     		 echo "Env: $env"
+				 echo "rname: $rname"
+				 continue
 		 fi
 
      if [ "$pname" == "region" ];
-         then set region=$pvalue;
+         then region=$pvalue;
+					echo "Region: $region"
          continue
      fi
 
@@ -67,6 +70,7 @@ deploy(){
      
    done
 
+	 echo "deploy_stack $rname $rcat $rtype $env $region $p"
    deploy_stack $rname $rcat $rtype $env $region $p
 }
 
