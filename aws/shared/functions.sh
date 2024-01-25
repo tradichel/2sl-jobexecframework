@@ -190,6 +190,24 @@ get_sts_role_arn(){
   echo $role
 }
 
+#add parameter to the list for the 
+#deploy_stack function (below)
+add_parameter () {
+  paramkey=$1
+  paramvalue=$2
+  addtoparams=$3
+
+  func=${FUNCNAME[0]}
+  validate_set $func "key" $paramkey
+  validate_set $func "value" $paramvalue
+
+  addp="\"$paramkey=$paramvalue\""
+  if [ "$addtoparams" == "" ]; then echo $addp; exit; fi
+  echo $addtoparams,$addp
+
+}
+
+
 #REQUIREMENTS:
 #must execute scripts from the directory containing the /resources and /deploy directories.
 #must set the value of $profile before calling this function
