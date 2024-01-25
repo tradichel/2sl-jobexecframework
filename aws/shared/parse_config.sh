@@ -6,7 +6,7 @@
 
 #profile must be set to the correct account where the resource exists
 #or assume the correct role...
-source resources/ssm/parameters/parameter_functions.sh
+source resources/ssm/parameter/parameter_functions.sh
 source shared/validate.sh
 source shared/functions.sh
 
