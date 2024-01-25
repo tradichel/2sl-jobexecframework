@@ -15,20 +15,7 @@ validate_resource_name(){
 	resourcename="$1"
 
 	env=$(echo $resourcename | cut -d "-" -f1)
-
-  #validate parameters
-  #Note: To make this more generic could pull list of evironments from somewhere
-  #and check that the enviroment is in the list of allowed enviroments
-	for check in "staging" "root" "prod" "dev" "test" "org" "nonprod"; do
-        if [ $env == "$check" ]; then
-            echo "the environment is ok"
-						exit
-        fi
-  done
-
-	echo "Did you forget to prefix the resource name with the environment name? [env]-[resourcename]"
-	echo "Env: $env is not in valid list of environments."
-
+  validate_env $env
 }
 
 
@@ -179,13 +166,17 @@ validate_environment(){
   validate_set "$varcaller" "varcaller" "$varcaller"
 	validate_set "$varcaller" "env" $env
 
-	if [ "$env" != "prod" ] && [ "$env" != "nonprod" ] && [ "$env" != "root" ]  && [ "$env" != "org" ]; then
-		echo "Invalid environment $env."
-		echo "Must be one of these: prod, nonprod, root, or org. caller: $varcaller resource: $resourcename"; 
-		echo "Did you forget to prefix the resource name with the environment name? [env]-[resourcename]"
-		exit 1	
-	fi
+  for check in "staging" "root" "prod" "dev" "test" "org" "nonprod"; do
+        if [ $env == "$check" ]; then
+            #environment is ok
+            exit
+        fi
+  done
 
+  echo "Invalid environment $env."
+	echo "If you are naming a resource make sure you prefix it with the env [env]-[resource name]"
+	exit 1
+ 
 }
 
 validate_alphanumeric(){
