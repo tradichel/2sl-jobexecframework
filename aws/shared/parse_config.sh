@@ -31,8 +31,7 @@ deploy_resource_config(){
 	rtype="$3"
 	rname="$4"
 
-  read -a lines <<<"$config"
-  for i in "${lines[@]}"
+  for i in "${config[@]}"
   do
      pname=$(echo $i | cut -d "=" -f1)
      pvalue=$(echo $i | cut -d "=" -f2)
@@ -71,8 +70,6 @@ deploy_resource_config(){
 deploy() {
 	job_parameter="$1"
 
-  config=$(get_ssm_parameter_job_config $job_parameter)
-
   role=$(echo $job_parameter | cut -d "/" -f4)
   resource=$(echo $job_parameter | cut -d "/" -f5)
 
@@ -80,11 +77,16 @@ deploy() {
   rtype=$(echo $resource | cut -d "-" -f2)
   rname=$(echo $resource | cut -d "-" -f3)
 
+  config=$(get_ssm_parameter_job_config $job_parameter)
+
+	read -a config <<<"$config"
+
 	if [ "$rcat" == "stack" ]; then
     deploy_stack_config $config $rcat $rtype $rname
 	else
 		deploy_resource_config $config $rcat $rtype $rname
 	fi
+
 }
 
 deploy_stack_config(){
@@ -93,7 +95,6 @@ deploy_stack_config(){
   rtype="$3"
   rname="$4"
 
-  read -a lines <<<"$config"
   for i in "${lines[@]}"
   do
      pname=$(echo $i | cut -d "=" -f1 | tr -d ' ') 
