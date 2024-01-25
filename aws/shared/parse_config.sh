@@ -8,6 +8,7 @@
 #or assume the correct role...
 source resources/ssm/parameter_functions.sh
 source shared/validate.sh
+source shared/functions.sh
 
 get_config_resource_id(){
   value="$1"
@@ -24,25 +25,41 @@ get_config_resource_id(){
 
 }
 
-parse_config(){
+deploy(){
 	job_parameter="$1"
+  
+	echo "Parsing Job Parameter:  $job_parameter"
 
-	role=$(echo $job_parameter | cut -d "/" -f4)
-	resource=$(echo $job_parameter | cut -d "/" -f5)
-	rcat=$(echo $resource | cut -d "/" -f1)
-	rtype=$(echo $resource | cut -d "/" -f2)
-	rname=$(echo $resource | cut -d "/" -f3)
-	
-	config=$(get_paramter_value $job_parameter)
+  role=$(echo $job_parameter | cut -d "/" -f4)
+  resource=$(echo $job_parameter | cut -d "/" -f5)
 
-	#loop through lines
-	#if env set env and adjust resource name
-	#if cf_param_ then get value
-	#if value starts with :get_id: then call get id function above
-	#set parameter name and value in array of parameters (p)
+  rcat=$(echo $resource | cut -d "-" -f1)
+  rtype=$(echo $resource | cut -d "-" -f2)
+  rname=$(echo $resource | cut -d "-" -f3)
 
-	deploy_stack $name $rcat $rtype $p
+  config=$(get_ssm_parameter_job_config $job_parameter)
 
+  read -a lines <<<"$config"
+  for i in "${lines[@]}"
+  do
+     pname=$(echo $i | cut -d "=" -f1)
+     pvalue=$(echo $i | cut -d "=" -f2)
+
+     if [ "$name" == "env" ];
+         then set env=$value;
+         if [ "$rname" != "$env" ]; then set rname=$env'-'$rname; fi
+     fi
+
+     if [[ $pname == cf_param_* ]]; then
+         if [[ $pvalue == :get_id:* ]]; then
+            pvalue=$(get_config_resource_id $pvalue)
+         fi
+         p=$(add_parameter $pname $pvalue)
+     fi
+     
+   done
+
+   deploy_stack $rname $rcat $rtype $p
 }
 
 
