@@ -169,7 +169,7 @@ validate_environment(){
   for check in "staging" "root" "prod" "dev" "test" "org" "nonprod"; do
         if [ $env == "$check" ]; then
             #environment is ok
-            exit
+            return 0
         fi
   done
 
