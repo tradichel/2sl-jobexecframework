@@ -93,6 +93,7 @@ deploy_stack_config(){
   stack_config="$1"
 
 	job_parameter=""
+	job_config=$@
 
   for i in "${stack_config[@]}"
   do
@@ -103,8 +104,7 @@ deploy_stack_config(){
      echo $pname
 
      if [[ pname ==  "/job/*" ]]; then 
-        job_parameter=$pname
-				job_config+=($i) 
+        job_parameter=$pname 
      fi
 
 		 if [ "$job_parameter" != "" ]; then
@@ -125,5 +125,6 @@ deploy_stack_config(){
    done
 
 }
+
 
 
