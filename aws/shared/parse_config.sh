@@ -48,6 +48,12 @@ deploy(){
      if [ "$name" == "env" ];
          then set env=$value;
          if [ "$rname" != "$env" ]; then set rname=$env'-'$rname; fi
+     		 continue
+		 fi
+
+     if [ "$name" == "region" ];
+         then set region=$value;
+         contine
      fi
 
      if [[ $pname == cf_param_* ]]; then
@@ -55,7 +61,7 @@ deploy(){
             pvalue=$(get_config_resource_id $pvalue)
          fi
          p=$(add_parameter $pname $pvalue)
-     fi
+		 fi
      
    done
 
