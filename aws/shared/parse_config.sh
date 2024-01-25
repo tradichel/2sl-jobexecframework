@@ -29,6 +29,8 @@ deploy_resource_config(){
 	r_job_parameter="$1"	
 	r_config="$2"
 
+	validate_job_param_name	$r_job_parameter
+
   resource=$(echo $r_job_parameter | cut -d "/" -f5)
   rcat=$(echo $resource | cut -d "-" -f1)
   rtype=$(echo $resource | cut -d "-" -f2)
@@ -66,11 +68,12 @@ deploy_resource_config(){
 
    p=$(add_parameter "cfparamName" $rname $p)
 
-	 validate_set $rname
-	 validate_set $rcat
-	 validate_set $rtype
-	 validate_set $env
-	 validate_region $region
+   f=${FUNCNAME[0]}	 
+	 validate_set $f "rname" $rname
+	 validate_set $f "rcat" $rcat
+	 validate_set $f "rtype" $rtype
+	 validate_set $f "env" $env
+	 validate_region $f $region
 
 	 echo "deploy_stack $rname $rcat $rtype $env $region $p"
    deploy_stack $rname $rcat $rtype $env $region $p
