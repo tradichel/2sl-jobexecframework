@@ -51,7 +51,7 @@ deploy_resource_config(){
 
      if [ "$pname" == "region" ];
          then region=$pvalue;
-					echo "Region: $region"
+				 echo "Region: $region"
          continue
      fi
 
@@ -65,6 +65,12 @@ deploy_resource_config(){
    done
 
    p=$(add_parameter "cfparamName" $rname $p)
+
+	 validate_set $rname
+	 validate_set $rcat
+	 validate_set $rtype
+	 validate_set $env
+	 validate_region $region
 
 	 echo "deploy_stack $rname $rcat $rtype $env $region $p"
    deploy_stack $rname $rcat $rtype $env $region $p
@@ -103,12 +109,12 @@ deploy_stack_config(){
 
      echo $pname
 
-     if [[ pname ==  "/job/*" ]]; then 
+     if [[ $pname == /job/* ]]; then 
         job_parameter=$pname 
      fi
 
 		 if [ "$job_parameter" != "" ]; then
-				if [[ pname ==  "-*" ]]; then 
+				if [[ $pname ==  -* ]]; then 
 					job_config+=($i)
 				else
 					deloy_resource_config $job_parameter $job_config
