@@ -26,12 +26,15 @@ get_config_resource_id(){
 }
 
 deploy_resource_config(){
-	config="$1"
-  rcat="$2"
-	rtype="$3"
-	rname="$4"
+	r_job_parameter="$1"	
+	r_config="$2"
 
-  for i in "${config[@]}"
+  resource=$(echo $r_job_parameter | cut -d "/" -f5)
+  rcat=$(echo $resource | cut -d "-" -f1)
+  rtype=$(echo $resource | cut -d "-" -f2)
+  rname=$(echo $resource | cut -d "-" -f3)
+
+  for i in "${r_config[@]}"
   do
      pname=$(echo $i | cut -d "=" -f1)
      pvalue=$(echo $i | cut -d "=" -f2)
@@ -70,52 +73,50 @@ deploy_resource_config(){
 deploy() {
 	job_parameter="$1"
 
-  role=$(echo $job_parameter | cut -d "/" -f4)
+ 	role=$(echo $job_parameter | cut -d "/" -f4)
   resource=$(echo $job_parameter | cut -d "/" -f5)
-
   rcat=$(echo $resource | cut -d "-" -f1)
-  rtype=$(echo $resource | cut -d "-" -f2)
-  rname=$(echo $resource | cut -d "-" -f3)
+ 
+  job_config=$(get_ssm_parameter_job_config $job_parameter)
 
-  config=$(get_ssm_parameter_job_config $job_parameter)
-
-	read -a config <<<"$config"
+	read -a config <<<"$job_config"
 
 	if [ "$rcat" == "stack" ]; then
-    deploy_stack_config $config $rcat $rtype $rname
+    deploy_stack_config $config
 	else
-		deploy_resource_config $config $rcat $rtype $rname
+		deploy_resource_config $job_parameter $config
 	fi
 
 }
 
 deploy_stack_config(){
-  config="$1"
-  rcat="$2"
-  rtype="$3"
-  rname="$4"
+  stack_config="$1"
 
-  for i in "${lines[@]}"
+	job_parameter=""
+
+  for i in "${stack_config[@]}"
   do
+		
      pname=$(echo $i | cut -d "=" -f1 | tr -d ' ') 
      pvalue=$(echo $i | cut -d "=" -f2 | tr -d ' ')
 
      echo $pname
 
-     if [ "$pname" == "env" ]; then
-         env=$pvalue;
-         if [ "$rname" != "$env" ]; then rname=$env'-'$rname; fi
-         echo "Env: $env"
-         echo "rname: $rname"
-         continue
+     if [[ pname ==  "/job/*" ]]; then 
+        job_parameter=$pname
+				job_config+=($i) 
      fi
 
-     if [ "$pname" == "region" ];
-         then region=$pvalue;
-          echo "Region: $region"
-         continue
-     fi
-
+		 if [ "$job_parameter" != "" ]; then
+				if [[ pname ==  "-*" ]]; then 
+					job_config+=($i)
+				else
+					deloy_resource_config $job_parameter $job_config
+					job_parameter=""
+					job_config=$@
+				fi
+		 fi
+ 
      if [ "$pname" == "Sequential:" ]; then parallel=0; continue; fi
  		 if [ "$pname" == "Parallel:" ]; then parallel=1; continue; fi
 
