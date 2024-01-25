@@ -47,9 +47,9 @@ deploy(){
 
 		 echo $pname
 
-     if [ "$pname" == "env" ];
-         then env=$pvalue;
-         if [ "$rname" != "$enva"]; then rname=$env'-'$rname; fi
+     if [ "$pname" == "env" ]; then 
+				 env=$pvalue;
+         if [ "$rname" != "$env" ]; then rname=$env'-'$rname; fi
      		 echo "Env: $env"
 				 echo "rname: $rname"
 				 continue
