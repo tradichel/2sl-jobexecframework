@@ -82,13 +82,23 @@ deploy_resource_config(){
 deploy() {
 	job_parameter="$1"
 
+	echo "parse_config: deploy $job_paramter"
+
  	role=$(echo $job_parameter | cut -d "/" -f4)
   resource=$(echo $job_parameter | cut -d "/" -f5)
   rcat=$(echo $resource | cut -d "-" -f1)
+
+	echo "Role: $role"
+	echo "Resource: $resource"
+	echo "Category: $rcat"
  
   job_config=$(get_ssm_parameter_job_config $job_parameter)
 
+	echo "got job config"
+
 	read -a config <<<"$job_config"
+
+	echo "job config as array"
 
 	if [ "$rcat" == "stack" ]; then
     deploy_stack_config $config
