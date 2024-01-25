@@ -95,7 +95,6 @@ deploy() {
 	else
 		deploy_resource_config $job_parameter $config
 	fi
-
 }
 
 deploy_stack_config(){
