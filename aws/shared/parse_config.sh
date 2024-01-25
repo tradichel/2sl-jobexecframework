@@ -25,19 +25,11 @@ get_config_resource_id(){
 
 }
 
-deploy(){
-	job_parameter="$1"
-  
-	echo "Parsing Job Parameter:  $job_parameter"
-
-  role=$(echo $job_parameter | cut -d "/" -f4)
-  resource=$(echo $job_parameter | cut -d "/" -f5)
-
-  rcat=$(echo $resource | cut -d "-" -f1)
-  rtype=$(echo $resource | cut -d "-" -f2)
-  rname=$(echo $resource | cut -d "-" -f3)
-
-  config=$(get_ssm_parameter_job_config $job_parameter)
+deploy_resource_config(){
+	config="$1"
+  rcat="$2"
+	rtype="$3"
+	rname="$4"
 
   read -a lines <<<"$config"
   for i in "${lines[@]}"
@@ -74,6 +66,62 @@ deploy(){
 
 	 echo "deploy_stack $rname $rcat $rtype $env $region $p"
    deploy_stack $rname $rcat $rtype $env $region $p
+}
+
+deploy() {
+	job_parameter="$1"
+
+  config=$(get_ssm_parameter_job_config $job_parameter)
+
+  role=$(echo $job_parameter | cut -d "/" -f4)
+  resource=$(echo $job_parameter | cut -d "/" -f5)
+
+  rcat=$(echo $resource | cut -d "-" -f1)
+  rtype=$(echo $resource | cut -d "-" -f2)
+  rname=$(echo $resource | cut -d "-" -f3)
+
+	if [ "$rcat" == "stack" ]; then
+    deploy_stack_config $config $rcat $rtype $rname
+	else
+		deploy_resource_config $config $rcat $rtype $rname
+	fi
+}
+
+deploy_stack_config(){
+  config="$1"
+  rcat="$2"
+  rtype="$3"
+  rname="$4"
+
+  read -a lines <<<"$config"
+  for i in "${lines[@]}"
+  do
+     pname=$(echo $i | cut -d "=" -f1 | tr -d ' ') 
+     pvalue=$(echo $i | cut -d "=" -f2 | tr -d ' ')
+
+     echo $pname
+
+     if [ "$pname" == "env" ]; then
+         env=$pvalue;
+         if [ "$rname" != "$env" ]; then rname=$env'-'$rname; fi
+         echo "Env: $env"
+         echo "rname: $rname"
+         continue
+     fi
+
+     if [ "$pname" == "region" ];
+         then region=$pvalue;
+          echo "Region: $region"
+         continue
+     fi
+
+     if [ "$pname" == "Sequential:" ]; then parallel=0; continue; fi
+ 		 if [ "$pname" == "Parallel:" ]; then parallel=1; continue; fi
+
+		 echo "Parallel: $parallel"
+
+   done
+
 }
 
 
