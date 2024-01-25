@@ -217,8 +217,10 @@ deploy_stack () {
   resourcename="$1"
 	category="$2"
   resourcetype="$3"
-  parameters="$4"
-	template="$5"
+	env="$4"
+	region="$5"
+  parameters="$6"
+	template="$7"
 
   func=${FUNCNAME[0]}
   validate_set $func 'resourcename' $resourcename

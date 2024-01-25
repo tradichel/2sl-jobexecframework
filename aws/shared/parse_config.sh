@@ -45,6 +45,8 @@ deploy(){
      pname=$(echo $i | cut -d "=" -f1)
      pvalue=$(echo $i | cut -d "=" -f2)
 
+		 echo $pname
+
      if [ "$pname" == "env" ];
          then set env=$pvalue;
          if [ "$rname" != "$env" ]; then set rname=$env'-'$rname; fi
@@ -65,7 +67,7 @@ deploy(){
      
    done
 
-   deploy_stack $rname $rcat $rtype $p
+   deploy_stack $rname $rcat $rtype $env $region $p
 }
 
 
