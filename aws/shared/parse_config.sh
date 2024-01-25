@@ -61,16 +61,17 @@ deploy(){
          continue
      fi
 
-     if [[ $pname == cf_param_* ]]; then
+     if [[ $pname == cfparam* ]]; then
          if [[ $pvalue == :get_id:* ]]; then
             pvalue=$(get_config_resource_id $pvalue)
          fi
-         p=$(add_parameter $pname $pvalue)
+         p=$(add_parameter $pname $pvalue $p)
 		 fi
      
    done
 
-	 p=$(add_parameter cf_param_name $rname)
+   p=$(add_parameter "cfparamName" $rname $p)
+
 	 echo "deploy_stack $rname $rcat $rtype $env $region $p"
    deploy_stack $rname $rcat $rtype $env $region $p
 }
