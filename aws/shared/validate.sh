@@ -38,8 +38,6 @@ validate_set(){
 	varname="$2"
 	varvalue=$3
 
-	echo "Checking value $varcaller $varname $varvalue"
-
 	#remove quotes in varname
 	varname=$(echo $varname | sed 's/"//g')
 	varname=$(echo $varname | sed "s/'//g")
