@@ -45,15 +45,15 @@ deploy(){
      pname=$(echo $i | cut -d "=" -f1)
      pvalue=$(echo $i | cut -d "=" -f2)
 
-     if [ "$name" == "env" ];
+     if [ "$pname" == "env" ];
          then set env=$value;
          if [ "$rname" != "$env" ]; then set rname=$env'-'$rname; fi
      		 continue
 		 fi
 
-     if [ "$name" == "region" ];
+     if [ "$pname" == "region" ];
          then set region=$value;
-         contine
+         continue
      fi
 
      if [[ $pname == cf_param_* ]]; then
