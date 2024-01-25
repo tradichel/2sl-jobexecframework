@@ -19,10 +19,18 @@ validate_resource_name(){
   #validate parameters
   #Note: To make this more generic could pull list of evironments from somewhere
   #and check that the enviroment is in the list of allowed enviroments
-  if [ "$env" != "root" ] && [ "$env" != "prod" ] && [ "$env" != "nonprod" ] && [ "$env" != "org" ]; then
-    echo "Error validating resource name: Invalid env: $env. Resource name must start with root-, prod-, or nonprod-."; exit
-  fi
+	for check in "staging" "root" "prod" "dev" "test" "org" "nonprod"; do
+        if [ $env == "$check" ]; then
+            echo "the environment is ok"
+						exit
+        fi
+  done
+
+	echo "Env: $env is not in valid list of environments."
+	echo "Did you forget to prepent the resource name with the environment and a dash? dev-, etc."
+  
 }
+
 
 #validate that the value only has alphanumeric characters,
 #dashes (-) or underscores (_).
