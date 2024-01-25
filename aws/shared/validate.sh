@@ -26,9 +26,9 @@ validate_resource_name(){
         fi
   done
 
+	echo "Did you forget to prefix the resource name with the environment name? [env]-[resourcename]"
 	echo "Env: $env is not in valid list of environments."
-	echo "Did you forget to prepent the resource name with the environment and a dash? dev-, etc."
-  
+
 }
 
 
