@@ -70,6 +70,7 @@ deploy(){
      
    done
 
+	 p=$(add_parameter cf_param_name $rname)
 	 echo "deploy_stack $rname $rcat $rtype $env $region $p"
    deploy_stack $rname $rcat $rtype $env $region $p
 }
