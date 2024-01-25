@@ -4,8 +4,8 @@
 # author: @teriradichel @2ndsightlab
 # Description: Functions to deploy a group policy
 ##############################################################
-source "execute/shared/functions.sh"
-source "execute/shared/validate.sh"
+source "shared/functions.sh"
+source "shared/validate.sh"
 
 deploy_project_group_policy(){
 	groupname="$1"

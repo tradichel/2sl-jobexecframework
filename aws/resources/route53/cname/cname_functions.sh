@@ -3,8 +3,8 @@
 # awsdeploy/resources/route53/cname/cname_functions.sh
 # author: @teriradichel @2ndsightlab
 ##############################################################
-source execute/shared/functions.sh
-source execute/shared/validate.sh
+source shared/functions.sh
+source shared/validate.sh
 source resources/route53/hostedzone/hostedzone_functions.sh
 
 deploy_cname() {

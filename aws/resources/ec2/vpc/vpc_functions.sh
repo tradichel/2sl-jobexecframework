@@ -4,8 +4,8 @@
 # author: @teriradichel @2ndsightlab
 # description: deploy a VPC
 ##############################################################
-source execute/shared/functions.sh
-source execute/shared/validate.sh
+source shared/functions.sh
+source shared/validate.sh
 source resources/ec2/routetable/routetable_functions.sh
 source resources/ec2/securitygroup/securitygroup_functions.sh
 

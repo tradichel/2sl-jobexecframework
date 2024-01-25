@@ -5,8 +5,8 @@
 # Description: project user ssh key for ec2 instance in project account
 ##############################################################
 
-source execute/shared/functions.sh
-source execute/shared/validate.sh
+source shared/functions.sh
+source shared/validate.sh
 source resources/secretsmanager/secret/secret_functions.sh
 
 #####################

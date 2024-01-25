@@ -4,27 +4,27 @@
 # description: CloudFormation template to delploy an OU
 ##############################################################
 Parameters:
-  NameParam:
+  cf_param_name:
     Type: String
-  ParentIdParam:
+  cf_param_parentid:
     Type: String
 
 Resources:
   OU:
     Type: AWS::Organizations::OrganizationalUnit
     Properties:
-      Name: !Ref NameParam
-      ParentId: !Ref ParentIdParam     
+      Name: !Ref cf_param_name
+      ParentId: !Ref cf_param_parentid     
 
 Outputs:
   OUID:
     Value: !Ref OU
     Export:
-     Name: !Sub id-organizations-organizationalunit-${NameParam}
+     Name: !Sub id-organizations-organizationalunit-${cf_param_name}
   OUArn:
     Value: !GetAtt OU.Arn
     Export:
-     Name: !Sub arn-organizations-organizationalunit-${NameParam}
+     Name: !Sub arn-organizations-organizationalunit-${cf_param_parentid}
 
 #################################################################################
 # Copyright Notice

@@ -4,7 +4,7 @@
 # author: @teriradichel @2ndsightlab
 # Description: deploy a secret
 ##############################################################
-source execute/shared/functions.sh
+source shared/functions.sh
 
 deploy_secret() {
   secretname="$1"

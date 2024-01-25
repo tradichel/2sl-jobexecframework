@@ -5,8 +5,8 @@
 # description: deploy security group rules
 ##############################################################
 
-source execute/shared/functions.sh
-source execute/shared/validate.sh
+source shared/functions.sh
+source shared/validate.sh
 source resources/ec2/prefixlist/prefixlist_functions.sh
 source resources/ec2/securitygroup/securitygroup_functions.sh
 

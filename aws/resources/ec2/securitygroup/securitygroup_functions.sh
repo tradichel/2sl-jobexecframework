@@ -5,8 +5,8 @@
 # description: deploy a security group
 ##############################################################
 
-source execute/shared/functions.sh
-source execute/shared/validate.sh
+source shared/functions.sh
+source shared/validate.sh
 #circular dependency
 #source resources/ec2/vpc/vpc_functions.sh
 source resources/ec2/prefixlist/prefixlist_functions.sh

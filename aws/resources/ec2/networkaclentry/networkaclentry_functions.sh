@@ -6,7 +6,7 @@
 ##############################################################
 
 
-source execute/shared/functions.sh
+source shared/functions.sh
 
 deploy_networkaclentry() {
   naclentryname="$1"

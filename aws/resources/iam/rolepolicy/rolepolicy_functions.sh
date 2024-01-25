@@ -4,8 +4,8 @@
 # author: @teriradichel @2ndsightlab
 # Description: Policy that allows deployment of organization resources
 ##############################################################
-source execute/shared/functions.sh
-source execute/shared/validate.sh
+source shared/functions.sh
+source shared/validate.sh
 
 deploy_rolepolicy() {
 

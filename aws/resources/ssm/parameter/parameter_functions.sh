@@ -5,7 +5,7 @@
 # description: Functions for AWS::SSM::Parameter
 # and CLI scripts to deploy secure string parameters
 ##############################################################
-source execute/shared/functions.sh
+source shared/functions.sh
 
 #depoy with cloudformation
 deploy_ssm_parameter(){
@@ -119,16 +119,18 @@ set_ssm_parameter_job_config(){
   func=${FUNCNAME[0]}
   validate_set $func "ssm_name" "$ssm_name"
 
+	if [ "$profile" != "" ]; then useprofile=" --profile $profile"; fi
+
   if [ "$kmskeyid" != "" ]; then
     echo "aws ssm put-parameter --name $ssm_name --overwrite --key-id $kmskeyid --value file://.$ssm_name \
-       --tier $tier --type $parmtype --profile $profile"
+       --tier $tier --type $parmtype $useprofile"
     aws ssm put-parameter --name $ssm_name --overwrite --key-id $kmskeyid --value file://.$ssm_name \
-       --tier $tier --type $parmtype --profile $profile
+       --tier $tier --type $parmtype $useprofile
   else
     echo "aws ssm put-parameter --name $ssm_name --overwrite --value file://.$ssm_name \
-       --tier $tier --type $parmtype --profile $profile"
+       --tier $tier --type $parmtype $useprofile"
     aws ssm put-parameter --name $ssm_name --overwrite --value file://.$ssm_name \
-       --tier $tier --type $parmtype --profile $profile
+       --tier $tier --type $parmtype $useprofile
   fi
 }
 

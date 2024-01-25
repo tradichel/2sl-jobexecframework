@@ -3,7 +3,7 @@
 # KMS/stacks/KeyAlias/keyalias_functions.sh
 # author: @teriradichel @2ndsightlab
 ##############################################################
-source execute/shared/functions.sh
+source shared/functions.sh
 
 deploy_keyalias(){
 

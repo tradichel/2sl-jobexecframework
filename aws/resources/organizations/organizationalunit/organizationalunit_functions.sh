@@ -4,9 +4,9 @@
 # author: @teriradichel @2ndsightlab
 # description: Functions used to deploy an organizationa unit
 ##############################################################
-source execute/shared/functions.sh
 source resources/organizations/organization/organization_functions.sh
-source execute/shared/validate.sh
+source shared/functions.sh
+source shared/validate.sh
 
 deploy_organizationalunit(){
  	
@@ -14,8 +14,8 @@ deploy_organizationalunit(){
   parentid=$2
 
   func=${FUNCNAME[0]}
-	validate_var $func "ouname" $ouname
-  validate_var $func "parentid" $parentid
+	validate_set $func "ouname" $ouname
+  validate_set $func "parentid" $parentid
 	
   p=$(add_parameter "NameParam" $ouname)
 	p=$(add_parameter "ParentIdParam" $parentid $p)
@@ -32,7 +32,7 @@ get_root_id(){
 	rootid=$(aws organizations list-roots --query Roots[0].Id --output text --profile $profile)
   
 	func=${FUNCNAME[0]}
-	validate_var $func "rootid" $rootid
+	validate_set $func "rootid" $rootid
 	
 	echo $rootid
 }
@@ -45,7 +45,7 @@ get_parent_ou_id(){
 
   if [ "$parentname" == "" ] || [ "$parentname" == "root" ]; then parentid=$(get_root_id); 		
   else parentid=$(get_account_number_from_name $parentname); fi
-  validate_var $func "parentid $parentname for ou $ouname" $parentid
+  validate_set $func "parentid $parentname for ou $ouname" $parentid
 
 	if [ "$parentid" == "$parentname" ]; then echo "Invalid parent id: $parentid for ou: $ou parent $parentname"; exit; fi
 
@@ -58,7 +58,7 @@ get_parent_ou_id(){
 #to find the OU ID by the OU name instead because
 #that would likely execute faster than making all
 #these API calls over the network.
-get_ou_id_from_name(){
+get_id(){
 	ou_name="$1"
 	parent_id="$2"
 

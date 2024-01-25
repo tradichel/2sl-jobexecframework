@@ -4,8 +4,8 @@
 # author: @teriradichel @2ndsightlab
 # Description: Functions to deploy a group and add users to groups
 ##############################################################
-source "execute/shared/functions.sh"
-source "execute/shared/validate.sh"
+source "shared/functions.sh"
+source "shared/validate.sh"
 
 add_users_to_group() {
 

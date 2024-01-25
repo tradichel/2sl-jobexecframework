@@ -5,8 +5,8 @@
 # description: deploy route tables
 ##############################################################
 
-source "execute/shared/functions.sh"
-source "execute/shared/validate.sh"
+source "shared/functions.sh"
+source "shared/validate.sh"
 
 deploy_route_table(){
 	vpcid="$1"

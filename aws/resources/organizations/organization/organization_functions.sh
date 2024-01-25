@@ -5,7 +5,7 @@
 # description: Functions used to deploy an organization
 ##############################################################
 
-source execute/shared/functions.sh
+source shared/functions.sh
 source resources/ssm/parameter/parameter_functions.sh
 
 deploy_organization(){

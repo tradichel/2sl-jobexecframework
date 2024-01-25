@@ -178,13 +178,13 @@ display_stack_errors(){
 }
 
 #get the role that is making the call to deploy something
-get_role_name(){
+get_sts_role_name(){
 	#rolenames cannot start with a letter or the stack name will fail.
   role=$(aws sts get-caller-identity --region $region --profile $profile --output text --query Arn | cut -d '/' -f2)
 	echo $role
 }
 
-get_role_arn(){
+get_sts_role_arn(){
   #rolenames cannot start with a letter or the stack name will fail.
   role=$(aws sts get-caller-identity --profile $profile --region $region --output text --query Arn)
   echo $role
@@ -289,36 +289,6 @@ get_timestamp() {
 
 }
 
-add_parameter () {
-  paramkey=$1
-  paramvalue=$2
-  addtoparams=$3
-
-	func=${FUNCNAME[0]}
-	validate_set $func "key" $paramkey
-	validate_set $func "value" $paramvalue
- 
-	addp="\"$paramkey=$paramvalue\""	
-  if [ "$addtoparams" == "" ]; then echo $addp; exit; fi
-  echo $addtoparams,$addp
-	
-}
-
-get_users_in_group() {
-	groupname="$1"
-	profile="$2"
-
- 	func=${FUNCNAME[0]}
-  validate_set "$func" 'groupname' "$groupname"
-  validate_set "$func" 'profile' "$profile"
-
-	#retrieve a list of user ARNs in the group
-  users=$(aws iam get-group --group-name $groupname --profile $profile --region $region \
-      --query Users[*].Arn --output text | sed 's/\t/,/g')
-
-	echo $users
-
-}
 
 #replace a var in {{ }}
 replace_placeholder() {

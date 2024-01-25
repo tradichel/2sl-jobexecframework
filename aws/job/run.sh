@@ -25,6 +25,10 @@ source resources/ssm/parameter/parameter_functions.sh
 	validate_set $s "secret_key" $secret_key
 	validate_set $s "session_token" $session_token
   validate_set $s "region" $region
+	
+	if [ "$job_config_ssm_paramter" != "" ]; then
+		validate_job_param_name $job_config_ssm_parameter
+	fi
   
   echo "### Creating profile for $profile ###"
   aws configure set aws_access_key_id $access_key --profile $profile

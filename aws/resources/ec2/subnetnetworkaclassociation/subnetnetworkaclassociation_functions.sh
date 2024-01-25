@@ -5,8 +5,8 @@
 # description: deploy a VPC
 ##############################################################
 
-source execute/shared/functions.sh
-source execute/shared/validate.sh
+source shared/functions.sh
+source shared/validate.sh
 
 deploy_subnetnetworkaclassociation(){
 	assocname="$1"

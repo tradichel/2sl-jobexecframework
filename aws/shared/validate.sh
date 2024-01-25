@@ -279,3 +279,30 @@ validate_starts_with(){
 
 }
 
+validate_job_param_name(){
+	value="$1"
+
+	#job parameter name should have four slashes
+	slashes=$(echo -n $value | sed 's|[^/]||g' | wc -c)
+	
+	if [ ! $slashes -eq 4 ]; then
+		echo "Incorrect number of characters in $value"
+		exit 1
+	fi
+		
+	#only charaters should be alphanumeric or a forward
+	#slash or dash
+	v=$(echo "$1" | sed 's|[^[:alnum:]/-.]||g')
+
+  if [ "$1" != "$v" ]; then
+
+    >&2 echo "Invalid value. Must contain only alphanumeric characters, forward slashes, or dashes."
+    exit 1
+  fi
+
+	#validate that the value starts with /job
+	validate_starts_with $value "/job"
+}
+
+
+

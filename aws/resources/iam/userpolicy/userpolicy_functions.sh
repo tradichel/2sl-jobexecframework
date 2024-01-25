@@ -6,8 +6,8 @@
 ##############################################################
 
 
-source execute/shared/functions.sh
-source execute/shared/validate.sh
+source shared/functions.sh
+source shared/validate.sh
 source resources/organizations/organization/organization_functions.sh
 
 deploy_userpolicy() {

@@ -4,8 +4,8 @@
 # author: @teriradichel @2ndsightlab
 # Description: Functions to deploy a group and add users to groups
 ##############################################################
-source "execute/shared/functions.sh"
-source "execute/shared/validate.sh"
+source "shared/functions.sh"
+source "shared/validate.sh"
 
 deploy_group(){
 	groupname="$1"
@@ -17,6 +17,23 @@ deploy_group(){
 	resourcetype='group'
 	parameters=$(add_parameter "NameParam" "$groupname")	
 	deploy_stack $groupname $category $resourcetype "$parameters"
+
+}
+
+
+get_users_in_group() {
+  groupname="$1"
+  profile="$2"
+
+  func=${FUNCNAME[0]}
+  validate_set "$func" 'groupname' "$groupname"
+  validate_set "$func" 'profile' "$profile"
+
+  #retrieve a list of user ARNs in the group
+  users=$(aws iam get-group --group-name $groupname --profile $profile --region $region \
+      --query Users[*].Arn --output text | sed 's/\t/,/g')
+
+  echo $users
 
 }
 
