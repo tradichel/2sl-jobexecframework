@@ -73,7 +73,7 @@ deploy_resource_config(){
 	 validate_set $f "rcat" $rcat
 	 validate_set $f "rtype" $rtype
 	 validate_set $f "env" $env
-	 validate_region $f $region
+	 validate_set $f "region" $region
 
 	 echo "deploy_stack $rname $rcat $rtype $env $region $p"
    deploy_stack $rname $rcat $rtype $env $region $p
