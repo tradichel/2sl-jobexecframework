@@ -45,10 +45,12 @@ deploy_resource_config(){
 
   for i in "${r_config[@]}"
   do
-     pname=$(echo $i | cut -d "=" -f1)
-     pvalue=$(echo $i | cut -d "=" -f2)
+		 echo "$i"
+     pname=$(echo $i | cut -d "=" -f1 | tr -d ' ')
+     pvalue=$(echo $i | cut -d "=" -f2 | tr -d ' ')
 
 		 echo $pname
+		 echo $pvalue
 
      if [ "$pname" == "env" ]; then 
 				 env=$pvalue;
