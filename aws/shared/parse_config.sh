@@ -36,6 +36,8 @@ deploy_resource_config(){
   rtype=$(echo $resource | cut -d "-" -f2)
   rname=$(echo $resource | cut -d "-" -f3)
 
+	echo $r_config
+
   for i in "${r_config[@]}"
   do
 		 echo "Line: $i"
@@ -48,24 +50,16 @@ deploy_resource_config(){
      if [ "$pname" == "env" ]; then 
 				 env=$pvalue;
          if [ "$rname" != "$env" ]; then rname=$env'-'$rname; fi
-				 continue
 		 fi
 
-     if [ "$pname" == "region" ];
-         then region=$pvalue;
-         continue
-     fi
+     if [ "$pname" == "region" ]; then region=$pvalue; fi
 
      if [[ $pname == cfparam* ]]; then
-				 echo "cf: $i"
          if [[ $pvalue == :get_id:* ]]; then
             pvalue=$(get_config_resource_id $pvalue)
          fi
          p=$(add_parameter $pname $pvalue $p)
-				 continue
 		 fi
-		
-		 echo "Not processed"
      
    done
 
@@ -93,16 +87,16 @@ deploy() {
 
   job_config=$(get_ssm_parameter_job_config $job_parameter)
 
-	echo "got job config"
-
 	read -a config <<<"$job_config"
+
+	echo $config
 
 	echo "job config as array"
 
 	if [ "$rcat" == "stack" ]; then
     deploy_stack_config $config
 	else
-		deploy_resource_config $job_parameter $job_config
+		deploy_resource_config $job_parameter $config
 	fi
 }
 
