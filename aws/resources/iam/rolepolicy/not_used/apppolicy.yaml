@@ -1,7 +1,7 @@
 Parameters:
-  NameParam:
+  cfparamName:
     Type: String
-  EnvParam:
+  cfparamEnv:
     Type: String
     AllowedValues: 
       - Sandbox
@@ -55,7 +55,7 @@ Resources:
   AppPolicy:
     Type: 'AWS::IAM::ManagedPolicy'
     Properties:
-      ManagedPolicyName: !Sub ${NameParam}${ServiceParam}Policy
+      ManagedPolicyName: !Sub ${cfparamName}${ServiceParam}Policy
       PolicyDocument:
         Version: "2012-10-17"
         Statement: 
@@ -74,8 +74,8 @@ Resources:
               - 'logs:CreateLogGroup'
               - 'logs:CreateLogStream'
               - 'logs:PutLogEvents'
-            Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/*/${NameParam}:*'
-            #Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/${logname}/${NameParam}:*'
+            Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/*/${cfparamName}:*'
+            #Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/${logname}/${cfparamName}:*'
           - !If 
             - HasSecret
             - 
@@ -87,7 +87,7 @@ Resources:
                 - secretsmanager:ListSecretVersionIds
               Resource: 
                 -  Fn::ImportValue:
-                    !Sub ${NameParam}Secret
+                    !Sub ${cfparamName}Secret
             - !Ref AWS::NoValue
 
           - !If 
@@ -104,7 +104,7 @@ Resources:
               - kms:GenerateDataKey
               - kms:Decrypt
             Resource:
-              - Fn::ImportValue: !Sub ${EnvParam}Key
+              - Fn::ImportValue: !Sub ${cfparamEnv}Key
 
           - !If
             - NoReadBucket
@@ -142,5 +142,5 @@ Resources:
             Resource: !Ref ResourcesParam
 
       Roles: 
-        - !Sub ${NameParam}${ServiceParam}Role
+        - !Sub ${cfparamName}${ServiceParam}Role
 

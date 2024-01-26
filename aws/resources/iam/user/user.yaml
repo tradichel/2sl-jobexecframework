@@ -4,7 +4,7 @@
 # description: CloudFormation template to create an IAM user
 ##############################################################
 Parameters:
-  NameParam:
+  cfparamName:
     Type: String
   ConsoleAccessParam:
     Type: String
@@ -34,13 +34,13 @@ Resources:
     Type: 'AWS::SecretsManager::Secret'
     Condition: ConsoleAllowed
     Properties:
-      Name: !Sub ${NameParam}-password
+      Name: !Sub ${cfparamName}-password
       GenerateSecretString:
         SecretStringTemplate:
               !Join
                 - ''
                 - - '{"username": "'
-                  - !Ref NameParam
+                  - !Ref cfparamName
                   - '"}'
         GenerateStringKey: password
         PasswordLength: 20
@@ -48,7 +48,7 @@ Resources:
   User:
     Type: AWS::IAM::User
     Properties:
-      UserName: !Ref NameParam
+      UserName: !Ref cfparamName
       ManagedPolicyArns:
         !If
           - AssignManagedPolicy
@@ -68,11 +68,11 @@ Outputs:
   userid:
     Value: !Ref User
     Export:
-     Name: !Sub id-iam-user-${NameParam}
+     Name: !Sub id-iam-user-${cfparamName}
   userarn:
     Value: !GetAtt User.Arn
     Export:
-     Name: !Sub arn-iam-user-${NameParam}
+     Name: !Sub arn-iam-user-${cfparamName}
  # forceupdate:
  #   Value: !Sub "${TimestampParam}"
 #################################################################################

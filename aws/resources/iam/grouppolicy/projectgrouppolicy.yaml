@@ -5,9 +5,9 @@
 # Description: Generic group policy for a project account
 ##############################################################
 Parameters:
-  NameParam:
+  cfparamName:
     Type: String
-  GroupNameParam:
+  GroupcfparamName:
     Type: String
   #if the user is allowed to assume any xacct roles
   #pass in the role arn
@@ -19,8 +19,8 @@ Resources:
   grouppolicy:
     Type: AWS::IAM::GroupPolicy
     Properties:
-      PolicyName: !Ref NameParam
-      GroupName: !Ref GroupNameParam
+      PolicyName: !Ref cfparamName
+      GroupName: !Ref GroupcfparamName
       PolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -70,11 +70,11 @@ Outputs:
   grouppolicyid:
     Value: !Ref grouppolicy
     Export:
-     Name: !Sub id-iam-grouppolicy-${NameParam}
+     Name: !Sub id-iam-grouppolicy-${cfparamName}
   grouppolicyarn:
     Value: !Ref grouppolicy
     Export:
-     Name: !Sub arn-iam-grouppolicy-${NameParam}
+     Name: !Sub arn-iam-grouppolicy-${cfparamName}
 
 #################################################################################
 # Copyright Notice

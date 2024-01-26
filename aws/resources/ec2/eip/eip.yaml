@@ -4,7 +4,7 @@
 # description: create an EIP to assign to an EC2 isntance
 ##############################################################
 Parameters: 
-  NameParam:
+  cfparamName:
     Type: String
 
 Resources:
@@ -13,13 +13,13 @@ Resources:
     Properties:
       Tags:
       - Key: Name
-        Value: !Sub ${NameParam}
+        Value: !Sub ${cfparamName}
 
 Outputs:
   EIPIDoutput:
     Value: !GetAtt EIP.AllocationId
     Export:
-      Name: !Sub ${NameParam}
+      Name: !Sub ${cfparamName}
 
 #################################################################################
 # Copyright Notice

@@ -4,7 +4,7 @@
 # description: CloudFormation template to create an Organizational Trail
 ##############################################################
 Parameters:
-  NameParam:
+  cfparamName:
     Type: String
 
 Resources:
@@ -18,13 +18,13 @@ Resources:
       IsOrganizationTrail: true
       KMSKeyId: !ImportValue OrgRootCloudTrailKeyIDExport
       S3BucketName: !ImportValue BucketName-orgroot-cloudtrail
-      TrailName: !Ref NameParam
+      TrailName: !Ref cfparamName
   
 Outputs:
   UserOutput:
     Value: OrgCloudtrail
     Export:
-     Name: !Sub ${NameParam}CloudTrail
+     Name: !Sub ${cfparamName}CloudTrail
 
 #################################################################################
 # Copyright Notice

@@ -94,7 +94,7 @@ deploy_securitygroup() {
   
 	category="ec2"
 	resourcetype="securitygroup"
-	p=$(add_parameter "NameParam" $sgname)
+	p=$(add_parameter "cfparamName" $sgname)
 	p=$(add_parameter "VPCIdParam" $vpcid $p)
 	p=$(add_parameter "GroupDescriptionParam" "$desc" $p)
 	

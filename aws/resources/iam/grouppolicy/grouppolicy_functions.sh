@@ -32,8 +32,8 @@ deploy_group_policy(){
 		template='$policyname'
 	fi
 
-	parameters=$(add_parameter "NameParam" $policyname)
-  parameters=$(add_parameter "GroupNameParam" $groupname $parameters)
+	parameters=$(add_parameter "cfparamName" $policyname)
+  parameters=$(add_parameter "GroupcfparamName" $groupname $parameters)
   if [ "$xacctnum" != "" ]; then
 		echo $xacctnum
     parameters=$(add_parameter "XAcctNumParam" $xacctnum $parameters)
@@ -62,7 +62,7 @@ add_users_to_group() {
 	name='AddUsersTo'$groupname
 	resourcetype='UserToGroupAddition'
 	parameters=$(add_parameter "UserNamesParam" $usernames)
-	parameters=$(add_parameter "GroupNameParam" $groupname $parameters)
+	parameters=$(add_parameter "GroupcfparamName" $groupname $parameters)
   parameters=$(add_parameter "TimestampParam" $timestamp $parameters)
 	deploy_stack $profile $name $resourcetype $template "$parameters"
 

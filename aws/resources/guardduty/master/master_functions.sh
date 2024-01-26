@@ -20,7 +20,7 @@ deploy_master() {
 
   mastername="$env-$mastername"
 
-  parameters=$(add_parameter "NameParam" $mastername)
+  parameters=$(add_parameter "cfparamName" $mastername)
 
   deploy_stack $mastername "guardduty" "master" $parameters
 

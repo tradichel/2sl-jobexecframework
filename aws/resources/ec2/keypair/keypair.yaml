@@ -10,7 +10,7 @@
 # managed key and a secret policy the customer controls.
 ##############################################################
 Parameters:
-  NameParam:
+  cfparamName:
     Type: String
   KeyFormatParam:
     Type: String
@@ -21,7 +21,7 @@ Resources:
     Type: AWS::EC2::KeyPair
     Properties:
       KeyFormat: !Ref KeyFormatParam
-      KeyName: !Ref NameParam
+      KeyName: !Ref cfparamName
       KeyType: "ed25519"
 
 

@@ -41,11 +41,11 @@ deploy_account(){
 		accountname="$env-$accountname"
 	fi
 	
-  parameters=$(add_parameter "NameParam" $accountname)
-  parameters=$(add_parameter "DomainParam" $domain $parameters)	
-  parameters=$(add_parameter "EnvParam" $env $parameters)
-  parameters=$(add_parameter "OrgParam" $org $parameters)
-	parameters=$(add_parameter "ParentIdsParam" $ouid $parameters)
+  parameters=$(add_parameter "cfparamName" $accountname)
+  parameters=$(add_parameter "cfparamDomain" $domain $parameters)	
+  parameters=$(add_parameter "cfparamEnv" $env $parameters)
+  parameters=$(add_parameter "cfparamOrg" $org $parameters)
+	parameters=$(add_parameter "cfparamParentIds" $ouid $parameters)
 	
   resourcetype="account"
   category="organizations"

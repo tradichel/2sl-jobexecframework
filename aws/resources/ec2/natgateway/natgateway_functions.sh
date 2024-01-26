@@ -23,7 +23,7 @@ deploy_nat(){
 
   resourcetype='NATGateway'
   template='cfn/NAT.yaml'
-  p=$(add_parameter "NameParam" $natname)
+  p=$(add_parameter "cfparamName" $natname)
   p=$(add_parameter "EIPIdExportParam" $eipidexportname $p)
   p=$(add_parameter "SubnetIdExportParam" $subnetidexportname $p)
 
@@ -122,7 +122,7 @@ deploy_vpc (){
 	category="ec2"
 	resourcetype='vpc'
  
-  p=$(add_parameter "NameParam" $vpcname)
+  p=$(add_parameter "cfparamName" $vpcname)
  	p=$(add_parameter "CIDRParam" $cidr $p)
 	
   deploy_stack $vpcname $category $resourcetype $p
@@ -230,7 +230,7 @@ deploy_security_group() {
 	template="cfn/SecurityGroup.yaml"
 	resourcetype="SecurityGroup"	
 	sgname=$vpc$prefix
-	p=$(add_parameter "NameParam" $sgname)
+	p=$(add_parameter "cfparamName" $sgname)
 	p=$(add_parameter "VPCExportParam" $vpc $p)
 	p=$(add_parameter "GroupDescriptionParam" "$desc" $p)
 	
@@ -286,7 +286,7 @@ deploy_vpce_sg_rules() {
 
   p=$(add_parameter "SGExportParam" $sgname)
   p=$(add_parameter "ServiceParam" $service $p)
-  p=$(add_parameter "VPCNameParam" $vpcname $p)
+  p=$(add_parameter "VPCcfparamName" $vpcname $p)
 
   resourcetype='SGRules'
   rulesname=$sgname'Rules'
@@ -302,7 +302,7 @@ deploy_nacl(){
 
   template="cfn/NACL.yaml"
   resourcetype='NACL'
-  p=$(add_parameter "NameParam" $naclname)
+  p=$(add_parameter "cfparamName" $naclname)
   p=$(add_parameter "VPCExportParam" $vpcexport $p)
   deploy_stack $profile $naclname $resourcetype "$template" "$p"
 
@@ -355,7 +355,7 @@ deploy_subnet(){
 
   resourcetype='Subnet'
   template='cfn/Subnet.yaml'  
-	p=$(add_parameter "NameParam" $subnetname)
+	p=$(add_parameter "cfparamName" $subnetname)
   p=$(add_parameter "VPCExportParam" $vpc $p)
   p=$(add_parameter "AZParam" $az $p)
   p=$(add_parameter "VPCCidrExportParam" $vpccidr $p)
@@ -428,7 +428,7 @@ deploy_s3_security_group() {
   template="cfn/SecurityGroup.yaml"
   resourcetype="SecurityGroup"  
   sgname=$vpc$prefix
-  p=$(add_parameter "NameParam" $sgname)
+  p=$(add_parameter "cfparamName" $sgname)
   p=$(add_parameter "VPCExportParam" $vpc $p)
   p=$(add_parameter "GroupDescriptionParam" "$desc" $p)
   
@@ -436,7 +436,7 @@ deploy_s3_security_group() {
 
   name=$prefix'Rules'
   template='cfn/SGRules/S3.yaml'
-  p=$(add_parameter "NameParam" $name)
+  p=$(add_parameter "cfparamName" $name)
   p=$(add_parameter "SGExportParam" $sgname $p)
   p=$(add_parameter "S3PrefixIdParam" "$prefixlistid" $p)
   resourcetype='SGRules'

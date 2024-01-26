@@ -4,7 +4,7 @@
 # author: @tradichel @2ndsightlab
 ##############################################################
 Parameters:
-  NameParam:
+  cfparamName:
     Type: String
     Description: "Group Name"
   XAcctNumParam:
@@ -22,7 +22,7 @@ Resources:
   GroupPolicy:
     Type: 'AWS::IAM::Policy'
     Properties:
-      PolicyName: !Sub ${NameParam}GroupPolicy
+      PolicyName: !Sub ${cfparamName}GroupPolicy
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -31,20 +31,20 @@ Resources:
             Resource: 
               !If
                 - XacctNumExists
-                - !Sub 'arn:aws:iam::${XAcctNumParam}:role/${NameParam}Group'
-                - !Sub 'arn:aws:iam::${AWS::AccountId}:role/${NameParam}Group'
+                - !Sub 'arn:aws:iam::${XAcctNumParam}:role/${cfparamName}Group'
+                - !Sub 'arn:aws:iam::${AWS::AccountId}:role/${cfparamName}Group'
             Condition:
               "Bool":
                 "aws:MultiFactorAuthPresent": "true"
       Groups:
         -
           Fn::ImportValue:
-            !Sub ${NameParam}Export
+            !Sub ${cfparamName}Export
 Outputs:
   GroupPolicyNameOutput:
-    Value: !Sub ${NameParam}GroupPolicy
+    Value: !Sub ${cfparamName}GroupPolicy
     Export:
-     Name: !Sub ${NameParam}PolicyExport
+     Name: !Sub ${cfparamName}PolicyExport
 
 # #################################################################################
 # Copyright Notice

@@ -3,7 +3,7 @@
 # author: @tradichel @2ndsightlab
 ##############################################################
 Parameters:
-  NameParam:
+  cfparamName:
     Type: String
     Description: "Group Name"
 
@@ -11,7 +11,7 @@ Resources:
   DevelopersGroupPolicy:
     Type: 'AWS::IAM::Policy'
     Properties:
-      PolicyName: !Sub ${NameParam}EC2GroupPolicy
+      PolicyName: !Sub ${cfparamName}EC2GroupPolicy
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -28,7 +28,7 @@ Resources:
       Groups:
         -
           Fn::ImportValue:
-            !Sub ${NameParam}Export
+            !Sub ${cfparamName}Export
 
 # #################################################################################
 # Copyright Notice

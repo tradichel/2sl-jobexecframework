@@ -5,7 +5,7 @@
 # with the policy specified below
 ##############################################################
 Parameters:
-    NameParam:
+    cfparamName:
       Type: String
     TargetIdsParam:
       Type: String
@@ -14,7 +14,7 @@ Resources:
   SCP:
     Type: AWS::Organizations::Policy
     Properties:
-      Name: !Ref NameParam
+      Name: !Ref cfparamName
       Content: |
         {
             "Version": "2012-10-17",
@@ -59,11 +59,11 @@ Outputs:
   PolicyID:
     Value: !Ref SCP
     Export:
-     Name: !Sub id-organizations-policy-${NameParam}
+     Name: !Sub id-organizations-policy-${cfparamName}
   PolicyArn:
     Value: !GetAtt SCP.Arn
     Export:
-     Name: !Sub arn-organizations-policy-${NameParam}
+     Name: !Sub arn-organizations-policy-${cfparamName}
 
 #################################################################################
 # Copyright Notice

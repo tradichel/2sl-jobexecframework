@@ -4,7 +4,7 @@
 # description: Generic template to deploy an EC2 instance profile
 ##############################################################
 Parameters:
-  NameParam:
+  cfparamName:
     Type: String
   RoleNamesParam:
     Type: CommaDelimitedList
@@ -13,14 +13,14 @@ Resources:
   InstanceProfile:
     Type: 'AWS::IAM::InstanceProfile'
     Properties:
-      InstanceProfileName: !Ref NameParam
+      InstanceProfileName: !Ref cfparamName
       Roles: !Ref RoleNamesParam 
 
 Outputs:
   InstanceProfileOutput:
     Value: !Ref InstanceProfile
     Export:
-     Name: !Sub ${NameParam}Export
+     Name: !Sub ${cfparamName}Export
 
 #################################################################################
 # Copyright Notice

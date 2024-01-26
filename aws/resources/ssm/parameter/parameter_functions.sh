@@ -20,7 +20,7 @@ deploy_ssm_parameter(){
  
  	cat="ssm"
 	resourcetype='parameter'
-  parameters=$(add_parameter "NameParam" $ssm_name)
+  parameters=$(add_parameter "cfparamName" $ssm_name)
   parameters=$(add_parameter "ValueParam" $ssm_value $parameters)
 
   deploy_stack $name $cat $resourcetype $parameters

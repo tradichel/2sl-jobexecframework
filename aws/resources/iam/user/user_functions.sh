@@ -19,7 +19,7 @@ deploy_user() {
 
 	category='iam'
   resourcetype='user'
-  parameters=$(add_parameter "NameParam" $username)
+  parameters=$(add_parameter "cfparamName" $username)
   
 	if [ "$console_access" == "true" ]; then
   	  parameters=$(add_parameter "ConsoleAccess" "true" $parameters)
@@ -85,7 +85,7 @@ create_ssh_key(){
 	#update user iam policy to allow access to secret
   resourcetype='Policy'
   template='cfn/UserSecretPolicy.yaml'
-  parameters=$(add_parameter "NameParam" $keyname)
+  parameters=$(add_parameter "cfparamName" $keyname)
 	resource=$keyname'UserSecretPolicy'
   deploy_stack $resource $category $resourcetype $parameters
 	

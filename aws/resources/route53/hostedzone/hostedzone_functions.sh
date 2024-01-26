@@ -31,7 +31,7 @@ deploy_hostedzone() {
 	#because aws naming conventions :^|
 	dotstodashes=$(dots_to_dashes $domain)
   parameters=$(add_parameter "DomainDotsToDashesParam" $dotstodashes)
-  parameters=$(add_parameter "DomainNameParam" $domain $parameters)
+  parameters=$(add_parameter "DomaincfparamName" $domain $parameters)
   
  	category="route53"
   resourcetype="hostedzone"

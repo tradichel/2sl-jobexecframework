@@ -23,7 +23,7 @@ add_users_to_group() {
 	resourcetype='usertogroupaddition'
 
 	parameters=$(add_parameter "UserNamesParam" $usernames)
-	parameters=$(add_parameter "GroupNameParam" $groupname $parameters)
+	parameters=$(add_parameter "GroupcfparamName" $groupname $parameters)
   parameters=$(add_parameter "TimestampParam" $timestamp $parameters)
 	deploy_stack $name $category $resourcetype $parameters
 

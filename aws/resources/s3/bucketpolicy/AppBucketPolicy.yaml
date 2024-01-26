@@ -3,7 +3,7 @@
 Parameters:
   BucketNameSuffixParam:
     Type: String
-  AppNameParam:
+  AppcfparamName:
     Type: String
   ServiceParam:
     Type: String
@@ -24,7 +24,7 @@ Resources:
           - "-"
           - !Sub "{{resolve:ssm:EnvironmentOrg}}"
           - "-"
-          - !Ref AppNameParam
+          - !Ref AppcfparamName
     PolicyDocument:
       Version: 2012-10-17
       Statement:
@@ -48,7 +48,7 @@ Resources:
                 - - "arn:aws:iam::"
                   - !Sub "{{resolve:ssm:EnvironmentAdminAccount}}"
                   - ":role/"
-                  - !Ref AppNameParam
+                  - !Ref AppcfparamName
                   - !Sub ServiceParam
                   - "Role" 
         - Effect: Allow
@@ -70,6 +70,6 @@ Resources:
                 - - "arn:aws:iam::"
                   - !Sub "{{resolve:ssm:EnvironmentAdminAccount}}"
                   - ":role/"
-                  - !Ref AppNameParam
+                  - !Ref AppcfparamName
                   - !Sub ServiceParam
                   - "Role"

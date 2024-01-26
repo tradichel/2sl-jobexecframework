@@ -26,7 +26,7 @@ deploy_bucket() {
 	if [ "$deploylogbucket" == "true" ]; then
 		
 	 	validate_var $f "kmskeyidlogs" "$kmskeyidlogs"
-    parameters=$(add_parameter "NameParam" "$bucketname-logs")
+    parameters=$(add_parameter "cfparamName" "$bucketname-logs")
     parameters=$(add_parameter "KMSKeyIdParam" $kmskeyidlogs $parameters)
 		parameters=$(add_parameter "DeployLogBucketParam" "false" $parameters)
     deploy_stack $bucketname $category $resourcetype "$parameters"
@@ -37,7 +37,7 @@ deploy_bucket() {
   fi
 	
 	#deploy the s3 bucket
-  parameters=$(add_parameter "NameParam" "$bucketname")
+  parameters=$(add_parameter "cfparamName" "$bucketname")
   parameters=$(add_parameter "KMSKeyIdParam" $kmskeyid $parameters)
 	parameters=$(add_parameter "DeployLogBucketParam" "$deploylogbucket" $parameters)
 	deploy_stack $bucketname $category $resourcetype $parameters
@@ -70,7 +70,7 @@ deploy_app_s3_bucket_policy(){
 	validate_var $f "readorwrite" "$readorwrite"
 
 	parameters=$(add_parameter "BucketNameSuffixParam" "$bucketnamesuffix")  
-	parameters=$(add_parameter "AppNameParam" "$appname" "$parameters")
+	parameters=$(add_parameter "AppcfparamName" "$appname" "$parameters")
 	parameters=$(add_parameter "ServiceParam" "$service" "$parameters")
 	parameters=$(add_parameter "ReadOrWriteParam" "$readorwrite" "$parameters")
 

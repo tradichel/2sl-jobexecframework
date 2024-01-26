@@ -4,20 +4,16 @@
 # description: CloudFormation template to create an AWS Account
 ##############################################################
 Parameters:
-  NameParam:
+  cfparamName:
     Type: String
-  ParentIdsParam:
+  cfparamParentIds:
     Type: String
-    Default: "None"
-  DomainParam:
+  cfparamDomain:
     Type: String  
-  EnvParam:
+  cfparamEnv:
     Type: String
-  OrgParam:
+  cfparamOrg:
     Type: String
-
-Conditions:
-   DefaultOU: !Equals ["None", !Ref ParentIdsParam]
 
 Resources:
 
@@ -25,54 +21,54 @@ Resources:
     Type: AWS::Organizations::Account
     Properties: 
       AccountName:
-        !Ref NameParam
+        !Ref cfparamName
       Email: 
           !Join
             - ""
-            - - !Ref NameParam
+            - - !Ref cfparamName
               - "@"
-              - !Ref DomainParam
+              - !Ref cfparamDomain
       ParentIds:
-        - !If [DefaultOU, !ImportValue DenyAllOUIdExport, !Ref ParentIdsParam] 
-      
+        - !Ref cfparamParentIds
+
       RoleName: 
             !Join
               - ""
-              - - !Ref EnvParam 
+              - - !Ref cfparamEnv 
                 - "-adminrole"
   
 Outputs:
   AccountID:
     Value: !Ref OrgAccount
     Export:
-     Name: !Sub id-organizations-account-${NameParam}
+     Name: !Sub id-organizations-account-${cfparamName}
   AcccountArn:
     Value: !GetAtt OrgAccount.Arn
     Export:
-     Name: !Sub arn-organizations-account-${NameParam}
+     Name: !Sub arn-organizations-account-${cfparamName}
   AccountNameOutput:
-    Value: !Ref NameParam
+    Value: !Ref cfparamName
     Export:
-     Name: !Ref NameParam
+     Name: !Ref cfparamName
   EmailOutput:
     Value:
       !Join
         - ""
-        - - !Ref NameParam
+        - - !Ref cfparamName
           - "@"
-          - !Ref DomainParam
+          - !Ref cfparamDomain
     Export:
      Name: 
-      !Sub "${NameParam}email"
+      !Sub "${cfparamName}email"
   RoleOutput:
     Value: 
       !Join
         - ""
-        - - !Ref EnvParam
+        - - !Ref cfparamEnv
           - "-adminrole"
     Export:
      Name: 
-      !Sub "${NameParam}role"
+      !Sub "${cfparamName}role"
           
 
 ##################################################################################

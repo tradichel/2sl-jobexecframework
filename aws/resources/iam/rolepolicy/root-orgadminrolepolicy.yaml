@@ -4,7 +4,7 @@
 # description: CloudFormation template to delploy an OU
 ##############################################################
 Parameters:
-  NameParam:
+  cfparamName:
     Type: String
     Default: root-orgadminrolepolicy
     AllowedValues: 
@@ -60,11 +60,11 @@ Outputs:
   PolicyID:
     Value: !Ref Policy
     Export:
-     Name: !Sub id-iam-rolepolicy-${NameParam}
+     Name: !Sub id-iam-rolepolicy-${cfparamName}
   PolicyArn:
     Value: !Ref Policy
     Export:
-     Name: !Sub arn-iam-rolepolicy-${NameParam}
+     Name: !Sub arn-iam-rolepolicy-${cfparamName}
 
 
 #################################################################################

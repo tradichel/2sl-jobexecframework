@@ -22,7 +22,7 @@ deploy_rolepolicy() {
 
   rolepolicyname="$env-$rolepolicyname"
 
-  parameters=$(add_parameter "NameParam" $rolepolicyname)
+  parameters=$(add_parameter "cfparamName" $rolepolicyname)
   parameters=$(add_parameter "RoleArnParam" $rolepolicyarn $parameters)
 
 	template=$rolepolicyname'.yaml'

@@ -26,7 +26,7 @@ deploy_cname() {
 
   hostedzoneid=$(get_hostedzone_id $domain)
 
-  parameters=$(add_parameter "CNameParam" $cname)
+  parameters=$(add_parameter "CcfparamName" $cname)
   parameters=$(add_parameter "CNameValueParam" $cnamevalue $parameters)
   parameters=$(add_parameter "HostedZoneIdParam" $hostedzoneid $parameters)
   parameters=$(add_parameter "TtlParam" $ttl $parameters)

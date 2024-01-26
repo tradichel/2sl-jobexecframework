@@ -6,13 +6,13 @@
 Parameters:
   ServiceParam:
     Type: String
-  EndpointServiceNameParam:
+  EndpointServicecfparamName:
     Type: String
-  VPCNameParam:
+  VPCcfparamName:
     Type: String
-  SubnetNameParam:
+  SubnetcfparamName:
     Type: String
-  SecurityGroupNameParam:
+  SecurityGroupcfparamName:
     Type: String
   ReadPrincipalsParam:
     Type: CommaDelimitedList
@@ -68,16 +68,16 @@ Resources:
               Resource: !Ref WriteResourcesParam
       VpcEndpointType: Interface
       PrivateDnsEnabled: True
-      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.${EndpointServiceNameParam}'
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.${EndpointServicecfparamName}'
       VpcId:
         Fn::ImportValue: 
-          !Sub "${VPCNameParam}"
+          !Sub "${VPCcfparamName}"
       SubnetIds: 
         - Fn::ImportValue:
-            !Sub "${SubnetNameParam}"
+            !Sub "${SubnetcfparamName}"
       SecurityGroupIds:
         - Fn::ImportValue: 
-            !Sub "${SecurityGroupNameParam}"
+            !Sub "${SecurityGroupcfparamName}"
 
 Outputs:
   VPCEOutput:

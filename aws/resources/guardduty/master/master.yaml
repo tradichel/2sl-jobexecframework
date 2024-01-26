@@ -8,7 +8,7 @@
 
 
 Parameters:
-    NameParam:
+    cfparamName:
       Type: String
 		#add any other parameters
 		
@@ -16,18 +16,18 @@ Resources:
   master:
     Type: AWS::guardduty::master
 		Properties:
-			Name: !Ref NameParam
+			Name: !Ref cfparamName
 			#Add the rest of the properties
 
 Outputs:
   masterid:
     Value: !Ref master
     Export:
-     Name: !Sub id-guardduty-master-${NameParam}
+     Name: !Sub id-guardduty-master-${cfparamName}
   masterarn:
     Value: !GetAtt master.Arn
     Export:
-     Name: !Sub arn-guardduty-master-${NameParam}
+     Name: !Sub arn-guardduty-master-${cfparamName}
 	#adjust outputs as needed
 
 

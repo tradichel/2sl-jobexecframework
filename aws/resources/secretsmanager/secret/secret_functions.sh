@@ -16,7 +16,7 @@ deploy_secret() {
   validate_var "$function" "kmskeyid" "$kmskeyid" 
   validate_var "$function" "secretvalue" "$secretvalue"
  
-  parameters=$(add_parameter "NameParam" $secretname)
+  parameters=$(add_parameter "cfparamName" $secretname)
   parameters=$(add_parameter "KMSKeyID" $kmskeyid $parameters)
   parameters=$(add_parameter "SecretValue" $secretvalue $parameters)
 

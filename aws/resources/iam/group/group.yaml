@@ -5,23 +5,23 @@
 # Description: IAM administrators who can assume the iamadminrole
 ##############################################################
 Parameters:
-  NameParam:
+  cfparamName:
     Type: String
 Resources:
   group:
     Type: AWS::IAM::Group
     Properties:
-      GroupName: !Ref NameParam
+      GroupName: !Ref cfparamName
 
 Outputs:
   groupid:
     Value: !Ref group
     Export:
-     Name: !Sub id-iam-group-${NameParam}
+     Name: !Sub id-iam-group-${cfparamName}
   grouparn:
     Value: !Ref group
     Export:
-     Name: !Sub arn-iam-group-${NameParam}
+     Name: !Sub arn-iam-group-${cfparamName}
 
 
 #################################################################################

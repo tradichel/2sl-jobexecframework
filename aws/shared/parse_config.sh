@@ -36,16 +36,11 @@ deploy_resource_config(){
   rtype=$(echo $resource | cut -d "-" -f2)
   rname=$(echo $resource | cut -d "-" -f3)
 
-	echo $r_config
-
   for i in "${r_config[@]}"
   do
 		 echo "Line: $i"
      pname=$(echo $i | cut -d "=" -f1 | tr -d ' ')
      pvalue=$(echo $i | cut -d "=" -f2 | tr -d ' ')
-
-		 echo $pname
-		 echo $pvalue
 
      if [ "$pname" == "env" ]; then 
 				 env=$pvalue;
@@ -57,6 +52,10 @@ deploy_resource_config(){
      if [[ $pname == cfparam* ]]; then
          if [[ $pvalue == :get_id:* ]]; then
             pvalue=$(get_config_resource_id $pvalue)
+         fi
+         if [[ $pvalue == :ssm:* ]]; then
+						parm=$(echo $pvalue | cut -d ":" -f3)
+            pvalue=$(get_ssm_parameter_value $parm)
          fi
          p=$(add_parameter $pname $pvalue $p)
 		 fi
@@ -112,12 +111,15 @@ deploy_stack_config(){
 
      if [[ $pname == /job/* ]]; then 
         job_parameter=$pname 
+				echo "Processing: $job_parameter"
      fi
 
 		 if [ "$job_parameter" != "" ]; then
 				if [[ $pname ==  -* ]]; then 
 					job_config+=($i)
 				else
+					echo "Deploy job config: $job_parameter"
+					echo "$job_config"
 					deloy_resource_config $job_parameter $job_config
 					job_parameter=""
 					job_config=$@
@@ -127,7 +129,7 @@ deploy_stack_config(){
      if [ "$pname" == "Sequential:" ]; then parallel=0; continue; fi
  		 if [ "$pname" == "Parallel:" ]; then parallel=1; continue; fi
 
-		 echo "Parallel: $parallel"
+     echo "Parallel: $parallel"
 
    done
 

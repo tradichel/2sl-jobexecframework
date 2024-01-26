@@ -3,7 +3,7 @@
 # author: @teriradichel @2ndsightlab
 ##############################################################
 Parameters:
-  EnvParam:
+  cfparamEnv:
     Type: String
   SecretIDParam:
     Type: String
@@ -21,7 +21,7 @@ Resources:
       Statement:
         - Effect: Allow
           Principal:
-            AWS: !Sub arn:aws:iam::${AWS::AccountId}:user/${EnvParam}Admin
+            AWS: !Sub arn:aws:iam::${AWS::AccountId}:user/${cfparamEnv}Admin
           Action: "*"
           Resource: "*"
         - Effect: Allow

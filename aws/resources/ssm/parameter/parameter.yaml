@@ -1,5 +1,5 @@
 Parameters:
-  NameParam:
+  cfparamName:
     Type: String
   ValueParam:
     Type: String
@@ -45,7 +45,7 @@ Resources:
   Parameter:
     Type: AWS::SSM::Parameter
     Properties:
-      Name: !Ref NameParam
+      Name: !Ref cfparamName
       DataType: !Ref DataTypeParam
       Value: !Ref ValueParam
       Type: !Ref TypeParam
@@ -61,5 +61,5 @@ Outputs:
   ParameterOutput:
     Value: !Ref Parameter
     Export:
-     Name: !Sub ${NameParam}                                           
+     Name: !Sub ${cfparamName}                                           
 

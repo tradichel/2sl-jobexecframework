@@ -4,7 +4,7 @@
 # description: policy for IAM administrators
 ##############################################################
 Parameters:
-  NameParam:
+  cfparamName:
     Type: String
     AllowedValues: 
       - prod
@@ -18,7 +18,7 @@ Resources:
   Policy:
     Type: 'AWS::IAM::ManagedPolicy'
     Properties:
-      ManagedPolicyName: !Sub ${NameParam}=adminkmspolicy
+      ManagedPolicyName: !Sub ${cfparamName}=adminkmspolicy
       PolicyDocument:
         Version: "2012-10-17"
         Statement:

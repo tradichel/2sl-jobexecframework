@@ -22,7 +22,7 @@ deploy_role() {
 
   rolename="$env-$rolename"
 
-  parameters=$(add_parameter "NameParam" $rolename)
+  parameters=$(add_parameter "cfparamName" $rolename)
   parameters=$(add_parameter "UsersParam" $users $parameters) 
 
   deploy_stack $rolename "iam" "role" $parameters
@@ -49,7 +49,7 @@ deploy_group_role(){
 
   resourcetype='role'
   template='grouprole.yaml'
-  p=$(add_parameter "GroupNameParam" $groupname)
+  p=$(add_parameter "GroupcfparamName" $groupname)
   p=$(add_parameter "GroupUsers" $users "$p")
   p=$(add_parameter "TimestampParam" $timestamp "$p")
   rolename=$groupname'role'
@@ -90,7 +90,7 @@ deploy_crossaccount_group_role(){
   profile="$targetacctprofile"
   resourcetype='role'
   template='grouprole.yaml'
-  p=$(add_parameter "GroupNameParam" $groupname)
+  p=$(add_parameter "GroupcfparamName" $groupname)
   p=$(add_parameter "GroupUsers" $users "$p")
   p=$(add_parameter "TimestampParam" $timestamp "$p")
  
@@ -110,7 +110,7 @@ deploy_role_policy(){
   function=${FUNCNAME[0]}
   validate_var $function "policyname" "$policyname"
 
-  p=$(add_parameter "NameParam" $policyname)
+  p=$(add_parameter "cfparamName" $policyname)
   template=$policyname'.yaml'
   
   deploy_stack $policyname "iam" "policy" $p $template
@@ -138,8 +138,8 @@ deploy_app_policy(){
   validate_var $function "secret" "$secret"
   validate_var $function "service" "$service"
 
-  p=$(add_parameter "NameParam" $appname)
-  p=$(add_parameter "EnvParam" $env $p)
+  p=$(add_parameter "cfparamName" $appname)
+  p=$(add_parameter "cfparamEnv" $env $p)
   p=$(add_parameter "HasSecretParam" $secret $p)
   p=$(add_parameter "ServiceParam" $service $p)
   if [ "$readbucket" != "" ]; then
@@ -171,7 +171,7 @@ deploy_ec2_instance_profile(){
   validate_var $function "profilename" "$profilename" 
   validate_var $function "rolename" "$rolename"
 
-  p=$(add_parameter "NameParam" "$profilename")
+  p=$(add_parameter "cfparamName" "$profilename")
   p=$(add_parameter "RoleNamesParam" "$rolename" "$p")
   template='cfn/EC2InstanceProfile.yaml'
   
@@ -192,7 +192,7 @@ deploy_aws_service_role(){
   validate_var $function "awsservice" "$awsservice"
 
   template='awsservicerole.yaml'
-  p=$(add_parameter "NameParam" $rolename)
+  p=$(add_parameter "cfparamName" $rolename)
   p=$(add_parameter "AWSServiceParam" $awsservice $p)
 
   deploy_stack $rolename "iam" "role" $p $template 

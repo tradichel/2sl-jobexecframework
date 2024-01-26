@@ -22,7 +22,7 @@ deploy_userpolicy() {
 
 	managementaccountid=$(get_management_account_number)
 
-  parameters=$(add_parameter "NameParam" $userpolicyname)
+  parameters=$(add_parameter "cfparamName" $userpolicyname)
   parameters=$(add_parameter "ManagementAccountIdParam" $managementaccountid)
 
   template=$userpolicyname'.yaml'
@@ -40,7 +40,7 @@ deploy_secret_userpolicy(){
   category='IAM'
   resourcetype='userpolicy'
   template='usersecretpolicy.yaml'
-  parameters=$(add_parameter "NameParam" $keyname)
+  parameters=$(add_parameter "cfparamName" $keyname)
   resource=$keyname'UserSecretPolicy'
   deploy_stack $resource $category $resourcetype $parameters
 

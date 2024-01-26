@@ -21,7 +21,7 @@ deploy_networkacl(){
 
 	category='ec2'
 	resourcetype='networkacl'
-	p=$(add_parameter "NameParam" $naclname)
+	p=$(add_parameter "cfparamName" $naclname)
 	p=$(add_parameter "VPCIdParam" $vpcid $p)
 	deploy_stack $naclname $category $resourcetype $p
 }

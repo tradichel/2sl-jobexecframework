@@ -3,7 +3,7 @@
 # author: @teriradichel @2ndsightlab
 ##############################################################
 Parameters: 
-  NameParam:
+  cfparamName:
     Type: String
   VPCIdParam:
     Type: String
@@ -15,17 +15,17 @@ Resources:
       VpcId: !Ref VPCIdParam
       Tags:
       - Key: Name
-        Value: !Ref NameParam
+        Value: !Ref cfparamName
 
 Outputs:
   naclid:
     Value: !Ref nacl
     Export:
-     Name: !Sub id-ec2-networkacl-${NameParam}
+     Name: !Sub id-ec2-networkacl-${cfparamName}
   naclarn:
     Value: !Ref nacl
     Export:
-     Name: !Sub arn-ec2-networkacl-${NameParam}
+     Name: !Sub arn-ec2-networkacl-${cfparamName}
 
 #################################################################################
 # Copyright Notice

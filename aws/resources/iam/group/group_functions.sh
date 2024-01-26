@@ -15,7 +15,7 @@ deploy_group(){
 
 	category='iam'
 	resourcetype='group'
-	parameters=$(add_parameter "NameParam" "$groupname")	
+	parameters=$(add_parameter "cfparamName" "$groupname")	
 	deploy_stack $groupname $category $resourcetype "$parameters"
 
 }

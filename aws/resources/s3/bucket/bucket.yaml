@@ -8,7 +8,7 @@
 ################################################################
 AWSTemplateFormatVersion: 2010-09-09
 Parameters:
-  NameParam:
+  cfparamName:
     Type: String
   KMSKeyIdParam:
     Type: String
@@ -42,7 +42,7 @@ Resources:
             ServerSideEncryptionByDefault:
               SSEAlgorithm: 'aws:kms'
               KMSMasterKeyID: !Ref KMSKeyIdParam        
-      BucketName: !Ref NameParam
+      BucketName: !Ref cfparamName
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: true
@@ -62,12 +62,12 @@ Resources:
               SSEAlgorithm: 'aws:kms'
               KMSMasterKeyID: !Ref KMSKeyIdParam
       BucketName:
-        !Ref NameParam
+        !Ref cfparamName
       LoggingConfiguration: 
         DestinationBucketName:
-          !Sub ${NameParam}-logs
+          !Sub ${cfparamName}-logs
         LogFilePrefix:
-          !Ref NameParam
+          !Ref cfparamName
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: true
@@ -88,19 +88,19 @@ Outputs:
   #BucketID:
   #  Value: !Ref Bucket
   #  Export:
-  #    Name: !Sub domain-s3-bucket-${NameParam}
+  #    Name: !Sub domain-s3-bucket-${cfparamName}
   #BucketDomainName:
   #  Value: !GetAtt [Bucket, DomainName]
   #  Export:
-  #    Name: !Sub domain-s3-bucket-${NameParam}
+  #    Name: !Sub domain-s3-bucket-${cfparamName}
   #BucketUrl:
   #  Value: !GetAtt [Bucket, WebsiteURL]
   #  Export:
-  #    Name: !Sub url-s3-bucket-${NameParam}
+  #    Name: !Sub url-s3-bucket-${cfparamName}
   #BucketArn:
   #  Value: !Ref Bucket
   #  Export: 
-  #    Name: !Sub arn-s3-bucket-${NameParam}
+  #    Name: !Sub arn-s3-bucket-${cfparamName}
     
 #################################################################################
 # Copyright Notice

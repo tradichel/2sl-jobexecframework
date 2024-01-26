@@ -18,7 +18,7 @@ deploy_route_table(){
   rtname=$vpcname$rttype'routetable'
   vpcstack='id-ec2-vpc-'$vpcname
 
-	p=$(add_parameter "NameParam" $rtname)
+	p=$(add_parameter "cfparamName" $rtname)
   p=$(add_parameter "VpcIdParam" $vpcid $p)
   p=$(add_parameter "RouteTypeParam" $rttype $p)
 	

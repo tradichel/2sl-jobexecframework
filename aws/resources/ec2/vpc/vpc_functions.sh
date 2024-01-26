@@ -31,7 +31,7 @@ deploy_vpc(){
   category="ec2"
   resourcetype="vpc"
 
-  p=$(add_parameter "NameParam" $vpcname)
+  p=$(add_parameter "cfparamName" $vpcname)
   p=$(add_parameter "CIDRParam" $cidr $p)
   
   deploy_stack $vpcname $category $resourcetype $p
@@ -94,7 +94,7 @@ import_vpc_default_routetable(){
   importtemplate=$tmp
 	cat $importtemplate
 
-  p=$(add_parameter "NameParam" $routetablename)
+  p=$(add_parameter "cfparamName" $routetablename)
   p=$(add_parameter "VpcIdParam" $vpcid $p)
   p=$(add_parameter "RouteTypeParam" $rttype $p)
 

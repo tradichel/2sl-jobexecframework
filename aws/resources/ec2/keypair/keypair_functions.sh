@@ -60,7 +60,7 @@ deploy_keypair_with_cloudformation_if_you_must(){
 	cat="ec2"
   resourcetype="keypair"
  	
-	p=$(add_parameter "NameParam" $keypairname)
+	p=$(add_parameter "cfparamName" $keypairname)
 
   deploy_stack $name $cat $resourcetype $p
 }

@@ -4,7 +4,7 @@
 # description: CloudFormation template to deploy an organization
 ##############################################################
 Parameters:
-  NameParam:
+  cfparamName:
     Type: String
     
 Resources:
@@ -18,36 +18,36 @@ Outputs:
   OrganizationID:
     Value: !Ref Organization
     Export:
-     Name: !Sub id-organizations-policy-${NameParam}
+     Name: !Sub id-organizations-policy-${cfparamName}
   OrganizaitonArn:
     Value: !GetAtt Organization.Arn
     Export:
-     Name: !Sub arn-organizations-policy-${NameParam}
+     Name: !Sub arn-organizations-policy-${cfparamName}
 
   OrganizationOutput:
     Value: !Ref Organization
     Export:
-      Name: !Ref NameParam
+      Name: !Ref cfparamName
   
   OrganizationArnOutput:
     Value: !GetAtt Organization.Arn
     Export:
-      Name: !Sub ${NameParam}arn
+      Name: !Sub ${cfparamName}arn
 
   OrganizationRootIdOutput:  
     Value: !GetAtt Organization.RootId
     Export:
-      Name: !Sub ${NameParam}rootid
+      Name: !Sub ${cfparamName}rootid
 
   OrganizationAccountIdOutput:
     Value: !GetAtt Organization.ManagementAccountId
     Export:
-      Name: !Sub ${NameParam}managementaccountid
+      Name: !Sub ${cfparamName}managementaccountid
 
   OrganizationManagementAccountArnOutput:
     Value: !GetAtt Organization.ManagementAccountArn
     Export:
-      Name: !Sub ${NameParam}managementaccountarn
+      Name: !Sub ${cfparamName}managementaccountarn
 
 #################################################################################
 # Copyright Notice

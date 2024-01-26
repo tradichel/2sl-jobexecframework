@@ -4,7 +4,7 @@
 # descirption: policy for root-orgadmin user in root-org account
 ##############################################################
 Parameters:
-  NameParam:
+  cfparamName:
     Type: String
     Default: "root-orgadminuserpolicy"
   ManagementAccountIdParam:
@@ -15,7 +15,7 @@ Resources:
     Type: AWS::IAM::UserPolicy
     Properties:
       UserName: root-orgadmin
-      PolicyName: !Ref NameParam
+      PolicyName: !Ref cfparamName
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -70,7 +70,7 @@ Outputs:
   PolicyID:
     Value: !Ref Policy
     Export:
-     Name: !Sub id-iam-userpolicy-${NameParam}
+     Name: !Sub id-iam-userpolicy-${cfparamName}
   CrossAccountRole:
     Value: !Sub arn:aws:iam::${ManagementAccountIdParam}:role/root-orgadminrole
     Export:

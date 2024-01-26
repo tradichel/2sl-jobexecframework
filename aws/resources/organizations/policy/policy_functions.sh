@@ -94,7 +94,7 @@ deploy_scp(){
   validate_var $func 'scpname' $scpname
   validate_var $func 'targetids' $targetids
 
-  parameters=$(add_parameter "NameParam" $scpname)
+  parameters=$(add_parameter "cfparamName" $scpname)
   parameters=$(add_parameter "TargetIdsParam" $targetids $parameters)
 
   deploy_scp_with_parameters $scpname $parameters $template
@@ -117,7 +117,7 @@ deploy_allowedregions(){
   validate_var $func 'region1' $region1
 	validate_var $func 'region2' $region2
 
-  parameters=$(add_parameter "NameParam" $scpname)
+  parameters=$(add_parameter "cfparamName" $scpname)
   parameters=$(add_parameter "TargetIdsParam" $targetids $parameters)
   parameters=$(add_parameter "Region1Param" $region1 $parameters)
   parameters=$(add_parameter "Region2Param" $region2 $parameters)

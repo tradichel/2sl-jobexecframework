@@ -4,7 +4,7 @@
 # description: create a public or private vpc
 ##############################################################
 Parameters: 
-  NameParam:
+  cfparamName:
     Type: String
   CIDRParam:
     Description: |
@@ -21,12 +21,12 @@ Resources:
       EnableDnsHostnames: True
       Tags:
       - Key: Name
-        Value: !Sub ${NameParam}
+        Value: !Sub ${cfparamName}
 
   LogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/vpc/${NameParam}LogGroup"
+      LogGroupName: !Sub "/vpc/${cfparamName}LogGroup"
       RetentionInDays: 30
  
   FlowLogs:
@@ -42,23 +42,23 @@ Outputs:
   vpcid:
     Value: !Ref VPC
     Export:
-     Name: !Sub id-ec2-vpc-${NameParam}
+     Name: !Sub id-ec2-vpc-${cfparamName}
   vpcarn:
     Value: !Ref VPC
     Export:
-     Name: !Sub arn-ec2-vpc-${NameParam}
+     Name: !Sub arn-ec2-vpc-${cfparamName}
   CidrOutput:
     Value: !GetAtt VPC.CidrBlock
     Export:
-      Name: !Sub ${NameParam}cidr
+      Name: !Sub ${cfparamName}cidr
   NetworkAclOutput:
     Value: !GetAtt VPC.DefaultNetworkAcl
     Export:
-      Name: !Sub ${NameParam}defaultnetworkacl
+      Name: !Sub ${cfparamName}defaultnetworkacl
   SecurityGroupOutput:
     Value: !GetAtt VPC.DefaultSecurityGroup
     Export:
-      Name: !Sub ${NameParam}defaultsecuritygroup
+      Name: !Sub ${cfparamName}defaultsecuritygroup
 
 #################################################################################
 # Copyright Notice

@@ -5,7 +5,7 @@
 # manage organization resources
 ##############################################################
 Parameters:
-  NameParam:
+  cfparamName:
     Type: String
   OrgPoliciesAdminAccountParam:
     Type: String
@@ -67,11 +67,11 @@ Outputs:
   ResourcePolicyID:
     Value: !Ref ResourcePolicy
     Export:
-     Name: !Sub id-organizations-resourcepolicy-${NameParam}
+     Name: !Sub id-organizations-resourcepolicy-${cfparamName}
   ResourcePolicyArn:
     Value: !GetAtt ResourcePolicy.Arn
     Export:
-     Name: !Sub arn-organizations-resourcepolicy-${NameParam}
+     Name: !Sub arn-organizations-resourcepolicy-${cfparamName}
 
 #################################################################################
 # Copyright Notice

@@ -4,7 +4,7 @@
 # description: deploy a nat with an EIP associated with a subnet
 ##############################################################
 Parameters: 
-  NameParam:
+  cfparamName:
     Type: String
   EIPIdExportParam:
     Type: String
@@ -23,13 +23,13 @@ Resources:
           !Ref SubnetIdExportParam
       Tags:
       - Key: Name
-        Value: !Sub ${NameParam}
+        Value: !Sub ${cfparamName}
     
 Outputs:
   NATIDOutput:
     Value: !GetAtt NAT.NatGatewayId
     Export:
-      Name: !Sub ${NameParam}
+      Name: !Sub ${cfparamName}
 
 #################################################################################
 # Copyright Notice

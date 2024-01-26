@@ -35,7 +35,7 @@ deploy_certificate(){
   if [ "$status" != "CREATE_IN_PROGRESS" ]; then
 
 		#certificate has not yet been deployed so deploy it
-  	parameters=$(add_parameter "DomainNameParam" "$domain")
+  	parameters=$(add_parameter "DomaincfparamName" "$domain")
 		parameters=$(add_parameter "DotsToDashesParam" "$dotstodashes" $parameters)
   	parameters=$(add_parameter "HostedZoneIdParam" "$hostedzoneid" $parameters)
 	

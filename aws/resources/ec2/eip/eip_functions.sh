@@ -21,7 +21,7 @@ deploy_eip() {
 
   eipname="$env-$eipname"
 
-  parameters=$(add_parameter "NameParam" $eipname)
+  parameters=$(add_parameter "cfparamName" $eipname)
 
   deploy_stack $eipname "ec2" "eip" $parameters
 

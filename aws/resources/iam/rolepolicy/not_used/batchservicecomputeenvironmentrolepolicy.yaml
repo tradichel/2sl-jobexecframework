@@ -1,5 +1,5 @@
 Parameters:
-  ComputeEnvironmentNameParam:
+  ComputeEnvironmentcfparamName:
     Type: String
     Default: "CloneGithubToCodeCommit"
 
@@ -100,7 +100,7 @@ Resources:
               - autoscaling:CreateLaunchConfiguration
               - autoscaling:DeleteLaunchConfiguration
             Resource: >-
-              !Sub arn:aws:autoscaling:*:*:launchConfiguration:*:launchConfigurationName/${ComputeEnvironmentNameParam}*
+              !Sub arn:aws:autoscaling:*:*:launchConfiguration:*:launchConfigurationName/${ComputeEnvironmentcfparamName}*
           - Effect: Allow
             Action:
               - autoscaling:CreateAutoScalingGroup
@@ -110,7 +110,7 @@ Resources:
               - autoscaling:SuspendProcesses
               - autoscaling:PutNotificationConfiguration
               - autoscaling:TerminateInstanceInAutoScalingGroup
-            Resource: !Sub arn:aws:autoscaling:*:*:autoScalingGroup:*:autoScalingGroupName/${ComputeEnvironmentNameParam}*
+            Resource: !Sub arn:aws:autoscaling:*:*:autoScalingGroup:*:autoScalingGroupName/${ComputeEnvironmentcfparamName}*
           - Effect: Allow
             Action:
               - ecs:DeleteCluster
@@ -118,7 +118,7 @@ Resources:
               - ecs:RunTask
               - ecs:StartTask
               - ecs:StopTask
-            Resource: !Sub arn:aws:ecs:*:*:cluster/${ComputeEnvironmentNameParam}*
+            Resource: !Sub arn:aws:ecs:*:*:cluster/${ComputeEnvironmentcfparamName}*
           - Effect: Allow
             Action:
               - ecs:RunTask

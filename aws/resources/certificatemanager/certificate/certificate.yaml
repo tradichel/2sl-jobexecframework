@@ -5,7 +5,7 @@
 ##############################################################
 
 Parameters:
-  DomainNameParam:
+  DomaincfparamName:
     Type: String
   DotsToDashesParam:
     Type: String
@@ -18,7 +18,7 @@ Resources:
   Certificate:
     Type: "AWS::CertificateManager::Certificate"
     Properties:
-      DomainName: !Ref DomainNameParam
+      DomainName: !Ref DomaincfparamName
       ValidationMethod: DNS
       #512 not yet rolled out? Getting errors.
       #KeyAlgorithm: EC_secp521r1
@@ -29,7 +29,7 @@ Resources:
       DomainValidationOptions:
         - 
           DomainName:
-            !Ref DomainNameParam
+            !Ref DomaincfparamName
           HostedZoneId:  
             !Ref HostedZoneIdParam
 

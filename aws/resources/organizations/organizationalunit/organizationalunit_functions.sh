@@ -17,7 +17,7 @@ deploy_organizationalunit(){
 	validate_set $func "ouname" $ouname
   validate_set $func "parentid" $parentid
 	
-  p=$(add_parameter "NameParam" $ouname)
+  p=$(add_parameter "cfparamName" $ouname)
 	p=$(add_parameter "ParentIdParam" $parentid $p)
 	
 	resourcecategory='organizations'

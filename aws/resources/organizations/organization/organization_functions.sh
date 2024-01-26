@@ -63,7 +63,7 @@ deploy_organization(){
 	#not using common deploy function here as the naming is a bit different
 	aws cloudformation deploy --template-file resources/organizations/organization/organization.yaml \
 				--stack-name root-organizations-organization-$org \
-				--parameter-overrides NameParam="$org"  \
+				--parameter-overrides cfparamName="$org"  \
 				--profile $profile --region $region
 }
 

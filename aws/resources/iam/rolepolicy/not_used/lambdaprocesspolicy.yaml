@@ -1,7 +1,7 @@
 Parameters:
-  NameParam:
+  cfparamName:
     Type: String
-  EnvParam:
+  cfparamEnv:
     Type: String
     AllowedValues: 
       - Sandbox
@@ -21,7 +21,7 @@ Resources:
   LambdaProcessPolicy:
     Type: 'AWS::IAM::ManagedPolicy'
     Properties:
-      ManagedPolicyName: !Sub ${NameParam}LambdaPolicy
+      ManagedPolicyName: !Sub ${cfparamName}LambdaPolicy
       PolicyDocument:
         Version: "2012-10-17"
         Statement: 
@@ -36,7 +36,7 @@ Resources:
               - 'logs:CreateLogGroup'
               - 'logs:CreateLogStream'
               - 'logs:PutLogEvents'
-            Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${NameParam}:*'
+            Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${cfparamName}:*'
           - !If 
             - HasSecret
             - 
@@ -48,7 +48,7 @@ Resources:
                 - secretsmanager:ListSecretVersionIds
               Resource: 
                 -  Fn::ImportValue:
-                    !Sub ${NameParam}Secret
+                    !Sub ${cfparamName}Secret
             - !Ref AWS::NoValue
 
           - !If 
@@ -69,9 +69,9 @@ Resources:
                 - kms:Decrypt
               Resource:
                 - Fn::ImportValue:
-                    !Sub ${EnvParam}Key
+                    !Sub ${cfparamEnv}Key
             - !Ref AWS::NoValue
 
       Roles: 
-        - !Sub ${NameParam}LambdaRole
+        - !Sub ${cfparamName}LambdaRole
 

@@ -5,7 +5,7 @@
 Parameters:
   UserNamesParam:
     Type: CommaDelimitedList
-  GroupNameParam:
+  GroupcfparamName:
     Type: String
   TimestampParam:
     Type: String
@@ -15,7 +15,7 @@ Resources:
   UserToGroup:
     Type: AWS::IAM::UserToGroupAddition
     Properties: 
-      GroupName: !Ref GroupNameParam
+      GroupName: !Ref GroupcfparamName
       Users: !Ref UserNamesParam
 
 Outputs:
