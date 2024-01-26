@@ -27,7 +27,7 @@ get_config_resource_id(){
 
 deploy_resource_config(){
 	r_job_parameter="$1"	
-	r_config="$2"
+	r_config=$2
 
 	validate_job_param_name	$r_job_parameter
 
@@ -88,10 +88,6 @@ deploy() {
   job_config=$(get_ssm_parameter_job_config $job_parameter)
 
 	read -a config <<<"$job_config"
-
-	echo $config
-
-	echo "job config as array"
 
 	if [ "$rcat" == "stack" ]; then
     deploy_stack_config $config
