@@ -27,7 +27,7 @@ get_config_resource_id(){
 
 deploy_resource_config(){
 	r_job_parameter="$1"	
-	r_config=$2
+	r_config=("$@")
 
 	validate_job_param_name	$r_job_parameter
 
@@ -90,14 +90,14 @@ deploy() {
 	read -a config <<<"$job_config"
 
 	if [ "$rcat" == "stack" ]; then
-    deploy_stack_config $config
+    deploy_stack_config "${config[@]}"
 	else
-		deploy_resource_config $job_parameter $config
+		deploy_resource_config $job_parameter "${config[@]}"
 	fi
 }
 
 deploy_stack_config(){
-  stack_config="$1"
+  stack_config=("$@")
 
 	job_parameter=""
 	job_config=$@
