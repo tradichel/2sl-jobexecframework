@@ -103,7 +103,9 @@ deploy_stack_config(){
 
   for i in "${stack_config[@]}"
   do
-		
+			
+	   echo "Stack Config Line: $i"
+
      pname=$(echo $i | cut -d "=" -f1 | tr -d ' ') 
      pvalue=$(echo $i | cut -d "=" -f2 | tr -d ' ')
 
@@ -119,8 +121,10 @@ deploy_stack_config(){
 					job_config+=($i)
 				else
 					echo "Deploy job config: $job_parameter"
-					echo "$job_config"
-					deloy_resource_config $job_parameter $job_config
+					echo "Job Config:"
+					echo $job_config
+					echo "Deploy..."
+					echo "deploy_resource_config $job_parameter $job_config"
 					job_parameter=""
 					job_config=$@
 				fi
