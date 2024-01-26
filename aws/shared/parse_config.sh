@@ -26,17 +26,23 @@ get_config_resource_id(){
 }
 
 deploy_resource_config(){
-	r_job_parameter="$1"	
-	r_config=("$@")
+	local job_parameter="$1"	
+  local config=("$@")
 
-	validate_job_param_name	$r_job_parameter
+	validate_job_param_name	$job_parameter
 
-  resource=$(echo $r_job_parameter | cut -d "/" -f5)
-  rcat=$(echo $resource | cut -d "-" -f1)
-  rtype=$(echo $resource | cut -d "-" -f2)
-  rname=$(echo $resource | cut -d "-" -f3)
+  local resource=$(echo $job_parameter | cut -d "/" -f5)
+  local rcat=$(echo $resource | cut -d "-" -f1)
+  local rtype=$(echo $resource | cut -d "-" -f2)
+  local rname=$(echo $resource | cut -d "-" -f3)
+	local pname=""
+	local pvalue=""
+	local env=""
+	local region=""
+	local p=""
+	local parm=""
 
-  for i in "${r_config[@]}"
+  for i in "${config[@]}"
   do
 		 echo "Line: $i"
      pname=$(echo $i | cut -d "=" -f1 | tr -d ' ')
@@ -76,16 +82,17 @@ deploy_resource_config(){
 }
 
 deploy() {
-	job_parameter="$1"
+	local job_parameter="$1"
 
 	echo "parse_config: deploy $job_paramter"
 
- 	role=$(echo $job_parameter | cut -d "/" -f4)
-  resource=$(echo $job_parameter | cut -d "/" -f5)
-  rcat=$(echo $resource | cut -d "-" -f1)
+ 	local role=$(echo $job_parameter | cut -d "/" -f4)
+  local resource=$(echo $job_parameter | cut -d "/" -f5)
+  local rcat=$(echo $resource | cut -d "-" -f1)
 
-  job_config=$(get_ssm_parameter_job_config $job_parameter)
+  local job_config=$(get_ssm_parameter_job_config $job_parameter)
 
+	local config
 	read -a config <<<"$job_config"
 
 	if [ "$rcat" == "stack" ]; then
@@ -96,23 +103,23 @@ deploy() {
 }
 
 deploy_stack_config(){
-  stack_config=("$@")
+  local -n stack_config=$1
 
-	job_parameter=""
-	job_config=$@
+	local job_parameter=""
+	local job_config=$@
 
   for i in "${stack_config[@]}"
   do
 			
 	   echo "Stack Config Line: $i"
 
-     pname=$(echo $i | cut -d "=" -f1 | tr -d ' ') 
-     pvalue=$(echo $i | cut -d "=" -f2 | tr -d ' ')
+     local pname=$(echo $i | cut -d "=" -f1 | tr -d ' ') 
+     local pvalue=$(echo $i | cut -d "=" -f2 | tr -d ' ')
 
      echo $pname
 
      if [[ $pname == /job/* ]]; then 
-        job_parameter=$pname 
+        local job_parameter=$pname 
 				echo "Processing: $job_parameter"
      fi
 
@@ -125,8 +132,8 @@ deploy_stack_config(){
 					echo $job_config
 					echo "Deploy..."
 					echo "deploy_resource_config $job_parameter $job_config"
-					job_parameter=""
-					job_config=$@
+					local job_parameter=""
+					local job_config=$@
 				fi
 		 fi
  
