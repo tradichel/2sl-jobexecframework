@@ -29,23 +29,16 @@ deploy_resource_config(){
 	r_job_parameter="$1"	
 	r_config="$2"
 
-	echo "Validate job parameter"
 	validate_job_param_name	$r_job_parameter
 
-	echo "get variables"
   resource=$(echo $r_job_parameter | cut -d "/" -f5)
   rcat=$(echo $resource | cut -d "-" -f1)
   rtype=$(echo $resource | cut -d "-" -f2)
   rname=$(echo $resource | cut -d "-" -f3)
 
-	echo "Resource: $resource"
-	echo "Category: $rcat"
-	echo "Type: $rtype"
-	echo "Name: $rname"
-
   for i in "${r_config[@]}"
   do
-		 echo "$i"
+		 echo "Line: $i"
      pname=$(echo $i | cut -d "=" -f1 | tr -d ' ')
      pvalue=$(echo $i | cut -d "=" -f2 | tr -d ' ')
 
@@ -60,10 +53,6 @@ deploy_resource_config(){
 
      if [ "$pname" == "region" ];
          then region=$pvalue;
-				 echo $pname
-				 echo $pvalue
-				 echo $i
-				 echo "Region: $region"
          continue
      fi
 
@@ -76,14 +65,11 @@ deploy_resource_config(){
 				 continue
 		 fi
 		
-		 echo "Not processed: $i"
+		 echo "Not processed"
      
    done
 
    p=$(add_parameter "cfparamName" $rname $p)
-
-	 echo "Env: $env"
-	 echo "Region: $region"
 
    f=${FUNCNAME[0]}	 
 	 validate_set $f "rname" $rname
@@ -105,10 +91,6 @@ deploy() {
   resource=$(echo $job_parameter | cut -d "/" -f5)
   rcat=$(echo $resource | cut -d "-" -f1)
 
-	echo "Role: $role"
-	echo "Resource: $resource"
-	echo "Category: $rcat"
- 
   job_config=$(get_ssm_parameter_job_config $job_parameter)
 
 	echo "got job config"
@@ -120,8 +102,7 @@ deploy() {
 	if [ "$rcat" == "stack" ]; then
     deploy_stack_config $config
 	else
-		echo "deploy resource $job_parameter"
-		deploy_resource_config $job_parameter $config
+		deploy_resource_config $job_parameter $job_config
 	fi
 }
 
