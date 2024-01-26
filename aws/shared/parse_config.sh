@@ -66,11 +66,15 @@ deploy_resource_config(){
      fi
 
      if [[ $pname == cfparam* ]]; then
+				 echo "cf: $i"
          if [[ $pvalue == :get_id:* ]]; then
             pvalue=$(get_config_resource_id $pvalue)
          fi
          p=$(add_parameter $pname $pvalue $p)
+				 continue
 		 fi
+		
+		 echo "Not processed: $i"
      
    done
 
