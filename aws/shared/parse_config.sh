@@ -43,7 +43,6 @@ deploy_resource_config(){
 	echo "Type: $rtype"
 	echo "Name: $rname"
 
-	echo "loop through config lines"
   for i in "${r_config[@]}"
   do
      pname=$(echo $i | cut -d "=" -f1)
@@ -54,13 +53,14 @@ deploy_resource_config(){
      if [ "$pname" == "env" ]; then 
 				 env=$pvalue;
          if [ "$rname" != "$env" ]; then rname=$env'-'$rname; fi
-     		 echo "Env: $env"
-				 echo "rname: $rname"
 				 continue
 		 fi
 
      if [ "$pname" == "region" ];
          then region=$pvalue;
+				 echo $pname
+				 echo $pvalue
+				 echo $i
 				 echo "Region: $region"
          continue
      fi
