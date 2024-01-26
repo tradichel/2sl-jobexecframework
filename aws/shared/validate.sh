@@ -291,7 +291,9 @@ validate_job_param_name(){
 		
 	#only charaters should be alphanumeric or a forward
 	#slash or dash
-	v=$(echo "$1" | sed 's|[^[:alnum:]/-.]||g')
+	v=$(echo "$value" | sed -r 's|[^[:alnum:]/-]||g')
+
+	echo "$v"
 
   if [ "$1" != "$v" ]; then
 
@@ -302,6 +304,5 @@ validate_job_param_name(){
 	#validate that the value starts with /job
 	validate_starts_with $value "/job"
 }
-
 
 
