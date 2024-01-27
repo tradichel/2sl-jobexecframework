@@ -5,16 +5,16 @@
 Parameters:
   cfparamEnv:
     Type: String
-  SecretIDParam:
+  cfparamSecretID:
     Type: String
-  ReadOnlyRolesParam:
+  cfparamReadOnlyRoles:
     Type: CommaDelimitedList
 Resources:
  SecretPolicy:
   Type: "AWS::SecretsManager::ResourcePolicy"
   Properties:
     BlockPublicPolicy: true
-    SecretId: !Ref SecretIDParam
+    SecretId: !Ref cfparamSecretID
     ResourcePolicy:
       Id: SecretReourcePolicy
       Version: 2012-10-17
@@ -28,5 +28,5 @@ Resources:
           Action: "secretsmanager:GetSecretValue"
           Resource: "*"
           Principal: 
-              AWS: !Ref ReadOnlyRolesParam
+              AWS: !Ref cfparamReadOnlyRoles
 

@@ -7,7 +7,7 @@
 Parameters:
   cfparamDomainName:
     Type: String
-  DotsToDashesParam:
+  cfparamDotsToDashes:
     Type: String
   cfparamHostedZoneId:
     Type: String
@@ -37,11 +37,11 @@ Outputs:
   certificateid:
     Value: !Ref Certificate
     Export:
-     Name: !Sub id-certificatemanager-certificate-${DotsToDashesParam}
+     Name: !Sub id-certificatemanager-certificate-${cfparamDotsToDashes}
   certificatearn:
     Value: !Ref Certificate
     Export:
-     Name: !Sub arn-certificate-certificate-${DotsToDashesParam}
+     Name: !Sub arn-certificate-certificate-${cfparamDotsToDashes}
 
 #################################################################################
 # Copyright Notice

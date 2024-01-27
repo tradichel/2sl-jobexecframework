@@ -36,7 +36,7 @@ deploy_certificate(){
 
 		#certificate has not yet been deployed so deploy it
   	parameters=$(add_parameter "cfparamDomainName" "$domain")
-		parameters=$(add_parameter "DotsToDashesParam" "$dotstodashes" $parameters)
+		parameters=$(add_parameter "cfparamDotsToDashes" "$dotstodashes" $parameters)
   	parameters=$(add_parameter "cfparamHostedZoneId" "$hostedzoneid" $parameters)
 	
 		category="certificatemanager"

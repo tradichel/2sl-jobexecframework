@@ -5,23 +5,7 @@
 # Description: deploy a secret
 ##############################################################
 source shared/functions.sh
-
-deploy_secret() {
-  secretname="$1"
-	kmskeyid="$2"
-	secretvalue="$3"
-
-  function=${FUNCNAME[0]}
-  validate_var "$function" "secretname" "$secretname" 
-  validate_var "$function" "kmskeyid" "$kmskeyid" 
-  validate_var "$function" "secretvalue" "$secretvalue"
- 
-  parameters=$(add_parameter "cfparamName" $secretname)
-  parameters=$(add_parameter "KMSKeyID" $kmskeyid $parameters)
-  parameters=$(add_parameter "SecretValue" $secretvalue $parameters)
-
-  deploy_stack $secretname "secretsmanager" "secret" $parameters
-}
+source shared/validate.sh
 
 #secret must exist
 #secret id is:

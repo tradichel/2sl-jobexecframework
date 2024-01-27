@@ -1,18 +1,18 @@
 Parameters:
   cfparamName:
     Type: String
-  ValueParam:
+  cfparamValue:
     Type: String
-  DescriptionParam:
+  cfparamDescription:
     Type: String
     Default: ""
-  DataType:
+  cfparamDataType:
     Type: String
     Default: "text"
     AllowedValues:
       - "text"
       - "aws:ec2:image"
-  Type:
+  cfparamType:
     Type: String
     Default: "String"
     AllowedValues:
@@ -20,7 +20,7 @@ Parameters:
       - "StringList"
       #Does not support SecureString at time of writing
       #awswishlist
-  TierParam:
+  cfparamTier:
     Type: String
     Default: "Standard"
     AllowedValues:
@@ -31,7 +31,7 @@ Parameters:
     #Advanced parameters, Type: SecureString: Envelope encryption w/KMS key you specify 
     #No point to advanced encryption options when we can't use the SecureString type so Standard is the only
     #option and is cheaper
-  AllowedPatternParam:
+  cfparamAllowedPattern:
     Type: String
     Default: '[a-z0-9]{1,255}$'
   #PoliciesParam:
@@ -46,9 +46,9 @@ Resources:
     Type: AWS::SSM::Parameter
     Properties:
       Name: !Ref cfparamName
-      DataType: !Ref DataType
-      Value: !Ref ValueParam
-      Type: !Ref Type
+      cfparamDataType: !Ref DataType
+      Value: !Ref cfparamValue
+      Type: !Ref cfparamType
         #CloudFormation does not support SecureString for Parameter Store
         #which is why parameters are not used for sensitived data
         #in this framework
