@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # resources/ec2/vpc/vpc_functions.sh
 # author: @teriradichel @2ndsightlab
 # description: deploy a VPC
@@ -25,7 +25,7 @@ deploy_nat(){
   template='cfn/NAT.yaml'
   p=$(add_parameter "cfparamName" $natname)
   p=$(add_parameter "EIPIdExportParam" $eipidexportname $p)
-  p=$(add_parameter "SubnetIdExportParam" $subnetidexportname $p)
+  p=$(add_parameter "cfparamSubnetIdExport" $subnetidexportname $p)
 
   deploy_stack $profile $natname $resourcetype $template "$p"
 
@@ -123,7 +123,7 @@ deploy_vpc (){
 	resourcetype='vpc'
  
   p=$(add_parameter "cfparamName" $vpcname)
- 	p=$(add_parameter "CIDRParam" $cidr $p)
+ 	p=$(add_parameter "cfparamCidr" $cidr $p)
 	
   deploy_stack $vpcname $category $resourcetype $p
 
@@ -249,7 +249,7 @@ get_sgrules_parameters() {
 		cidr="$2"
 
     p=$(add_parameter "SGExportParam" $sgname)
-    if [ "$cidr" != "" ]; then p=$(add_parameter "AllowCidrParam" "$cidr" $p); fi
+    if [ "$cidr" != "" ]; then p=$(add_parameter "cfparamAllowCidr" "$cidr" $p); fi
 		echo "$p"
 }
 
@@ -285,8 +285,8 @@ deploy_vpce_sg_rules() {
   validate_param "template" "$template" "$function"
 
   p=$(add_parameter "SGExportParam" $sgname)
-  p=$(add_parameter "ServiceParam" $service $p)
-  p=$(add_parameter "VPCcfparamName" $vpcname $p)
+  p=$(add_parameter "cfparamService" $service $p)
+  p=$(add_parameter "cfparamVPCName" $vpcname $p)
 
   resourcetype='SGRules'
   rulesname=$sgname'Rules'
@@ -370,18 +370,18 @@ deploy_subnet(){
 
   timestamp="$(date)"
   t=$(echo $timestamp | sed 's/ //g')
-  p=$(add_parameter "SubnetIdExportParam" $subnetname)
+  p=$(add_parameter "cfparamSubnetIdExport" $subnetname)
   p=$(add_parameter "NACLIdExportParam" $naclname $p) 
-	p=$(add_parameter "TimestampParam" $t $p)
+	p=$(add_parameter "cfparamTimestamp" $t $p)
 	deploy_stack $profile $subnetname$naclname $resourcetype $template "$p"
 
   template=cfn/SubnetRouteTableAssociation.yaml
   resourcetype='SubnetRouteTableAssociation'
   timestamp="$(date)"
   t=$(echo $timestamp | sed 's/ //g')
-  p=$(add_parameter "SubnetIdExportParam" $subnetname)
-  p=$(add_parameter "RouteTableIdExportParam" $routetablename $p)
-  p=$(add_parameter "TimestampParam" $t $p)
+  p=$(add_parameter "cfparamSubnetIdExport" $subnetname)
+  p=$(add_parameter "cfparamRouteTableIdExport" $routetablename $p)
+  p=$(add_parameter "cfparamTimestamp" $t $p)
   deploy_stack $profile $subnetname$routetablename $resourcetype $template "$p"
 
 }

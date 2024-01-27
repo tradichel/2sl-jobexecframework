@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/deploy/rootadminrole/iam_userpolicy_orgadminuserpolicy.sh
 # author: @teriradichel @2ndsightlab
 # Description: functions for user policies
@@ -23,7 +23,7 @@ deploy_userpolicy() {
 	managementaccountid=$(get_management_account_number)
 
   parameters=$(add_parameter "cfparamName" $userpolicyname)
-  parameters=$(add_parameter "ManagementAccountIdParam" $managementaccountid)
+  parameters=$(add_parameter "cfparamManagementAccountId" $managementaccountid)
 
   template=$userpolicyname'.yaml'
 

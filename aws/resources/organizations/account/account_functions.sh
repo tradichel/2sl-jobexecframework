@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation/
+# https://github.com/tradichel/2sl-jobexecframework/
 # awsdepoy/resources/organizations/account/account_functions.sh
 # author: @teriradichel @2ndsightlab
 # description: Functions to deploy accounts
@@ -7,52 +7,7 @@
 
 source shared/functions.sh
 source resources/organizations/organization/organization_functions.sh
-source resources/organizations/organizationalunit/organizationalunit_functions.sh
-
-#format of outputs:
-#account: env-accountname
-#email: accountname@domain
-#role: org-env
-deploy_account(){
-
-	accountname="$1"
-	ouname="$2"
-
-	env=$(echo $ouname | cut -d "-" -f1)
-	
-  function=${FUNCNAME[0]}
-  validate_var "$function" "accountname" "$accountname"
-  validate_var "$function" "ouname" "$ouname"
-  validate_var "$function" "env" "$env"
-
-	ouid=$(get_ou_id_from_name $ouname)
-  org=$(get_organization_prefix)
-  domain=$(get_organization_domain)
-	
-  validate_var "$function" "ouid" "$ouid"
-  validate_var "$function" "org" "$org"
-  validate_var "$function" "domain" "$domain"
-
-	#account naming convention - used by policies
-	#to restrict actions to particular ous and accounts
-	acctenv=$(echo $accountname | cut -d "-" -f1)
-	if [ "$acctenv" != "$env" ]; then
-		#add environment to account name
-		accountname="$env-$accountname"
-	fi
-	
-  parameters=$(add_parameter "cfparamName" $accountname)
-  parameters=$(add_parameter "cfparamDomain" $domain $parameters)	
-  parameters=$(add_parameter "cfparamEnv" $env $parameters)
-  parameters=$(add_parameter "cfparamOrg" $org $parameters)
-	parameters=$(add_parameter "cfparamParentIds" $ouid $parameters)
-	
-  resourcetype="account"
-  category="organizations"
-	
-	deploy_stack $accountname $category $resourcetype $parameters
-	
-}
+source resources/organizations/organizationalunit/organizationalunit_functions.s
 
 get_account_ou(){
 	accountid="$1"
@@ -99,7 +54,7 @@ get_account_number_from_account_name(){
 	get_account_number $1
 }
 
-get_account_number(){
+get_id(){
 	account_name=$1
 
   function=${FUNCNAME[0]}

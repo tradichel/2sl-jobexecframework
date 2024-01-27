@@ -1,23 +1,23 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/resources/ec2/networkaclentry/httpandhttpsoutbound.yaml
 # author: @teriradichel @2ndsightlab
 ##############################################################
 Parameters:
-  NetworkAclIdParam:
+  cfparamNetworkAclId:
     Type: String
-  EphemeralPortStartParam:
+  cfparamEphemeralPortStart:
     Type: String
     Default: "1024"
-  AllowCidrParam:
+  cfparamAllowCidr:
     Type: String
     Default: 0.0.0.0/0
-  EphemeralInNumberParam:
+  cfparamEphemeralInNumber:
     Type: String
     Default: 500 
-  HTTPOutRuleNumberParam:
+  cfparamHTTPOutRuleNumber:
     Type: String
     Default: 500
-  HTTPSOutRuleNumberParam:
+  cfparamHTTPSOutRuleNumber:
     Type: String
     Default: 501
 
@@ -26,41 +26,41 @@ Resources:
   NaclEphemeralInbound:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
-      CidrBlock: !Ref AllowCidrParam
+      CidrBlock: !Ref cfparamAllowCidr
       Egress: False
-      NetworkAclId: !Ref NetworkAclIdParam
+      NetworkAclId: !Ref cfparamNetworkAclId
       PortRange:
-        From: !Ref EphemeralPortStartParam
+        From: !Ref cfparamEphemeralPortStart
         To: 65535
       Protocol: 6
       RuleAction: Allow
-      RuleNumber: !Ref EphemeralInNumberParam
+      RuleNumber: !Ref cfparamEphemeralInNumber
 
   NaclEgress80:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
-      CidrBlock: !Ref AllowCidrParam
+      CidrBlock: !Ref cfparamAllowCidr
       Egress: True
-      NetworkAclId: !Ref NetworkAclIdParam
+      NetworkAclId: !Ref cfparamNetworkAclId
       PortRange:
         From: 80
         To: 80
       Protocol: 6
       RuleAction: Allow
-      RuleNumber: !Ref HTTPOutRuleNumberParam
+      RuleNumber: !Ref cfparamHTTPOutRuleNumber
 
   NaclEgress443:
     Type: AWS::EC2::NetworkAclEntry
     Properties:
-      CidrBlock: !Ref AllowCidrParam
+      CidrBlock: !Ref cfparamAllowCidr
       Egress: True
-      NetworkAclId: !Ref NetworkAclIdParam
+      NetworkAclId: !Ref cfparamNetworkAclId
       PortRange:
         From: 443
         To: 443
       Protocol: 6
       RuleAction: Allow
-      RuleNumber: !Ref HTTPSOutRuleNumberParam
+      RuleNumber: !Ref cfparamHTTPSOutRuleNumber
 
 #################################################################################
 # Copyright NoticParame

@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/deploy/role/rootadminrole.yaml
 # author: @teriradichel @2ndsightlab
 # Description: Generic IAM Role template

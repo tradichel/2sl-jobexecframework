@@ -1,5 +1,5 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
-# Network/stacks/cfn/NAT.yaml
+# https://github.com/tradichel/2sl-jobexecframework
+# resources/ec2/../NAT.yaml
 # author: @teriradichel @2ndsightlab
 # description: deploy a nat with an EIP associated with a subnet
 ##############################################################
@@ -8,7 +8,7 @@ Parameters:
     Type: String
   EIPIdExportParam:
     Type: String
-  SubnetIdExportParam:
+  cfparamSubnetIdExport:
     Type: String
 
 Resources:
@@ -20,7 +20,7 @@ Resources:
           !Ref EIPIdExportParam
       SubnetId:
         Fn::ImportValue:
-          !Ref SubnetIdExportParam
+          !Ref cfparamSubnetIdExport
       Tags:
       - Key: Name
         Value: !Sub ${cfparamName}

@@ -1,51 +1,51 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # KMS/stacks/Key/cfn/Key.yaml
 # author: @teriradichel @2ndsightlab
 ##############################################################
 Parameters:
-  EncryptArnParam:
+  cfparamEncryptArn:
     Type: CommaDelimitedList
     Default: ""
-  DecryptArnParam:
+  cfparamDecryptArn:
     Type: CommaDelimitedList
     Default: ""
-  AdminArnParam:
+  cfparamAdminArnParam:
     Type: CommaDelimitedList
     Default: ""
-  EncryptServicesParam:
+  cfparamEncryptServices:
     Type: CommaDelimitedList
     Default: ""
-  DecryptServicesParam:
+  cfparamDecryptServices:
     Type: CommaDelimitedList
     Default: ""
-  OrganizationIdParam:
+  cfparamOrganizationId:
     Type: String
     Default: ""
   EncryptOuParam:
     Type: CommaDelimitedList
     Default: ""
-  DecryptOuParam:
+  cfparamDecryptOu:
     Type: CommaDelimitedList
     Default: ""
-  KeyAliasParam:
+  cfparamKeyAlias:
     Type: String
-  RotateParam:
+  cfparamRotate:
     Type: String
     Default: "true"
     AllowedValues:
       - "true"
       - "false"
-  DescParam:
+  cfparamDesc:
     Type: String
     Default: ""
-  TimestampParam:
+  cfparamTimestamp:
     Type: String
     Description: "Force an update since AWS overwrites roles and CF doesn't recognize the change"
   #the service the user is using the key with, if restricted
-  ServiceParam:
+  cfparamService:
     Type: String
     Default: ""
-  CreateGrantAllowedParam:
+  cfparamCreateGrantAllowed:
     Type: String
     Default: "false"
     AllowedValues:
@@ -55,27 +55,27 @@ Parameters:
 Conditions:
   CreateGrantAllowed:
     !Or [
-      !Equals [!Ref CreateGrantAllowedParam, "true"],
-      !Equals [!Ref ServiceParam, "ec2"],
-      !Equals [!Ref ServiceParam, "ecr"],
+      !Equals [!Ref cfparamCreateGrantAllowed, "true"],
+      !Equals [!Ref cfparamService, "ec2"],
+      !Equals [!Ref cfparamService, "ecr"],
     ]
   ServiceIsSecretsManager:
-    !Equals [!Ref ServiceParam, "secretsmanager"]
+    !Equals [!Ref cfparamService, "secretsmanager"]
   NoEncryptServices:
     !Equals 
-      - !Select [0, !Ref EncryptServicesParam]
+      - !Select [0, !Ref cfparamEncryptServices]
       - ''
   NoDecryptServices:
     !Equals
-      - !Select [0, !Ref DecryptServicesParam]
+      - !Select [0, !Ref cfparamDecryptServices]
       - ''
   NoEncryptArns:
     !Equals
-      - !Select [0, !Ref EncryptArnParam]
+      - !Select [0, !Ref cfparamEncryptArn]
       - ''
   NoDecryptArns:
     !Equals
-      - !Select [0, !Ref DecryptArnParam]
+      - !Select [0, !Ref cfparamDecryptArn]
       - ''
   NoEncryptOus:
     !Equals
@@ -83,15 +83,15 @@ Conditions:
       - ''
   NoDecryptOus:
     !Equals
-      - !Select [0, !Ref DecryptOuParam]
+      - !Select [0, !Ref cfparamDecryptOu]
       - ''
 
 Resources:
   KMSKey:
     Type: AWS::KMS::Key
     Properties:
-      Description: !Ref DescParam
-      EnableKeyRotation: !Ref RotateParam
+      Description: !Ref cfparamDesc
+      EnableKeyRotation: !Ref cfparamRotate
       KeyPolicy:
         Version: 2012-10-17
         Id: key-default-1
@@ -108,7 +108,7 @@ Resources:
             Effect: Allow
             Principal:
               AWS:
-                !Ref AdminArnParam
+                !Ref cfparamAdminArnParam
             Action:
               - kms:Create*
               - kms:Describe*
@@ -148,7 +148,7 @@ Resources:
               Effect: Allow
               Principal:
                 AWS:
-                  !Ref EncryptArnParam
+                  !Ref cfparamEncryptArn
               Action:
                 - 'kms:Encrypt'
                 - 'kms:ReEncrypt*'
@@ -170,7 +170,7 @@ Resources:
               Effect: Allow
               Principal:
                 AWS:
-                  !Ref DecryptArnParam
+                  !Ref cfparamDecryptArn
               Action:
                 - 'kms:Decrypt'
                 - 'kms:DescribeKey'
@@ -184,7 +184,7 @@ Resources:
                   - 
                     "StringEquals":
                       "kms:ViaService":
-                        - !Sub "${ServiceParam}.${AWS::Region}.amazonaws.com"
+                        - !Sub "${cfparamService}.${AWS::Region}.amazonaws.com"
                   - !Ref AWS::NoValue
               Resource: "*"
 
@@ -211,7 +211,7 @@ Resources:
               Condition:
                 "StringEquals":
                   "aws:PrincipalOrgID": 
-                    !Ref OrganizationIdParam
+                    !Ref cfparamOrganizationId
                 "ForAnyValue:StringLike":
                   "aws:PrincipalOrgPaths": 
                     !Ref EncryptOuParam
@@ -234,7 +234,7 @@ Resources:
               Condition:
                 "StringEquals":
                   "aws:PrincipalOrgID":
-                    !Ref OrganizationIdParam
+                    !Ref cfparamOrganizationId
                 "ForAnyValue:StringLike":
                   "aws:PrincipalOrgPaths":
                     !Ref EncryptOuParam
@@ -254,7 +254,7 @@ Resources:
               Effect: Allow
               Principal:
                 Service:
-                  !Ref EncryptServicesParam
+                  !Ref cfparamEncryptServices
               Action:
                 - 'kms:Encrypt'
                 - !If
@@ -271,7 +271,7 @@ Resources:
               Effect: Allow
               Principal:
                 Service:
-                  !Ref DecryptServicesParam
+                  !Ref cfparamDecryptServices
               Action:
                 - 'kms:Decrypt'
                 - !If
@@ -284,7 +284,7 @@ Resources:
                   - 
                     "StringEquals":
                       "kms:ViaService":
-                        - !Sub "${ServiceParam}.${AWS::Region}.amazonaws.com"
+                        - !Sub "${cfparamService}.${AWS::Region}.amazonaws.com"
                   - !Ref AWS::NoValue
               Resource: "*"
 
@@ -292,12 +292,12 @@ Outputs:
   resourceid:
     Value: !GetAtt KMSKey.KeyId
     Export:
-     Name: !Sub id-kms-key-${KeyAliasParam}
+     Name: !Sub id-kms-key-${cfparamKeyAlias}
   resourcearn:
     Value: !GetAtt KMSKey.Arn
     Export:
-      Name: !Sub arn-iam-key-${KeyAliasParam}
+      Name: !Sub arn-iam-key-${cfparamKeyAlias}
   ForceUpdate:
-    Value: !Sub "${TimestampParam}"
+    Value: !Sub "${cfparamTimestamp}"
     Export:
       Name: ForceUpdate

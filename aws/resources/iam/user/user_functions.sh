@@ -1,51 +1,11 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation/
+# https://github.com/tradichel/2sl-jobexecframework/
 # resources/iam/user/user_functions.sh
 # author: @teriradichel @2ndsightlab
 # description: Functions for user creation
 ##############################################################
 source shared/functions.sh
 source shared/validate.sh
-
-deploy_user() {
-
-	username="$1"
-	console_access="$2"
-	managed_policy_arns="$3"
-		
-	function=${FUNCNAME[0]}
-  validate_var $function "username" $username
-	validate_var $function "console_access" $console_access
-
-	category='iam'
-  resourcetype='user'
-  parameters=$(add_parameter "cfparamName" $username)
-  
-	if [ "$console_access" == "true" ]; then
-  	  parameters=$(add_parameter "ConsoleAccess" "true" $parameters)
-	fi
-
-	if [ "$managed_policy_arn" != "" ]; then
-	  parameters=$(add_parameter "ManagedPolicyArnsParam" $managed_policy_arn $parameters)
-	fi
-
-	deploy_stack $username $category $resourcetype $parameters
-
-}
-
-deploy_admin() {
-
- 	username="$1"
-
-	function=${FUNCNAME[0]}
-  validate_var $function "username" "$username"
-
-	console_access="true"
-	
-	adminpolicyarn=$(aws iam list-policies --query 'Policies[?PolicyName==`AdministratorAccess`]'.Arn --output text)
-
-	deploy_user $username $console_access $adminpolicyarn
-}
 
 create_ssh_key(){
 

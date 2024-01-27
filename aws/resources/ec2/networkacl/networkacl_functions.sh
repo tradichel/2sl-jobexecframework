@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/resources/ec2/networkacl/networkacl_functions.sh
 # author: @teriradichel @2ndsightlab
 # description: deploy a VPC
@@ -22,7 +22,7 @@ deploy_networkacl(){
 	category='ec2'
 	resourcetype='networkacl'
 	p=$(add_parameter "cfparamName" $naclname)
-	p=$(add_parameter "VPCIdParam" $vpcid $p)
+	p=$(add_parameter "cfparamVPCId/ec2/.." $vpcid $p)
 	deploy_stack $naclname $category $resourcetype $p
 }
 

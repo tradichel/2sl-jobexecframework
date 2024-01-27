@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation/
+# https://github.com/tradichel/2sl-jobexecframework/
 # awsdeploy/resources/organizations/organization/organization_functions.sh
 # author: @teriradichel @2ndsightlab
 # description: Functions used to deploy an organization
@@ -67,14 +67,18 @@ deploy_organization(){
 				--profile $profile --region $region
 }
 
+get_organization_id(){
+  echo $get_id
+}
+
 get_root_id(){
-	rootouid=$(aws organizations list-roots --query Roots[0].Id --output text --profile $profile)
+	local rootouid=$(aws organizations list-roots --query Roots[0].Id --output text --profile $profile)
 	echo $rootouid
 }
 
 enable_all_features(){
 
-	  enabled=$(aws organizations describe-organization --query \
+	 	local enabled=$(aws organizations describe-organization --query \
 		       'Organization.FeatureSet' --output text --profile $profile)
 
 	    if [ "$enabled" == "ALL" ]; then
@@ -87,20 +91,20 @@ enable_all_features(){
 
 enable_scps(){
 	
-	enabled=$(aws organizations describe-organization --query \
+	local enabled=$(aws organizations describe-organization --query \
 		 'Organization.AvailablePolicyTypes[?Type==`SERVICE_CONTROL_POLICY`].Status' --output text --profile $profile)
 	
 	if [ "$enabled" == "ENABLED" ]; then
 		echo "SCPs are already enabled."
   else
-		rootouid=$(get_root_id)
+		local rootouid=$(get_root_id)
  	 	aws organizations enable-policy-type --root-id $rootouid --policy-type SERVICE_CONTROL_POLICY --profile $profile
 	fi
 
 }
 
-get_organization_id(){
-	orgid=$(aws organizations describe-organization --query 'Organization.Id' --output text --profile $profile)
+get_id(){
+	local orgid=$(aws organizations describe-organization --query 'Organization.Id' --output text --profile $profile)
 	echo $orgid
 }
 

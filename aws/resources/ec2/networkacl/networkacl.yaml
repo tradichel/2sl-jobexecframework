@@ -1,18 +1,18 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
-# Network/stacks/cfn/NACL.yaml
+# https://github.com/tradichel/2sl-jobexecframework
+# resources/ec2/../NACL.yaml
 # author: @teriradichel @2ndsightlab
 ##############################################################
 Parameters: 
   cfparamName:
     Type: String
-  VPCIdParam:
+  cfparamVPCId/ec2/..:
     Type: String
 
 Resources:
   nacl:
     Type: AWS::EC2::NetworkAcl
     Properties:
-      VpcId: !Ref VPCIdParam
+      VpcId: !Ref cfparamVPCId/ec2/..
       Tags:
       - Key: Name
         Value: !Ref cfparamName

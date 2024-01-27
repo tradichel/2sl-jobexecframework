@@ -1,38 +1,38 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
-# Network/stacks/cfn/VPCEndpoint.yaml
+# https://github.com/tradichel/2sl-jobexecframework
+# resources/ec2/../VPCEndpoint.yaml
 # author: @teriradichel @2ndsightlab
 # description: VPC Endpoint template
 ##############################################################
 Parameters:
-  ServiceParam:
+  cfparamService:
     Type: String
-  EndpointServicecfparamName:
+  cfparamEndpointService:
     Type: String
-  VPCcfparamName:
+  cfparamVPCName:
     Type: String
-  SubnetcfparamName:
+  cfparamSubnetName:
     Type: String
-  SecurityGroupcfparamName:
+  cfparamSecurityGroupName:
     Type: String
-  ReadPrincipalsParam:
+  cfparamReadPrincipals:
     Type: CommaDelimitedList
-  ReadActionsParam:
+  cfparamReadActions:
     Type: CommaDelimitedList
-  ReadResourcesParam:
+  cfparamReadResources:
     Type: CommaDelimitedList
-  ReadAllowDenyParam:
+  cfparamReadAllowDeny:
     Type: String
     Default: Deny
-  WritePrincipalsParam:
+  cfparamWritePrincipals:
     Type: CommaDelimitedList
     Default: "None"
-  WriteActionsParam:
+  cfparamWriteActions:
     Type: CommaDelimitedList
     Default: "None"
-  WriteResourcesParam:
+  cfparamWriteResources:
     Type: CommaDelimitedList
     Default: "None"
-  WriteAllowDenyParam:
+  cfparamWriteAllowDeny:
     Type: String
     Default: Deny
     AllowedValues:
@@ -41,7 +41,7 @@ Parameters:
 
 Conditions:
   NoWrite: !Equals
-      - !Ref WriteAllowDenyParam
+      - !Ref cfparamWriteAllowDeny
       - "Deny"
 
 Resources:
@@ -51,39 +51,39 @@ Resources:
       PolicyDocument:
         Version: 2012-10-17
         Statement:
-          - Effect: !Ref ReadAllowDenyParam
+          - Effect: !Ref cfparamReadAllowDeny
             Principal:
-              AWS: !Ref ReadPrincipalsParam
-            Action: !Ref ReadActionsParam
-            Resource: !Ref ReadResourcesParam
+              AWS: !Ref cfparamReadPrincipals
+            Action: !Ref cfparamReadActions
+            Resource: !Ref cfparamReadResources
           - !If
             - NoWrite
             - !Ref AWS::NoValue
             - 
-              Effect: !Ref WriteAllowDenyParam
+              Effect: !Ref cfparamWriteAllowDeny
               Principal: 
                 AWS: 
-                  !Ref WritePrincipalsParam
-              Action:  !Ref WriteActionsParam
-              Resource: !Ref WriteResourcesParam
+                  !Ref cfparamWritePrincipals
+              Action:  !Ref cfparamWriteActions
+              Resource: !Ref cfparamWriteResources
       VpcEndpointType: Interface
       PrivateDnsEnabled: True
-      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.${EndpointServicecfparamName}'
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.${cfparamEndpointService}'
       VpcId:
         Fn::ImportValue: 
-          !Sub "${VPCcfparamName}"
+          !Sub "${cfparamVPCName}"
       SubnetIds: 
         - Fn::ImportValue:
-            !Sub "${SubnetcfparamName}"
+            !Sub "${cfparamSubnetName}"
       SecurityGroupIds:
         - Fn::ImportValue: 
-            !Sub "${SecurityGroupcfparamName}"
+            !Sub "${cfparamSecurityGroupName}"
 
 Outputs:
   VPCEOutput:
     Value: !Ref VPCE
     Export:
-      Name: !Sub VPCE-${ServiceParam}
+      Name: !Sub VPCE-${cfparamService}
 
 
 

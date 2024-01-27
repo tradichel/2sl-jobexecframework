@@ -1,25 +1,11 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # resources/iam/group/group_functions.sh
 # author: @teriradichel @2ndsightlab
 # Description: Functions to deploy a group and add users to groups
 ##############################################################
 source "shared/functions.sh"
 source "shared/validate.sh"
-
-deploy_group(){
-	groupname="$1"
- 
-	function=${FUNCNAME[0]}
-	validate_var $function "groupname" $groupname
-
-	category='iam'
-	resourcetype='group'
-	parameters=$(add_parameter "cfparamName" "$groupname")	
-	deploy_stack $groupname $category $resourcetype "$parameters"
-
-}
-
 
 get_users_in_group() {
   groupname="$1"

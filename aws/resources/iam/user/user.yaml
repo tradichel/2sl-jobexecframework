@@ -1,4 +1,4 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/resources/iam/user/user.yaml
 # author: @tradichel @2ndsightlab
 # description: CloudFormation template to create an IAM user
@@ -6,26 +6,26 @@
 Parameters:
   cfparamName:
     Type: String
-  ConsoleAccessParam:
+  cfparamConsoleAccess:
     Type: String
     AllowedValues:
       - true
       - false
     Default: false
-  ManagedPolicyArnParam:
+  cfparamManagedPolicyArn:
     Type: String
     Default: "None"
-  #TimestampParam:
+  #cfparamTimestamp:
   #  Type: String
   #  Description: Force an update since AWS overwrites roles and CF doesn't recognize the change
 
 Conditions:
   ConsoleAllowed: !Equals
-    - !Ref ConsoleAccessParam
+    - !Ref cfparamConsoleAccess
     - true
   AssignManagedPolicy: !Not
     - !Equals
-      - !Ref ManagedPolicyArnParam
+      - !Ref cfparamManagedPolicyArn
       - "None"
 
 Resources:
@@ -53,7 +53,7 @@ Resources:
         !If
           - AssignManagedPolicy
           - 
-            - !Ref ManagedPolicyArnParam
+            - !Ref cfparamManagedPolicyArn
           - !Ref AWS::NoValue
       LoginProfile:
         Fn::If: 
@@ -74,7 +74,7 @@ Outputs:
     Export:
      Name: !Sub arn-iam-user-${cfparamName}
  # forceupdate:
- #   Value: !Sub "${TimestampParam}"
+ #   Value: !Sub "${cfparamTimestamp}"
 #################################################################################
 # Copyright Notice
 # All Rights Reserved.

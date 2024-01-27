@@ -1,4 +1,4 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/resources/iam/userpolicy/orgadminuserpolicy.yaml
 # author: @tradichel @2ndsightlab
 # descirption: policy for root-orgadmin user in root-org account
@@ -7,7 +7,7 @@ Parameters:
   cfparamName:
     Type: String
     Default: "root-orgadminuserpolicy"
-  ManagementAccountIdParam:
+  cfparamManagementAccountId:
     Type: String
 
 Resources:
@@ -62,7 +62,7 @@ Resources:
           - Sid: "AllowAssumeRole"
             Effect: Allow
             Action: sts:assumerole
-            Resource: !Sub arn:aws:iam::${ManagementAccountIdParam}:role/root-orgadminrole
+            Resource: !Sub arn:aws:iam::${cfparamManagementAccountId}:role/root-orgadminrole
             Condition:
               Bool:
                 "aws:MultiFactorAuthPresent": "true"
@@ -72,7 +72,7 @@ Outputs:
     Export:
      Name: !Sub id-iam-userpolicy-${cfparamName}
   CrossAccountRole:
-    Value: !Sub arn:aws:iam::${ManagementAccountIdParam}:role/root-orgadminrole
+    Value: !Sub arn:aws:iam::${cfparamManagementAccountId}:role/root-orgadminrole
     Export:
       Name: OrgManagementRole
 

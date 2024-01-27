@@ -1,33 +1,20 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/resources/ec2/networkaclentry/networkaclentry_functions.sh
 # author: @teriradichel @2ndsightlab
 # Description: allow outbound http and https traffic in nacl
 ##############################################################
-
-
 source shared/functions.sh
+source shared/validate.sh
 
-deploy_networkaclentry() {
-  naclentryname="$1"
-  naclid="$2"
-	template="$3"
+get_id(){
+  local name="$1"
 
-  function=${FUNCNAME[0]}
-  validate_var $function "naclentryname" $naclentryname
-	validate_var $function "naclid" $naclid
-  validate_var $function "template" $template
-  
-	parameters=$(add_parameter "NetworkAclIdParam" $naclid)
-	
-	category="ec2"
-	resourcetype="networkaclentry"
+  validate_set "${FUNCNAME[0]}" "name" "$name"
 
-  deploy_stack $naclentryname $category $resourcetype $parameters $template
-
+  echo "get_id not implemented for {{resource_type}}"
+  exit 1
 }
-
-
 
 #################################################################################
 # Copyright Notice

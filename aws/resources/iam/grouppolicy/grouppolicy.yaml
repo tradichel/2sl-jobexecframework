@@ -1,5 +1,5 @@
 
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # IAM/stacks/Group/cfn/Policy/GroupPolicy.yaml
 # author: @tradichel @2ndsightlab
 ##############################################################
@@ -7,7 +7,7 @@ Parameters:
   cfparamName:
     Type: String
     Description: "Group Name"
-  XAcctNumParam:
+  cfparamXAcctNumParam:
     Type: String
     Default: "None"
     Description: Optional Paramater for a Cross-Account role
@@ -15,7 +15,7 @@ Parameters:
 Conditions:
     XacctNumExists: !Not
       - !Equals 
-        - !Ref XAcctNumParam
+        - !Ref cfparamXAcctNumParam
         - "None"
 
 Resources:
@@ -31,7 +31,7 @@ Resources:
             Resource: 
               !If
                 - XacctNumExists
-                - !Sub 'arn:aws:iam::${XAcctNumParam}:role/${cfparamName}Group'
+                - !Sub 'arn:aws:iam::${cfparamXAcctNumParam}:role/${cfparamName}Group'
                 - !Sub 'arn:aws:iam::${AWS::AccountId}:role/${cfparamName}Group'
             Condition:
               "Bool":

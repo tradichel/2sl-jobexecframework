@@ -1,5 +1,5 @@
 Parameters:
-  cfn_param_admins:
+  cfparamadmins:
     Type: CommaDelimitedList
 
 Resources:
@@ -14,7 +14,7 @@ Resources:
             Action: "sts:AssumeRole"
             Principal:
               AWS:
-                !Ref cfn_param_admins
+                !Ref cfparamadmins
             Condition:
               "Bool":
                 "aws:MultiFactorAuthPresent": "true"

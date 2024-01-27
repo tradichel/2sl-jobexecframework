@@ -1,13 +1,13 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
-# Network/stacks/cfn/SubnetRouteTableAssociation.yaml
+# https://github.com/tradichel/2sl-jobexecframework
+# resources/ec2/subnetroutetableassociation/SubnetRouteTableAssociation.yaml
 # author: @teriradichel @2ndsightlab
 ##############################################################
 Parameters: 
-  SubnetIdExportParam:
+  cfparamSubnetId:
     Type: String
-  RouteTableIdExportParam:
+  cfparamRouteTableId:
     Type: String
-  TimestampParam:
+  cfparamTimestamp:
     Type: String
     Description: Force an update since AWS doesn't recognize the parameter value changes
 
@@ -17,16 +17,15 @@ Resources:
     Properties:
       RouteTableId:
         Fn::ImportValue:
-          !Sub "${RouteTableIdExportParam}"
+          !Ref cfparamRouteTableId
       SubnetId:
-        Fn::ImportValue:
-          !Sub "${SubnetIdExportParam}"
+          !Ref cfparamSubnetId
 
 Outputs:
   RouteAssocationOutput:
     Value: !Ref SubnetRouteTableAssociation
   ForceUpdate:
-    Value: !Sub "${TimestampParam}"
+    Value: !Sub "${cfparamTimestamp}"
 
 #################################################################################
 # Copyright Notice

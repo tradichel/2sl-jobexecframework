@@ -1,11 +1,11 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
-# Network/stacks/cfn/SecurityGroup.yaml
+# https://github.com/tradichel/2sl-jobexecframework
+# resources/ec2/../SecurityGroup.yaml
 # author: @teriradichel @2ndsightlab
 ##############################################################
 Parameters: 
   cfparamName:
     Type: String
-  VPCIdParam:
+  cfparamVPCId/ec2/..:
     Type: String
   GroupDescriptionParam:
     Type: String
@@ -16,7 +16,7 @@ Resources:
     Properties:
       GroupName: !Ref cfparamName
       GroupDescription: !Ref GroupDescriptionParam
-      VpcId: !Ref VPCIdParam
+      VpcId: !Ref cfparamVPCId/ec2/..
       Tags:
       - Key: Name
         Value: !Ref cfparamName

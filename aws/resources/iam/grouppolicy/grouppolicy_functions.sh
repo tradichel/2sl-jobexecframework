@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # resources/iam/group/grouppolicy_functions.sh
 # author: @teriradichel @2ndsightlab
 # Description: Functions to deploy a group policy
@@ -7,65 +7,13 @@
 source "shared/functions.sh"
 source "shared/validate.sh"
 
-deploy_project_group_policy(){
-	groupname="$1"
-	xacctnum="$2" #optional
+get_id(){
+  local name="$1"
 
-	template="projectgrouppolicy.yaml"
-	
-	deploy_group_policy $groupname $template $xacctnum
-}
+  validate_set "${FUNCNAME[0]}" "name" "$name"
 
-deploy_group_policy(){
-
-	groupname="$1"
-	template="$2"
-	xacctnum="$3" #optional
-
-	policyname=$groupname'grouppolicy'
-
-  f=${FUNCNAME[0]}
- 	validate_var $f "groupname" "$groupname" 
- 	validate_var $f "policyname" "$policyname"
-
-	if [ "$template" == "" ]; then 
-		template='$policyname'
-	fi
-
-	parameters=$(add_parameter "cfparamName" $policyname)
-  parameters=$(add_parameter "GroupcfparamName" $groupname $parameters)
-  if [ "$xacctnum" != "" ]; then
-		echo $xacctnum
-    parameters=$(add_parameter "XAcctNumParam" $xacctnum $parameters)
-  fi
-
-	category='iam'
-	resourcetype='grouppolicy'
-
-	echo "deploy_stack $category $category $resourcetype $parameters $template"
-	deploy_stack $policyname $category $resourcetype $parameters $template
-
-}
-
-add_users_to_group() {
-
-  usernames="$1"
-	groupname="$2"
-  
-  function=${FUNCNAME[0]}
-  validate_param "usernames" "$usernames" "$function"
-	validate_param "groupname" "$groupname" "$function"
-	
-	timestamp=$(get_timestamp)
-
-	template='cfn/UserToGroupAddition.yaml'
-	name='AddUsersTo'$groupname
-	resourcetype='UserToGroupAddition'
-	parameters=$(add_parameter "UserNamesParam" $usernames)
-	parameters=$(add_parameter "GroupcfparamName" $groupname $parameters)
-  parameters=$(add_parameter "TimestampParam" $timestamp $parameters)
-	deploy_stack $profile $name $resourcetype $template "$parameters"
-
+  echo "get_id not implemented for {{resource_type}}"
+  exit 1
 }
 
 #################################################################################

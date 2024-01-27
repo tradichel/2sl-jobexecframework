@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # Network/stacks/network_functions.sh
 # author: @teriradichel @2ndsightlab
 # description: shared network functions
@@ -18,7 +18,7 @@ deploy_vpce() {
   template="cfn/VPCEndpoint.yaml"
   resourcetype="VPCEndpoint"
 
-  p=$(add_parameter "ServiceParam" $service)
+  p=$(add_parameter "cfparamService" $service)
 	
   deploy_stack $profile $service $resourcetype $template "$p"
 
@@ -82,21 +82,21 @@ deploy_vpce_generic() {
   resourcetype="VPCEndpoint"
 	p=""
 
-	p=$(add_parameter "ServiceParam" "$servicename")
-  p=$(add_parameter "EndpointServicecfparamName" "$endpointservicename" $p)
-  p=$(add_parameter "VPCcfparamName" "$vpcname" $p)
-  p=$(add_parameter "SubnetcfparamName" "$subnetname" $p)
-  p=$(add_parameter "SecurityGroupcfparamName" "$sgname" $p)
-  p=$(add_parameter "ReadPrincipalsParam" "$readprincipals" $p)
-  p=$(add_parameter "ReadActionsParam" "$readactions" $p)
-  p=$(add_parameter "ReadResourcesParam" "$readresources" $p)
-  p=$(add_parameter "ReadAllowDenyParam" "$readallowdeny" $p)
+	p=$(add_parameter "cfparamService" "$servicename")
+  p=$(add_parameter "cfparamEndpointService" "$endpointservicename" $p)
+  p=$(add_parameter "cfparamVPCName" "$vpcname" $p)
+  p=$(add_parameter "cfparamSubnetName" "$subnetname" $p)
+  p=$(add_parameter "cfparamSecurityGroupName" "$sgname" $p)
+  p=$(add_parameter "cfparamReadPrincipals" "$readprincipals" $p)
+  p=$(add_parameter "cfparamReadActions" "$readactions" $p)
+  p=$(add_parameter "cfparamReadResources" "$readresources" $p)
+  p=$(add_parameter "cfparamReadAllowDeny" "$readallowdeny" $p)
 	
 	if [ "$writeprincipals" != "" ]; then 
-  	p=$(add_parameter "WritePrincipalsParam" "$writeprincipals" $p)
-  	p=$(add_parameter "WriteActionsParam" "$writeactions" $p)
-  	p=$(add_parameter "WriteResourcesParam" "$writeresources" $p)
-  	p=$(add_parameter "WriteAllowDenyParam" "$writeallowdeny" $p)
+  	p=$(add_parameter "cfparamWritePrincipals" "$writeprincipals" $p)
+  	p=$(add_parameter "cfparamWriteActions" "$writeactions" $p)
+  	p=$(add_parameter "cfparamWriteResources" "$writeresources" $p)
+  	p=$(add_parameter "cfparamWriteAllowDeny" "$writeallowdeny" $p)
  	fi
 
 	deploy_stack $profile $servicename $resourcetype $template "$p"
@@ -133,7 +133,7 @@ deploy_nat(){
   template='cfn/NAT.yaml'
   p=$(add_parameter "cfparamName" $natname)
   p=$(add_parameter "EIPIdExportParam" $eipidexportname $p)
-  p=$(add_parameter "SubnetIdExportParam" $subnetidexportname $p)
+  p=$(add_parameter "cfparamSubnetIdExport" $subnetidexportname $p)
 
   deploy_stack $profile $natname $resourcetype $template "$p"
 
@@ -232,7 +232,7 @@ deploy_vpc (){
 	resourcetype='VPC'
   template='cfn/VPC.yaml'
   p=$(add_parameter "cfparamName" $vpcname)
- 	p=$(add_parameter "CIDRParam" $cidr $p)
+ 	p=$(add_parameter "cfparamCidr" $cidr $p)
 	
   deploy_stack $profile $vpcname $resourcetype $template "$p"
 
@@ -256,7 +256,7 @@ deploy_route_table(){
   
 	p=$(add_parameter "cfparamName" $rtname)
   p=$(add_parameter "VPCExportParam" $vpcname $p)
-  p=$(add_parameter "RouteTypeParam" $rttype $p)
+  p=$(add_parameter "RouteType" $rttype $p)
 	
 	if [ "$rttype" == "NAT" ]; then
 	  if [ "$gatewayname" == "" ]; then
@@ -419,7 +419,7 @@ get_sgrules_parameters() {
 		cidr="$2"
 
     p=$(add_parameter "SGExportParam" $sgname)
-    if [ "$cidr" != "" ]; then p=$(add_parameter "AllowCidrParam" "$cidr" $p); fi
+    if [ "$cidr" != "" ]; then p=$(add_parameter "cfparamAllowCidr" "$cidr" $p); fi
 		echo "$p"
 }
 
@@ -455,8 +455,8 @@ deploy_vpce_sg_rules() {
   validate_param "template" "$template" "$function"
 
   p=$(add_parameter "SGExportParam" $sgname)
-  p=$(add_parameter "ServiceParam" $service $p)
-  p=$(add_parameter "VPCcfparamName" $vpcname $p)
+  p=$(add_parameter "cfparamService" $service $p)
+  p=$(add_parameter "cfparamVPCName" $vpcname $p)
 
   resourcetype='SGRules'
   rulesname=$sgname'Rules'
@@ -540,18 +540,18 @@ deploy_subnet(){
 
   timestamp="$(date)"
   t=$(echo $timestamp | sed 's/ //g')
-  p=$(add_parameter "SubnetIdExportParam" $subnetname)
+  p=$(add_parameter "cfparamSubnetIdExport" $subnetname)
   p=$(add_parameter "NACLIdExportParam" $naclname $p) 
-	p=$(add_parameter "TimestampParam" $t $p)
+	p=$(add_parameter "cfparamTimestamp" $t $p)
 	deploy_stack $profile $subnetname$naclname $resourcetype $template "$p"
 
   template=cfn/SubnetRouteTableAssociation.yaml
   resourcetype='SubnetRouteTableAssociation'
   timestamp="$(date)"
   t=$(echo $timestamp | sed 's/ //g')
-  p=$(add_parameter "SubnetIdExportParam" $subnetname)
-  p=$(add_parameter "RouteTableIdExportParam" $routetablename $p)
-  p=$(add_parameter "TimestampParam" $t $p)
+  p=$(add_parameter "cfparamSubnetIdExport" $subnetname)
+  p=$(add_parameter "cfparamRouteTableIdExport" $routetablename $p)
+  p=$(add_parameter "cfparamTimestamp" $t $p)
   deploy_stack $profile $subnetname$routetablename $resourcetype $template "$p"
 
 }

@@ -1,13 +1,13 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # IAM/stacks/cfn/UserToGroupAddition.yaml
 # author: @tradichel @2ndsightlab
 ##############################################################
 Parameters:
-  UserNamesParam:
+  cfparamUserName:
     Type: CommaDelimitedList
-  GroupcfparamName:
+  cfparamGroupName:
     Type: String
-  TimestampParam:
+  cfparamTimestamp:
     Type: String
     Description: Force an update since AWS overwrites roles and CF doesn't recognize the change
 
@@ -15,12 +15,12 @@ Resources:
   UserToGroup:
     Type: AWS::IAM::UserToGroupAddition
     Properties: 
-      GroupName: !Ref GroupcfparamName
-      Users: !Ref UserNamesParam
+      GroupName: !Ref cfparamGroupName
+      Users: !Ref cfparamUserName
 
 Outputs:
   ForceUpdate:
-    Value: !Sub "${TimestampParam}"
+    Value: !Sub "${cfparamTimestamp}"
 
 #################################################################################
 # Copyright Notice

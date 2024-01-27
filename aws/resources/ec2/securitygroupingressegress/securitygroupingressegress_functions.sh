@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/resources/ec2/securitygroupingressegress/securitygroupingressegress_functions.sh
 # author: @teriradichel @2ndsightlab
 # description: deploy security group rules
@@ -25,7 +25,7 @@ deploy_rules_with_cidr() {
 	sgid=$(get_securitygroup_id $sgname)
 
   p=$(add_parameter "SecurityGroupIdParam" $sgid)
-  p=$(add_parameter "AllowCidrParam" $cidr $p)
+  p=$(add_parameter "cfparamAllowCidr" $cidr $p)
 
   deploy_securitygroupingressegress $rulesname $p
 }

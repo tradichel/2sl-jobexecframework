@@ -1,16 +1,16 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/deploy/role/role.yaml
 # author: @teriradichel @2ndsightlab
 # Description: Generic IAM Role template
 ##############################################################
 
 Parameters:
-  cfn_param_name:
+  cfparamName:
     Type: String
-  cfn_users_param:
+  cfparamUsers:
     Type: CommaDelimitedList
-  cfn_timestamp_param:
+  cfparamTimestamp:
     Type: String
     Description: Force an update since AWS overwrites roles and CF doesn't recognize the change
     Default: ""
@@ -19,7 +19,7 @@ Resources:
   role:
     Type: 'AWS::IAM::Role'
     Properties:
-      RoleName: !Ref cfn_param_name
+      RoleName: !Ref cfparamName
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -27,7 +27,7 @@ Resources:
             Action: "sts:AssumeRole"
             Principal:
               AWS:
-                !Ref cfn_param_users
+                !Ref cfparamusers
             Condition:
               "Bool":
                 "aws:MultiFactorAuthPresent": "true"
@@ -36,13 +36,13 @@ Outputs:
   roleid:
     Value: !Ref role
     Export:
-     Name: !Sub id-iam-role-${cfn_param_name}
+     Name: !Sub id-iam-role-${cfparamName}
   rolearn:
     Value: !GetAtt role.Arn
     Export:
-     Name: !Sub arn-iam-role-${cfn_param_name}
+     Name: !Sub arn-iam-role-${cfparamName}
   forceupdate:
-    Value: !Sub "${cfn_param_timestamp}"
+    Value: !Sub "${cfparamtimestamp}"
 
 #################################################################################
 # Copyright Notice

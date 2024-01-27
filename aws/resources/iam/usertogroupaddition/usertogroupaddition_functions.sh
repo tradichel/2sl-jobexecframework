@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # resources/iam/group/group_functions.sh
 # author: @teriradichel @2ndsightlab
 # Description: Functions to deploy a group and add users to groups
@@ -7,27 +7,18 @@
 source "shared/functions.sh"
 source "shared/validate.sh"
 
-add_users_to_group() {
+source shared/functions.sh
+source shared/validate.sh
 
-  usernames="$1"
-	groupname="$2"
-  
-  function=${FUNCNAME[0]}
-  validate_var $function "usernames" "$usernames"
-	validate_var $function "groupname" "$groupname"
-	
-	timestamp=$(get_timestamp)
+get_id(){
+  local name="$1"
 
-	name='nonprod-usertogroupaddition'$groupname
-	category='iam'
-	resourcetype='usertogroupaddition'
+  validate_set "${FUNCNAME[0]}" "name" "$name"
 
-	parameters=$(add_parameter "UserNamesParam" $usernames)
-	parameters=$(add_parameter "GroupcfparamName" $groupname $parameters)
-  parameters=$(add_parameter "TimestampParam" $timestamp $parameters)
-	deploy_stack $name $category $resourcetype $parameters
-
+  echo "get_id not implemented for {{resource_type}}"
+  exit 1
 }
+
 
 #################################################################################
 # Copyright Notice

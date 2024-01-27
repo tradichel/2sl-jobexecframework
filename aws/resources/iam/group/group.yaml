@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/deploy/orgadminrole/iam_group_iamadmins.sh
 # author: @teriradichel @2ndsightlab
 # Description: IAM administrators who can assume the iamadminrole

@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # resources/ec2/subnet/subnet_functions.sh
 # author: @teriradichel @2ndsightlab
 # description: deploy a VPC
@@ -70,7 +70,7 @@ deploy_subnet(){
 	category='ec2'
   resourcetype='subnet'
 	p=$(add_parameter "cfparamName" $subnetname)
-  p=$(add_parameter "VPCIdParam" $vpcid $p)
+  p=$(add_parameter "cfparamVPCId/ec2/.." $vpcid $p)
   p=$(add_parameter "AZParam" $az $p)
   p=$(add_parameter "VPCCidrParam" $vpccidr $p)
   p=$(add_parameter "CidrIndexParam" $cidrindex $p)
@@ -137,6 +137,13 @@ deploy_subnets(){
 }
 
 get_subnet_id(){
+	name="$1"
+
+	get_id $name
+
+}
+
+get_id(){
 	subnetname="$1"
 	query='Subnets[].SubnetId'
 	subnetid=$(aws ec2 describe-subnets \

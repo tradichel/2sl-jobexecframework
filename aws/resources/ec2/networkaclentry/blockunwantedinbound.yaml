@@ -1,12 +1,12 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # resources/ec2/networkaclentry/blockunwantedinbound.yaml
 # author: @teriradichel @2ndsightlab
 ##############################################################
 Parameters:
 
-  NetworkAclIdParam:
+  cfparamNetworkAclId:
     Type: String
-  EphemeralPortStartParam:
+  cfparamEphemeralPortStart:
     Type: String
     Default: "1024"
   
@@ -27,7 +27,7 @@ Resources:
     Properties:
       CidrBlock: "0.0.0.0/2"
       Egress: False
-      NetworkAclId: !Ref NetworkAclIdParam
+      NetworkAclId: !Ref cfparamNetworkAclId
       Protocol: -1
       RuleAction: Deny
       RuleNumber: 450
@@ -36,7 +36,7 @@ Resources:
     Properties:
       CidrBlock: "64.0.0.0/5"
       Egress: False
-      NetworkAclId: !Ref NetworkAclIdParam
+      NetworkAclId: !Ref cfparamNetworkAclId
       Protocol: -1
       RuleAction: Deny
       RuleNumber: 451
@@ -45,7 +45,7 @@ Resources:
     Properties:
       CidrBlock: "72.0.0.0/8"
       Egress: False
-      NetworkAclId: !Ref NetworkAclIdParam
+      NetworkAclId: !Ref cfparamNetworkAclId
       Protocol: -1
       RuleAction: Deny
       RuleNumber: 452
@@ -54,7 +54,7 @@ Resources:
     Properties:
       CidrBlock: "73.0.0.0/8"
       Egress: False
-      NetworkAclId: !Ref NetworkAclIdParam
+      NetworkAclId: !Ref cfparamNetworkAclId
       Protocol: -1
       RuleAction: Deny
       RuleNumber: 453
@@ -63,7 +63,7 @@ Resources:
     Properties:
       CidrBlock: "74.0.0.0/7"
       Egress: False
-      NetworkAclId: !Ref NetworkAclIdParam
+      NetworkAclId: !Ref cfparamNetworkAclId
       Protocol: -1
       RuleAction: Deny
       RuleNumber: 454
@@ -72,7 +72,7 @@ Resources:
     Properties:
       CidrBlock: "76.0.0.0/6"
       Egress: False
-      NetworkAclId: !Ref NetworkAclIdParam
+      NetworkAclId: !Ref cfparamNetworkAclId
       Protocol: -1
       RuleAction: Deny
       RuleNumber: 455
@@ -81,7 +81,7 @@ Resources:
     Properties:
       CidrBlock: "80.0.0.0/4"
       Egress: False
-      NetworkAclId: !Ref NetworkAclIdParam
+      NetworkAclId: !Ref cfparamNetworkAclId
       Protocol: -1
       RuleAction: Deny
       RuleNumber: 456
@@ -90,7 +90,7 @@ Resources:
     Properties:
       CidrBlock: "96.0.0.0/3"
       Egress: False
-      NetworkAclId: !Ref NetworkAclIdParam
+      NetworkAclId: !Ref cfparamNetworkAclId
       Protocol: -1
       RuleAction: Deny
       RuleNumber: 457
@@ -99,7 +99,7 @@ Resources:
     Properties:
       CidrBlock: "128.0.0.0/1"
       Egress: False
-      NetworkAclId: !Ref NetworkAclIdParam
+      NetworkAclId: !Ref cfparamNetworkAclId
       Protocol: -1
       RuleAction: Deny
       RuleNumber: 458

@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # resources/ec2/vpc/vpc_functions.sh
 # author: @teriradichel @2ndsightlab
 # description: deploy a VPC
@@ -9,36 +9,14 @@ source shared/validate.sh
 source resources/ec2/routetable/routetable_functions.sh
 source resources/ec2/securitygroup/securitygroup_functions.sh
 
-thisscript=$(echo $(basename "$PWD")/$(basename "$0"))
- 
-#run the script in the deploy/iamadmin folder
-#to deploy the vpc-flow-logs role before
-#calling this function.
-#The script to create the role only needs
-#to be called once for multiple vpcs,
-#unless you want different roles for each
-#VPC to distinguish those actions in the logs.
-deploy_vpc(){
+get_id() {
+
   vpcname="$1"
-  cidr="$2"
-  rttype="$3"
 
-  f=$thisscript-${FUNCNAME[0]}
-  validate_var $f "prefix" $vpcname
-  validate_var $f "cidr" $cidr
-  validate_var $f "rttype" $rttype
-  
-  category="ec2"
-  resourcetype="vpc"
-
-  p=$(add_parameter "cfparamName" $vpcname)
-  p=$(add_parameter "CIDRParam" $cidr $p)
-  
-  deploy_stack $vpcname $category $resourcetype $p
-  
-	import_vpc_default_routetable $vpcname $rttype
-
-	import_vpc_default_securitygroup $vpcname "default"
+  vpcid=$(aws ec2 describe-vpcs \
+          --filter Name=tag:Name,Values=$vpcname \
+          --query Vpcs[*].VpcId --output text --profile $profile)
+  echo $vpcid
 
 }
 
@@ -95,8 +73,8 @@ import_vpc_default_routetable(){
 	cat $importtemplate
 
   p=$(add_parameter "cfparamName" $routetablename)
-  p=$(add_parameter "VpcIdParam" $vpcid $p)
-  p=$(add_parameter "RouteTypeParam" $rttype $p)
+  p=$(add_parameter "cfparamVpcId/ec2/.." $vpcid $p)
+  p=$(add_parameter "RouteType" $rttype $p)
 
   import_resource_to_stack \
     $routetablename \

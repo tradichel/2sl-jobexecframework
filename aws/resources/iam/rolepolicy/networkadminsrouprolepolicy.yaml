@@ -1,4 +1,4 @@
-# https://github.com/tradichel/SecurityMetricsAutomation/blob/main/iam/batch_job_role/cfn/role_batch_job.yaml
+# https://github.com/tradichel/2sl-jobexecframework/blob/main/iam/batch_job_role/cfn/role_batch_job.yaml
 # IAM/stacks/role/cfn/Policy/NetworkAdminsGroupRolePolicy.yaml
 # author: @tradichel @2ndsightlab
 # description: policy for IAM administrators

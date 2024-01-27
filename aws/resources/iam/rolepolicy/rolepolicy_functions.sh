@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/resources/iam/rolepolicy/rolepolicy_functions.sh
 # author: @teriradichel @2ndsightlab
 # Description: Policy that allows deployment of organization resources
@@ -7,31 +7,14 @@
 source shared/functions.sh
 source shared/validate.sh
 
-deploy_rolepolicy() {
+get_id(){
+  local name="$1"
 
-  rolepolicyname="$1"
-  rolearn="2"
-  env="$3"
+  validate_set "${FUNCNAME[0]}" "name" "$name"
 
-  function=${FUNCNAME[0]}
-  validate_var "$function" "rolepolicyname" "$rolepolicyname"
-  validate_var "$function" "rolearn" "$rolearn"
-  validate_var "$function" "env" "$env"
-  
-	validate_environment $env
-
-  rolepolicyname="$env-$rolepolicyname"
-
-  parameters=$(add_parameter "cfparamName" $rolepolicyname)
-  parameters=$(add_parameter "RoleArnParam" $rolepolicyarn $parameters)
-
-	template=$rolepolicyname'.yaml'
-
-  deploy_stack $rolepolicyname "iam" "rolepolicy" $parameters $template
-
+  echo "get_id not implemented for {{resource_type}}"
+  exit 1
 }
-
-
 
 #################################################################################
 # Copyright Notice

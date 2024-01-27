@@ -1,4 +1,4 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # S3/stacks/cfn/Bucket.yaml
 # author: @teriradichel @2ndsightlab
 # The convolute nature of this template is due to what I 
@@ -10,7 +10,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Parameters:
   cfparamName:
     Type: String
-  KMSKeyIdParam:
+  KMScfparamKeyId:
     Type: String
     Default: ""
   VersioningParam:
@@ -41,7 +41,7 @@ Resources:
           - BucketKeyEnabled: true
             ServerSideEncryptionByDefault:
               SSEAlgorithm: 'aws:kms'
-              KMSMasterKeyID: !Ref KMSKeyIdParam        
+              KMSMasterKeyID: !Ref KMScfparamKeyId        
       BucketName: !Ref cfparamName
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
@@ -60,7 +60,7 @@ Resources:
           - BucketKeyEnabled: true
             ServerSideEncryptionByDefault:
               SSEAlgorithm: 'aws:kms'
-              KMSMasterKeyID: !Ref KMSKeyIdParam
+              KMSMasterKeyID: !Ref KMScfparamKeyId
       BucketName:
         !Ref cfparamName
       LoggingConfiguration: 

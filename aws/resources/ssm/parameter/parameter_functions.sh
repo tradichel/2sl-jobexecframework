@@ -1,31 +1,11 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation/
+# https://github.com/tradichel/2sl-jobexecframework/
 # awsdeploy/resources/ssm/parameter/parameter_functions.sh
 # author: @teriradichel @2ndsightlab
 # description: Functions for AWS::SSM::Parameter
 # and CLI scripts to deploy secure string parameters
 ##############################################################
 source shared/functions.sh
-
-#depoy with cloudformation
-deploy_ssm_parameter(){
-
-  ssm_name="$1"
-  ssm_value="$2"
-
-	echo "Parameters deployed via CloudFormation will be unencrypted"
-
-  func=${FUNCNAME[0]}
-  validate_set $func 'ssm_name' "$ssm_name"
- 
- 	cat="ssm"
-	resourcetype='parameter'
-  parameters=$(add_parameter "cfparamName" $ssm_name)
-  parameters=$(add_parameter "ValueParam" $ssm_value $parameters)
-
-  deploy_stack $name $cat $resourcetype $parameters
-
-}
 
 ssm_parameter_exists(){
 	ssm_name="$1"

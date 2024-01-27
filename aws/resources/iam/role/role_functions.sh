@@ -1,202 +1,20 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/resource/iam/role/role_functions.sh
 # author: @teriradichel @2ndsightlab
 # Description: Role to manage the organization for the root-orgadmin user in the root-org account
 ##############################################################
 
 source shared/functions.sh
+source shared/validate.sh
 
-deploy_role() {
+get_id(){
+	local name="$1"
 
-  rolename="$1"
-  users="$2"
-  env="$3"
+  validate_set "${FUNCNAME[0]}" "name" "$name"
 
-  function=${FUNCNAME[0]}
-  validate_var "$function" "rolename" "$rolename"
-  validate_var "$function" "env" "$users"
-  validate_var "$function" "env" "$env"
-  
-	validate_environment $env
-
-  rolename="$env-$rolename"
-
-  parameters=$(add_parameter "cfparamName" $rolename)
-  parameters=$(add_parameter "UsersParam" $users $parameters) 
-
-  deploy_stack $rolename "iam" "role" $parameters
-
-}
-
-deploy_group_role(){
-
-  groupname="$1"
-  
-  function=${FUNCNAME[0]}
-  validate_var $function "groupname" $groupname
-
-  #retrieve a list of user ARNs in the group
-  users=$(aws iam get-group --group-name $groupname --profile $profile \
-      --query Users[*].Arn --output text | sed 's/\t/,/g')
-
-  if [ "$users" == "" ]; then
-    echo 'No users in group '$groupname' so the group role will not be created.'
-    exit
-  fi
-
-  timestamp=$(get_timestamp)
-
-  resourcetype='role'
-  template='grouprole.yaml'
-  p=$(add_parameter "GroupcfparamName" $groupname)
-  p=$(add_parameter "GroupUsers" $users "$p")
-  p=$(add_parameter "TimestampParam" $timestamp "$p")
-  rolename=$groupname'role'
-
-	deploy_stack $rolename "iam" "role" $p $template
-
-  policyname=$groupname'GroupRolePolicy'
-  deploy_role_policy $policyname $profile
-
-}
-
-#the groupname is the group of users who are allowed to assume the role.
-#The remote account AWS CLI profile can make changes in the user account.
-#the target profile can deploy the cross-account role in the remote account.
-deploy_crossaccount_group_role(){
-
-  groupname="$1"
-  remoteacctprofile="$2"
-  targetacctprofile="$3"
-
-  function=${FUNCNAME[0]}
-  validate_var $function "groupname" "$groupname"
-  validate_var $function "remoteacctprofile" "$remoteacctprofile"
-  validate_var $function "targetacctprofile" "$targetacctprofile"
-
-  profile=$remoteacctprofile
-  #retrieve a list of user ARNs in the group
-  users=$(aws iam get-group --group-name $groupname --profile $profile \
-      --query Users[*].Arn --output text | sed 's/\t/,/g')
-
-  if [ "$users" == "" ]; then
-    echo 'No users in group '$groupname' so the group role will not be created.'
-    exit
-  fi
-
-  timestamp=$(get_timestamp)
-
-  profile="$targetacctprofile"
-  resourcetype='role'
-  template='grouprole.yaml'
-  p=$(add_parameter "GroupcfparamName" $groupname)
-  p=$(add_parameter "GroupUsers" $users "$p")
-  p=$(add_parameter "TimestampParam" $timestamp "$p")
- 
-	echo need to set rolename; exit
-
-	deploy_stack $rolename "iam" "role" $p $template
-
-  policyname=$groupname'grouprolepolicy'
-  deploy_role_policy $policyname $profile
-
-}
-
-deploy_role_policy(){
-
-  policyname=$1
-
-  function=${FUNCNAME[0]}
-  validate_var $function "policyname" "$policyname"
-
-  p=$(add_parameter "cfparamName" $policyname)
-  template=$policyname'.yaml'
-  
-  deploy_stack $policyname "iam" "policy" $p $template
-
-}
-
-deploy_app_policy(){
-
-  service="$1"
-  appname="$2"
-  env="$3"
-  secret="$4"
-  readbucket="$5"
-  writebucket="$6"
-  actions="$7"
-  resources="$8"
-
-  if [ "$secret" == "" ]; then
-    secret="false"
-  fi
-
-  function=${FUNCNAME[0]}
-  validate_var $function "functionname" "$appname"
-  validate_var $function "env" "$env"
-  validate_var $function "secret" "$secret"
-  validate_var $function "service" "$service"
-
-  p=$(add_parameter "cfparamName" $appname)
-  p=$(add_parameter "cfparamEnv" $env $p)
-  p=$(add_parameter "HasSecretParam" $secret $p)
-  p=$(add_parameter "ServiceParam" $service $p)
-  if [ "$readbucket" != "" ]; then
-    p=$(add_parameter "S3ReadBucketArnParam" $readbucket $p)
-  fi
-  if [ "$writebucket" != "" ]; then
-    p=$(add_parameter "S3riteBucketArnParam" $writebucket $p)
-  fi
-  if [ "$actions" != "" ]; then
-    p=$(add_parameter "ActionsParam" $actions $p)
-  fi
-  if [ "$resources" !="" ]; then
-    p=$(add_parameter "ResourcesParam" $resources $p)
-  fi
-
-  policyname=$appname$service'rolepolicy'
-  template='apppolicy.yaml'
-  
-  deploy_stack $policyname "iam" "policy" $p $template
-
-}
-
-deploy_ec2_instance_profile(){
-
-  profilename=$1
-  rolename=$2
-
-  function=${FUNCNAME[0]}
-  validate_var $function "profilename" "$profilename" 
-  validate_var $function "rolename" "$rolename"
-
-  p=$(add_parameter "cfparamName" "$profilename")
-  p=$(add_parameter "RoleNamesParam" "$rolename" "$p")
-  template='cfn/EC2InstanceProfile.yaml'
-  
-  deploy_stack $profilename "iam" "ec2instanceprofile" $p $template
-
-}
-
-deploy_aws_service_role(){
-
-  awsservice=$1
-
-	#aws service is name of service only not full domain
-	rolename=$awsservice'role'
-	rolename=$(echo $rolename | sed 's/-//g')
-	rolename='org-'$rolename
-	
-  function=${FUNCNAME[0]}
-  validate_var $function "awsservice" "$awsservice"
-
-  template='awsservicerole.yaml'
-  p=$(add_parameter "cfparamName" $rolename)
-  p=$(add_parameter "AWSServiceParam" $awsservice $p)
-
-  deploy_stack $rolename "iam" "role" $p $template 
- 
+  echo "get_id not implemented for {{resource_type}}"
+  exit 1
 }
 
 #################################################################################

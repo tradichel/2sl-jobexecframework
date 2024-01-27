@@ -1,30 +1,45 @@
-#!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation/
-# Org/stacks/IdP/idp_functions.sh
+# https://github.com/tradichel/2sl-jobexecframework
+# IAM/stacks/OktaRole/cfn/OktaRole.yaml
 # author: @teriradichel @2ndsightlab
-# description: Functions for idp creation
+# description: Generic template to create a role for Okta federation
 ##############################################################
-source ../../../Functions/shared_functions.sh
+Parameters:
+  RolecfparamName:
+    Type: String
+  cfparamTimestamp:
+    Type: String
+    Description: Force an update since AWS overwrites roles and CF doesn't recognize the change
 
-profile="IAM"
+Resources:
+  OktaRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Sub Okta${RolecfparamName}
 
-deploy_root_idp(){
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+            Effect: "Allow"
+            Action: "sts:AssumeRoleWithSAML"
+            Principal:
+              Federated: !ImportValue OktaIdpExport
+            Condition:
+              "StringEquals": 
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
+        
+Outputs:
+  OktaRoleOutput:
+    Value: !Ref OktaRole
+    Export:
+     Name: !Sub Okta${RolecfparamName}RoleExport
+  OtkatRoleArnOutput:
+    Value: !GetAtt OktaRole.Arn
+    Export:
+     Name: !Sub Okta${RolecfparamName}RoleArnExport
+  ForceUpdate:
+    Value: !Sub "${cfparamTimestamp}"
 
-	profile="OrgRoot"
-	deploy_idp
-
-}
-
-deploy_idp(){
-
-  name='OktaIdentiyProvider'
-  resourcetype='IdentityProvider'
-  template='cfn/IdP.yaml'
-  deploy_stack $profile $name $resourcetype $template $parameters
-
-}
-
-################################################################################
+#################################################################################
 # Copyright Notice
 # All Rights Reserved.
 # All materials (the “Materials”) in this repository are protected by copyright 
@@ -46,4 +61,4 @@ deploy_idp(){
 # HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION 
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-################################################################################  
+################################################################################ 

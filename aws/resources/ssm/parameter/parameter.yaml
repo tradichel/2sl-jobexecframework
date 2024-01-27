@@ -6,13 +6,13 @@ Parameters:
   DescriptionParam:
     Type: String
     Default: ""
-  DataTypeParam:
+  DataType:
     Type: String
     Default: "text"
     AllowedValues:
       - "text"
       - "aws:ec2:image"
-  TypeParam:
+  Type:
     Type: String
     Default: "String"
     AllowedValues:
@@ -46,9 +46,9 @@ Resources:
     Type: AWS::SSM::Parameter
     Properties:
       Name: !Ref cfparamName
-      DataType: !Ref DataTypeParam
+      DataType: !Ref DataType
       Value: !Ref ValueParam
-      Type: !Ref TypeParam
+      Type: !Ref Type
         #CloudFormation does not support SecureString for Parameter Store
         #which is why parameters are not used for sensitived data
         #in this framework

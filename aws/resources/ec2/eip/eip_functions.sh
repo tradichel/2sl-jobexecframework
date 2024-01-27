@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/resources/ec2/eip/eip_functions.sh
 # author: @teriradichel @2ndsightlab
 # Description: eips for projects
@@ -9,24 +9,14 @@
 source shared/functions.sh
 source shared/validate.sh
 
-deploy_eip() {
+get_id(){
+  local name="$1"
 
-  eipname="$1"
-  env="$2"
+  validate_set "${FUNCNAME[0]}" "name" "$name"
 
-  function=${FUNCNAME[0]}
-  validate_var "$function" "eipname" $eipname
-  
-	validate_environment $function $env
-
-  eipname="$env-$eipname"
-
-  parameters=$(add_parameter "cfparamName" $eipname)
-
-  deploy_stack $eipname "ec2" "eip" $parameters
-
+  echo "get_id not implemented for {{resource_type}}"
+  exit 1
 }
-
 
 
 #################################################################################

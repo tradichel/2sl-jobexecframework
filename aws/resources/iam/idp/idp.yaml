@@ -1,17 +1,16 @@
-#!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation/
-# Org/stacks/IdP/deploy_root_idp.sh
-# author: @teriradichel @2ndsightlab
-# description: Deploy AWS IAM IdP
+# https://github.com/tradichel/2sl-jobexecframework
+# IAM/stacks/resources/organizations/IdP/cfn/IdP.yaml
+# author: @tradichel @2ndsightlab
+# description: CloudFormation template to create an IdP
 ##############################################################
-source idp_functions.sh
+Resources:
+  IdP:
+    Type: AWS::IAM::SAMLProvider
+    Properties: 
+      Name: Okta
+      SamlMetadataDocument: !Sub "{{resolve:secretsmanager:OktaMetadata}}"
 
-echo "An CLI Profile named OrgRoot is required to run this code."
-
-deploy_root_idp
-
-
-################################################################################
+#################################################################################
 # Copyright Notice
 # All Rights Reserved.
 # All materials (the “Materials”) in this repository are protected by copyright 
@@ -33,4 +32,4 @@ deploy_root_idp
 # HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION 
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-################################################################################  
+################################################################################

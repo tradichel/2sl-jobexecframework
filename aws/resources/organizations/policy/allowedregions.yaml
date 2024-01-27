@@ -1,4 +1,4 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/organizations/policy/allowedregions.yaml
 # author: @tradichel @2ndsightlab
 # description: CloudFormation template to create an SCP
@@ -8,12 +8,10 @@
 Parameters:
     cfparamName:
       Type: String
-    TargetIdsParam:
+    cfparamTargetIds:
       Type: String
-    Region1Param:
-      Type: String
-    Region2Param:
-      Type: String
+    cfparamRegions:
+      Type: CommaDelimitedList
 
 Resources:
   SCP:
@@ -31,17 +29,14 @@ Resources:
                 "Condition": {
                   "StringNotEquals": {
                     "aws:RequestedRegion":
-                      [
-                        "${Region1Param}",
-                        "${Region2Param}"
-                      ]
+                    ${cfparamRegions}
                   }
                 }
              }
           ]
         }
       Description: "Deny any actions not in allowed regions"
-      TargetIds: [ !Ref TargetIdsParam ]
+      TargetIds: [ !Ref cfparamTargetIds ]
       Type: SERVICE_CONTROL_POLICY
 
 Outputs:

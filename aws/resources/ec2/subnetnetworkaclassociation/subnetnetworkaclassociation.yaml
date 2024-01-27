@@ -1,13 +1,13 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/resources/ec2/subnetnaclassociation/subnetnacleassociation.yaml
 # author: @teriradichel @2ndsightlab
 ##############################################################
 Parameters: 
-  SubnetIdParam:
+  cfparamSubnetId/ec2/..:
     Type: String
-  NACLIdParam:
+  cfparamNACLId/ec2/..:
     Type: String
-  TimestampParam:
+  cfparamTimestamp:
     Type: String
     Description: Force an update since AWS doesn't recognize the parameter value changes
 
@@ -15,14 +15,14 @@ Resources:
   SubnetAssociation:
     Type: AWS::EC2::SubnetNetworkAclAssociation
     Properties:
-      NetworkAclId: !Ref NACLIdParam
-      SubnetId: !Ref SubnetIdParam
+      NetworkAclId: !Ref cfparamNACLId
+      SubnetId: !Ref cfparamSubnetId
 
 Outputs:
   NACLOutput:
     Value: !Ref SubnetAssociation
   ForceUpdate:
-    Value: !Sub "${TimestampParam}"
+    Value: !Sub "${cfparamTimestamp}"
 
 #################################################################################
 # Copyright Notice

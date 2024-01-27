@@ -1,29 +1,18 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # KMS/stacks/KeyAlias/keyalias_functions.sh
 # author: @teriradichel @2ndsightlab
 ##############################################################
 source shared/functions.sh
+source shared/validate.sh
 
-deploy_keyalias(){
+#a key alias does not really have an id
+get_id(){
+  local name="$1"
 
-  keyid="$1"
-  alias="$2"
+  validate_set "${FUNCNAME[0]}" "name" "$name"
 
-  f=${FUNCNAME[0]}
-  validate_var $f "keyid" $keyid
-  validate_var $f "alias" $alias
-
-	#if the key alias does not start with alias/ then add it
-	prefix=$(echo $alias | cut -d '/' -f1)
-	if [ "$prefix" != "alias/" ]; then alias='alias/'$alias; fi
-	parameters=$(add_parameter "KeyIdParam" "$keyid")
-  parameters=$(add_parameter "KeyAliasParam" $alias $parameters)
-  category="kms"
-  resourcetype='keyalias'
-  	
-	deploy_stack $alias $category $resourcetype $parameters
-
+  echo $name
 }
 
 #################################################################################

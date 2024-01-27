@@ -1,23 +1,25 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
-# Network/stacks/cfn/VPC.yaml
+# https://github.com/tradichel/2sl-jobexecframework
+# resources/ec2/../VPC.yaml
 # author: @teriradichel @2ndsightlab
 # description: create a public or private vpc
 ##############################################################
 Parameters: 
   cfparamName:
     Type: String
-  CIDRParam:
+  cfparamCidr:
     Description: |
       VPC CIDR Block. Make the CIDR large enough to support the subnets you need. 
       The allowed sizes are from a /28 to a /16 for IPV4. Plan accordingly.
     Type: String
     AllowedPattern: '((\d{1,3})\.){3}\d{1,3}/\d{1,2}'
+  cfparamFlowlogsrole:
+    Type: String
 
 Resources:
   VPC:
     Type: AWS::EC2::VPC
     Properties:
-      CidrBlock: !Ref CIDRParam
+      CidrBlock: !Ref cfparamCidr
       EnableDnsHostnames: True
       Tags:
       - Key: Name
@@ -32,7 +34,7 @@ Resources:
   FlowLogs:
     Type: AWS::EC2::FlowLog
     Properties: 
-      DeliverLogsPermissionArn: !ImportValue org-vpcflowlogsrole
+      DeliverLogsPermissionArn: !Ref cfparamFlowlogsrole
       LogDestination: !GetAtt LogGroup.Arn
       ResourceId: !Ref VPC
       ResourceType: VPC

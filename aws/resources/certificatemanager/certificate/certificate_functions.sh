@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation/
+# https://github.com/tradichel/2sl-jobexecframework/
 # awsdeploy/resources/certificatemanager/certificatemanager_functions.sh
 # author: @teriradichel @2ndsightlab
 # description: Functions to deploy tls certificates

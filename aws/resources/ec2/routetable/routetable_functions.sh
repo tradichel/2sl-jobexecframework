@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/resources/routetable/routetable_functions.sh
 # author: @teriradichel @2ndsightlab
 # description: deploy route tables
@@ -19,8 +19,8 @@ deploy_route_table(){
   vpcstack='id-ec2-vpc-'$vpcname
 
 	p=$(add_parameter "cfparamName" $rtname)
-  p=$(add_parameter "VpcIdParam" $vpcid $p)
-  p=$(add_parameter "RouteTypeParam" $rttype $p)
+  p=$(add_parameter "cfparamVpcId/ec2/.." $vpcid $p)
+  p=$(add_parameter "RouteType" $rttype $p)
 	
 	if [ "$rttype" == "nat" ]; then
 	  if [ "$gatewayid" == "" ]; then

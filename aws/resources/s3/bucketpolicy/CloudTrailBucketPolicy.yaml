@@ -1,4 +1,4 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # Org/stacks/S3/cfn/Policy/CloudTrailPolicy.yaml
 # author: @tradichel @2ndsightlab
 # description: Bucket policy for CloudTrail bucket
@@ -7,7 +7,7 @@ Parameters:
   CloudTrailArnParam:
     Type: String
     Default: "*"
-  OrganizationIdParam:
+  cfparamOrganizationId:
     Type: String
 
 Conditions:
@@ -57,7 +57,7 @@ Resources:
               - !Sub
                   - ${BucketArn}/AWSLogs/*
                   - BucketArn: !ImportValue BucketArn-orgroot-cloudtrail
-                    OrgId: !Ref OrganizationIdParam          
+                    OrgId: !Ref cfparamOrganizationId          
             Condition:
               !If
                  - NoCloudTrailArn

@@ -18,11 +18,13 @@ get_config_resource_id(){
   name=$(echo $value | cut -d ':' -f5)
 
   file='resources/'$category'/'$resource_type'/'$resource_type'_functions.sh'
- 	source $file
-
-  id=$(get_id $name)
+  
+	#source $file
+  #id=$(get_id $name)
+  
+  #trying the following when multiple files have get_id
+  id=$(sh -c "source $file; get_id $name")
   echo $id
-
 }
 
 deploy_resource_config(){

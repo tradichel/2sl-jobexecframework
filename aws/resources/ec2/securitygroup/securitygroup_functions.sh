@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/resources/ec2/securitygroup/securitygroup_functions.sh
 # author: @teriradichel @2ndsightlab
 # description: deploy a security group
@@ -95,7 +95,7 @@ deploy_securitygroup() {
 	category="ec2"
 	resourcetype="securitygroup"
 	p=$(add_parameter "cfparamName" $sgname)
-	p=$(add_parameter "VPCIdParam" $vpcid $p)
+	p=$(add_parameter "cfparamVPCId/ec2/.." $vpcid $p)
 	p=$(add_parameter "GroupDescriptionParam" "$desc" $p)
 	
 	deploy_stack $sgname $category $resourcetype $p

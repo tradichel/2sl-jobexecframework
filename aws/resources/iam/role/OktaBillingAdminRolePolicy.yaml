@@ -1,41 +1,46 @@
-#!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
-# resources/ec2/subnet/subnet_functions.sh
+# https://github.com/tradichel/2sl-jobexecframework
+# IAM/stacks/OkataRole/cfn/Policy/OktaBillingAdminsRolePolicy.yaml
 # author: @teriradichel @2ndsightlab
-# description: deploy a VPC
+# Description: Deploy okta billing admins policy
+# NOTE: This may not work in current form. 
+# Need to test update after deploying Okta login.
 ##############################################################
+Resources:
+  BillingAdminsOktaRolePolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      ManagedPolicyName: BillingAdminsOktaRolePolicy
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: 'organizations:CreateAccount'
+            Resource: '*'
+          - Effect: Deny
+            Action: 'organizations:*'
+            NotResource: !ImportValue DenyAllOUArnExport
+          - Effect: Allow
+            Action: 
+              - 'budgets.*'
+              - 'account.*'
+              - 'cur.*'
+              - 'ce.*'
+              - 'freetier.*'
+              - 'pricing.*'
+            Resource: '*'
+          - Effect: Allow
+            Action: 'cloudformation:*'
+            Resource:
+              - !Sub "arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/Billing-*"
+              - !Sub "arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/Organization-Account-*" 
+     Roles:
+        - "OktaBillingAdmins"
 
-source shared/functions.sh
-source shared/validate.sh
-
-deploy_subnetnetworkaclassociation(){
-	assocname="$1"
-	subnetid="$2"
-	naclid="$3"
-
-  f=${FUNCNAME[0]}
-  validate_var $f "assocname" $assocname
-  validate_var $f "subnetid" $subnetid
-  validate_var $f "naclid" "$naclid"
-
-	category="ec2"
-	resourcetype='subnetnetworkaclassociation'
-  timestamp="$(date)"
-  t=$(echo $timestamp | sed 's/ //g')
-  p=$(add_parameter "SubnetIdParam" $subnetid)
-  p=$(add_parameter "NACLIdParam" $naclid $p) 
-	p=$(add_parameter "TimestampParam" $t $p)
-
-	deploy_stack $assocname $category $resourcetype $p
-}
-
-#  resourcetype='subnetroutetableassociation'
-#  timestamp="$(date)"
-#  t=$(echo $timestamp | sed 's/ //g')
-#  p=$(add_parameter "SubnetIdExportParam" $subnetname)
-#  p=$(add_parameter "RouteTableIdExportParam" $routetablename $p)
-#  p=$(add_parameter "TimestampParam" $t $p)
-#  deploy_stack $subnetname'routetableassociation' $category $resourcetype $p
+Outputs:
+  OktaPolicyNameOutput:
+    Value: BillingAdminsOktaRolePolicy
+    Export:
+      Name: BillingAdminsOktaRolePolicyPolicyExport
 
 #################################################################################
 # Copyright Notice
@@ -60,3 +65,4 @@ deploy_subnetnetworkaclassociation(){
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ################################################################################ 
+

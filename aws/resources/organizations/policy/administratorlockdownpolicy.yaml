@@ -1,4 +1,4 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/organizations/policy/administratorpolicylockdown.yaml
 # author: @tradichel @2ndsightlab
 # description: CloudFormation template to create an SCP
@@ -12,7 +12,7 @@ Parameters:
       Default: "root-administratorlockdownpolicy"
       AllowedValues:
         - "root-administratorlockdownpolicy"
-    TargetIdsParam:
+    cfparamTargetIds:
       Type: String
 
 Resources:
@@ -33,7 +33,7 @@ Resources:
             ]
           }
       Description: "Deny Unauthorized Administrator Actions"
-      TargetIds: [ !Ref TargetIdsParam ]
+      TargetIds: [ !Ref cfparamTargetIds ]
       Type: SERVICE_CONTROL_POLICY
      
 Outputs:

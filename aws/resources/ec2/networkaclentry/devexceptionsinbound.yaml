@@ -1,12 +1,12 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # resources/ec2/networkaclentry/exceptions.yaml
 # author: @teriradichel @2ndsightlab
 ##############################################################
 Parameters:
 
-  NetworkAclIdParam:
+  cfparamNetworkAclId:
     Type: String
-  EphemeralPortStartParam:
+  cfparamEphemeralPortStart:
     Type: String
     Default: "1024"
 
@@ -19,9 +19,9 @@ Resources:
     Properties:
       CidrBlock: "140.82.112.0/20"
       Egress: False
-      NetworkAclId: !Ref NetworkAclIdParam
+      NetworkAclId: !Ref cfparamNetworkAclId
       PortRange:
-        From: !Ref EphemeralPortStartParam
+        From: !Ref cfparamEphemeralPortStart
         To: 65535
       Protocol: 6
       RuleAction: Allow
@@ -31,10 +31,10 @@ Resources:
     Properties:
       CidrBlock: "108.156.0.0/14"
       Egress: False
-      NetworkAclId: !Ref NetworkAclIdParam
+      NetworkAclId: !Ref cfparamNetworkAclId
       Protocol: 6
       PortRange:
-        From: !Ref EphemeralPortStartParam
+        From: !Ref cfparamEphemeralPortStart
         To: 65535
       RuleAction: Allow
       RuleNumber: 401
@@ -43,10 +43,10 @@ Resources:
     Properties:
       CidrBlock: "146.75.0.0/16"
       Egress: False
-      NetworkAclId: !Ref NetworkAclIdParam
+      NetworkAclId: !Ref cfparamNetworkAclId
       Protocol: 6
       PortRange:
-        From: !Ref EphemeralPortStartParam
+        From: !Ref cfparamEphemeralPortStart
         To: 65535
       RuleAction: Allow
       RuleNumber: 402
@@ -55,10 +55,10 @@ Resources:
     Properties:
       CidrBlock: "52.0.0.0/8"
       Egress: False
-      NetworkAclId: !Ref NetworkAclIdParam
+      NetworkAclId: !Ref cfparamNetworkAclId
       Protocol: 6
       PortRange:
-        From: !Ref EphemeralPortStartParam
+        From: !Ref cfparamEphemeralPortStart
         To: 65535
       RuleAction: Allow
       RuleNumber: 403
@@ -67,10 +67,10 @@ Resources:
     Properties:
       CidrBlock: "151.101.0.0/16"
       Egress: False
-      NetworkAclId: !Ref NetworkAclIdParam
+      NetworkAclId: !Ref cfparamNetworkAclId
       Protocol: 6
       PortRange:
-        From: !Ref EphemeralPortStartParam
+        From: !Ref cfparamEphemeralPortStart
         To: 65535
       RuleAction: Allow
       RuleNumber: 404
@@ -79,10 +79,10 @@ Resources:
     Properties:
       CidrBlock: "3.0.0.0/8"
       Egress: False
-      NetworkAclId: !Ref NetworkAclIdParam
+      NetworkAclId: !Ref cfparamNetworkAclId
       Protocol: 6
       PortRange:
-        From: !Ref EphemeralPortStartParam
+        From: !Ref cfparamEphemeralPortStart
         To: 65535
       RuleAction: Allow
       RuleNumber: 405
@@ -91,10 +91,10 @@ Resources:
     Properties:
       CidrBlock: "75.2.101.78/32"
       Egress: False
-      NetworkAclId: !Ref NetworkAclIdParam
+      NetworkAclId: !Ref cfparamNetworkAclId
       Protocol: 6
       PortRange:
-        From: !Ref EphemeralPortStartParam
+        From: !Ref cfparamEphemeralPortStart
         To: 65535
       RuleAction: Allow
       RuleNumber: 406
@@ -103,10 +103,10 @@ Resources:
     Properties:
       CidrBlock: "99.83.145.10/32"
       Egress: False
-      NetworkAclId: !Ref NetworkAclIdParam
+      NetworkAclId: !Ref cfparamNetworkAclId
       Protocol: 6
       PortRange:
-        From: !Ref EphemeralPortStartParam
+        From: !Ref cfparamEphemeralPortStart
         To: 65535
       RuleAction: Allow
       RuleNumber: 407

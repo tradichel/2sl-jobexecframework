@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation/
+# https://github.com/tradichel/2sl-jobexecframework/
 # awsdeploy/resources/organizations/organizationalunit/organizationalunit_functions.sh
 # author: @teriradichel @2ndsightlab
 # description: Functions used to deploy an organizationa unit
@@ -7,35 +7,6 @@
 source resources/organizations/organization/organization_functions.sh
 source shared/functions.sh
 source shared/validate.sh
-
-deploy_organizationalunit(){
- 	
-  ouname=$1
-  parentid=$2
-
-  func=${FUNCNAME[0]}
-	validate_set $func "ouname" $ouname
-  validate_set $func "parentid" $parentid
-	
-  p=$(add_parameter "cfparamName" $ouname)
-	p=$(add_parameter "ParentIdParam" $parentid $p)
-	
-	resourcecategory='organizations'
-  resourcetype='organizationalunit'
- 
-	echo "deploy_stack $ouname $resourcecategory $resourcetype $p"
-  deploy_stack $ouname $resourcecategory $resourcetype $p
-
-}
-
-get_root_id(){
-	rootid=$(aws organizations list-roots --query Roots[0].Id --output text --profile $profile)
-  
-	func=${FUNCNAME[0]}
-	validate_set $func "rootid" $rootid
-	
-	echo $rootid
-}
 
 get_parent_ou_id(){
   ouname="$1"

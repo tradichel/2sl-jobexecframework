@@ -1,12 +1,12 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
-# Network/stacks/cfn/Subnet.yaml
+# https://github.com/tradichel/2sl-jobexecframework
+# resources/ec2/../Subnet.yaml
 # author: @teriradichel @2ndsightlab
 # description: create a subnet
 ##############################################################
 Parameters: 
   cfparamName:
     Type: String
-  VPCIdParam:
+  cfparamVPCId/ec2/..:
     Type: String
   AZParam:
     Type: String
@@ -23,7 +23,7 @@ Resources:
   Subnet:
     Type: AWS::EC2::Subnet
     Properties:
-      VpcId: !Ref VPCIdParam
+      VpcId: !Ref cfparamVPCId/ec2/..
 
       # The !Cidr function will generate
       # $SubnetCountParam number of 

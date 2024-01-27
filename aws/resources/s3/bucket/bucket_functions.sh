@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # resources/s3/bucket/bucket_functions.sh
 # author: @teriradichel @2ndsightlab
 ##############################################################
@@ -27,7 +27,7 @@ deploy_bucket() {
 		
 	 	validate_var $f "kmskeyidlogs" "$kmskeyidlogs"
     parameters=$(add_parameter "cfparamName" "$bucketname-logs")
-    parameters=$(add_parameter "KMSKeyIdParam" $kmskeyidlogs $parameters)
+    parameters=$(add_parameter "KMScfparamKeyId" $kmskeyidlogs $parameters)
 		parameters=$(add_parameter "DeployLogBucketParam" "false" $parameters)
     deploy_stack $bucketname $category $resourcetype "$parameters"
 
@@ -38,7 +38,7 @@ deploy_bucket() {
 	
 	#deploy the s3 bucket
   parameters=$(add_parameter "cfparamName" "$bucketname")
-  parameters=$(add_parameter "KMSKeyIdParam" $kmskeyid $parameters)
+  parameters=$(add_parameter "KMScfparamKeyId" $kmskeyid $parameters)
 	parameters=$(add_parameter "DeployLogBucketParam" "$deploylogbucket" $parameters)
 	deploy_stack $bucketname $category $resourcetype $parameters
 
@@ -71,7 +71,7 @@ deploy_app_s3_bucket_policy(){
 
 	parameters=$(add_parameter "BucketNameSuffixParam" "$bucketnamesuffix")  
 	parameters=$(add_parameter "AppcfparamName" "$appname" "$parameters")
-	parameters=$(add_parameter "ServiceParam" "$service" "$parameters")
+	parameters=$(add_parameter "cfparamService" "$service" "$parameters")
 	parameters=$(add_parameter "ReadOrWriteParam" "$readorwrite" "$parameters")
 
   category="s3"

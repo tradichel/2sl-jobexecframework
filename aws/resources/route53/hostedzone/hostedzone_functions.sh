@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/resources/route53/hostedzone/hostedzone_functions.sh
 # author: @teriradichel @2ndsightlab
 ##############################################################

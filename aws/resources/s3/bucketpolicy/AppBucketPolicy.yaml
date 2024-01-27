@@ -5,7 +5,7 @@ Parameters:
     Type: String
   AppcfparamName:
     Type: String
-  ServiceParam:
+  cfparamService:
     Type: String
   ReadOrWriteParam:
     Type: String
@@ -49,7 +49,7 @@ Resources:
                   - !Sub "{{resolve:ssm:EnvironmentAdminAccount}}"
                   - ":role/"
                   - !Ref AppcfparamName
-                  - !Sub ServiceParam
+                  - !Sub cfparamService
                   - "Role" 
         - Effect: Allow
           Action:
@@ -71,5 +71,5 @@ Resources:
                   - !Sub "{{resolve:ssm:EnvironmentAdminAccount}}"
                   - ":role/"
                   - !Ref AppcfparamName
-                  - !Sub ServiceParam
+                  - !Sub cfparamService
                   - "Role"

@@ -1,5 +1,5 @@
 #!/bin/bash
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # Org/stacks/S3/org_s3_functions.sh
 # author: @teriradichel @2ndsightlab
 ###############################################################
@@ -25,7 +25,7 @@ deploy_cloudtrail_bucket_policy() {
   function=${FUNCNAME[0]}
   validate_param "orgid" "$orgid" "$function"
 
-  parameters=$(add_parameter "OrganizationIdParam" "$orgid")
+  parameters=$(add_parameter "cfparamOrganizationId" "$orgid")
   if [ "$trail" != "" ]; then
      parameters=$(add_parameter "" "$trail" $parameters)
   fi

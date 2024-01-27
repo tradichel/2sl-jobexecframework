@@ -1,4 +1,4 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # IAM/stacks/CloudTrail/cfn/Trail.yaml
 # author: @tradichel @2ndsightlab
 # description: CloudFormation template to create an Organizational Trail

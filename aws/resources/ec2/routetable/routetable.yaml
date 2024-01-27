@@ -1,4 +1,4 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/resources/ec2/routetable/routetable.yaml
 # author: @teriradichel @2ndsightlab
 # description: create a public or private route table
@@ -7,9 +7,9 @@
 Parameters:
   cfparamName:
     Type: String
-  VpcIdParam:
+  cfparamVpcId/ec2/..:
     Type: String    
-  RouteTypeParam:
+  RouteType:
     Type: String
     AllowedValues: ['public','private','nat']
   GatewayIdParam:
@@ -18,17 +18,17 @@ Parameters:
 
 Conditions:
   IsPublic: !Equals
-    - !Ref RouteTypeParam
+    - !Ref RouteType
     - public
   IsNAT: !Equals
-    - !Ref RouteTypeParam
+    - !Ref RouteType
     - nat
 
 Resources:
   RouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
-      VpcId: !ref VpcIdParam
+      VpcId: !ref cfparamVpcId/ec2/..
       Tags:
         - Key: Name
           Value: !Ref cfparamName
@@ -46,7 +46,7 @@ Resources:
     Condition: IsPublic
     Properties:
       InternetGatewayId: !Ref IGW
-      VpcId: !Ref VpcIdParam
+      VpcId: !Ref cfparamVpcId/ec2/..
 
   PublicRoute:
     Type: AWS::EC2::Route

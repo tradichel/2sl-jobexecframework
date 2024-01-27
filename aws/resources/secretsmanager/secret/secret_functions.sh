@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/resources/secretsmanager/secret/secret_functions.sh
 # author: @teriradichel @2ndsightlab
 # Description: deploy a secret

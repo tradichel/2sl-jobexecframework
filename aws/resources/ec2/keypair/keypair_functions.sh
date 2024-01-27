@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/resources/ec2/sshkey/sshkey_functions.sh
 # author: @teriradichel @2ndsightlab
 # Description: project user ssh key for ec2 instance in project account

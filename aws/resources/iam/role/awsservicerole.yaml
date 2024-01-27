@@ -1,15 +1,15 @@
 
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # IAM/stacks/Role/AWSServiceRole.yaml
 # author: @teriradichel @2ndsightlab
 # Description: generic template to deploy a role that an AWS
 # service can asssume
 ##############################################################
 Parameters:
-  cfn_param_name:
+  cfparamName:
     Type: String
     Default: ""
-  cfn_param_awsservice:
+  cfparamAwsservice:
     Type: String
       #sample service names (see AWS documentation for more)
       #vpc-flow-logs
@@ -23,7 +23,7 @@ Resources:
     Type: 'AWS::IAM::Role'
     Properties:
       RoleName: 
-        !Sub "${cfn_param_name}"
+        !Sub "${cfparamName}"
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -34,16 +34,16 @@ Resources:
                 aws:SourceAccount: !Ref AWS::AccountId
               ArnLike:
                 aws:SourceArn:
-                  !Sub arn:aws:${cfn_param_service}:${AWS::Region}:${AWS::AccountId}:*  
+                  !Sub arn:aws:${cfparamservice}:${AWS::Region}:${AWS::AccountId}:*  
             Principal:
                Service: 
-                  !Sub ${cfn_param_service}.amazonaws.com
+                  !Sub ${cfparamservice}.amazonaws.com
 
 Outputs:
   ServiceRoleArnOutput:
     Value: !GetAtt ServiceRole.Arn
     Export:
-     Name: !Ref cfn_param_name
+     Name: !Ref cfparamName
 
 ##################################################################################
 # Copyright Notice

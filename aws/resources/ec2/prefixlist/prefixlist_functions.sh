@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # resources/ec2/vpc/prefixlist_functions.sh
 # author: @teriradichel @2ndsightlab
 # description: deploy a VPC

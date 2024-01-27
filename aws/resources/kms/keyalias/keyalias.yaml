@@ -1,19 +1,19 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # KMS/stacks/KeyAlias/cfn/KeyAlias.yaml
 # author: @teriradichel @2ndsightlab
 ##############################################################
 Parameters:
-  KeyAliasParam:
+  cfparamKeyAlias:
     Type: String
-  KeyIdParam:
+  cfparamKeyId:
     Type: String
 
 Resources:
  KeyAlias:
     Type: AWS::KMS::Alias
     Properties:
-      AliasName: !Ref KeyAliasParam
-      TargetKeyId: !Ref KeyIdParam
+      AliasName: !Ref cfparamKeyAlias
+      TargetKeyId: !Ref cfparamKeyId
 
 #################################################################################
 # Copyright Notice

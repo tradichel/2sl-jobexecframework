@@ -1,41 +1,22 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
-# IAM/stacks/role/cfn/Policy/XacctWebAdminGroupRolePolicy.yaml 
-# author: @tradichel @2ndsightlab
-# description: policy for Cross Account Web administrators
+#!/bin/bash -e
+# https://github.com/tradichel/2sl-jobexecframework/
+# resources/organizations/samlprovider/idp_functions.sh
+# author: @teriradichel @2ndsightlab
+# description: Functions for idp creation
 ##############################################################
-Resources:
-  IAMAdminsGroupRolePolicy:
-    Type: 'AWS::IAM::ManagedPolicy'
-    Properties:
-      ManagedPolicyName: XacctWebAdminGroupRolePolicy
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Action: 'iam:*'
-            NotResource: [
-              'arn:aws:iam::*:role/XacctWebAdmin*',
-              'arn:aws:iam::*:group/XacctWebAdmin*',
-              'arn:aws:iam::*:policy/XacctWebAdmin*'
-            ]
-          - Effect: Allow
-            Action: 'cloudformation:*'
-            Resource:
-              - !Sub "arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/XacctWebAdmin-*"
-          - Effect: Allow
-            Action:
-              - '*'
-            Resource: '*'
-      Roles:
-        - "XacctWebAdminGroup"
+source shared/functions.sh
+source shared/validate.sh
 
-Outputs:
-  GroupPolicyNameOutput:
-    Value: XacctWebAdminGroupRolePolicy
-    Export:
-      Name: XacctWebAdminGroupRolePolicyPolicyExport
+get_id(){
+  local name="$1"
 
-#################################################################################
+  validate_set "${FUNCNAME[0]}" "name" "$name"
+
+  echo "get_id not implemented for {{resource_type}}"
+  exit 1
+}
+
+################################################################################
 # Copyright Notice
 # All Rights Reserved.
 # All materials (the “Materials”) in this repository are protected by copyright 
@@ -57,4 +38,4 @@ Outputs:
 # HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION 
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-################################################################################ 
+################################################################################  

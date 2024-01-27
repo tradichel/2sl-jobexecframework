@@ -1,6 +1,6 @@
 
 Parameters:
-    NameParam:
+    cfparamName:
       Type: String
 		#add any other parameters
 		
@@ -15,11 +15,11 @@ Outputs:
   {{resourcetype}}id:
     Value: !Ref {{resourcetype}}
     Export:
-     Name: !Sub id-{{resourcecategory}}-{{resourcetype}}-${NameParam}
+     Name: !Sub id-{{resourcecategory}}-{{resourcetype}}-${cfparamName}
   {{resourcetype}}arn:
     Value: !GetAtt {{resourcetype}}.Arn
     Export:
-     Name: !Sub arn-{{resourcecategory}}-{{resourcetype}}-${NameParam}
+     Name: !Sub arn-{{resourcecategory}}-{{resourcetype}}-${cfparamName}
 	#adjust outputs as needed
 
 

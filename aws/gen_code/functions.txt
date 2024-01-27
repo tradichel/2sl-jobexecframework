@@ -1,21 +1,13 @@
 source shared/functions.sh
 source shared/validate.sh
 
-deploy_{{resourcetype}}() {
+get_id(){
+	local name="$1"
 
-  {{resourcetype}}name="$1"
-  env="$2"
+  validate_set "${FUNCNAME[0]}" "name" "$name"
 
-  function=${FUNCNAME[0]}
-  validate_set "$function" "{{resourcetype}}name" "${{resourcetype}}name"
-	validate_environment "$function" $env
-
-  {{resourcetype}}name="$env-${{resourcetype}}name"
-
-  parameters=$(add_parameter "NameParam" ${{resourcetype}}name)
-
-  deploy_stack ${{resourcetype}}name "{{resourcecategory}}" "{{resourcetype}}" $parameters
-
+	echo "get_id not implemented for {{resource_type}}"
+	exit 1
 }
 
 

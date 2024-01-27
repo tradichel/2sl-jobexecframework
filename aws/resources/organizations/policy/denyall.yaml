@@ -1,4 +1,4 @@
-# https://github.com/tradichel/SecurityMetricsAutomation
+# https://github.com/tradichel/2sl-jobexecframework
 # awsdeploy/organizations/policy//denyall.yaml
 # author: @tradichel @2ndsightlab
 # description: CloudFormation template to create an SCP
@@ -7,7 +7,7 @@
 Parameters:
     cfparamName:
       Type: String
-    TargetIdsParam:
+    cfparamTargetIds:
       Type: String
 
 Resources:
@@ -25,7 +25,7 @@ Resources:
              }
         }
       Description: "Deny All Actions"
-      TargetIds: [ !Ref TargetIdsParam ]
+      TargetIds: [ !Ref cfparamTargetIds ]
       Type: SERVICE_CONTROL_POLICY
 
 Outputs:
