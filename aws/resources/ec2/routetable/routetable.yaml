@@ -7,28 +7,28 @@
 Parameters:
   cfparamName:
     Type: String
-  cfparamVpcId/ec2/..:
+  cfparamVpcId:
     Type: String    
-  RouteType:
+  cfparamRouteType:
     Type: String
     AllowedValues: ['public','private','nat']
-  GatewayIdParam:
+  cfparamGatewayId:
     Type: String
     Default: "None"
 
 Conditions:
   IsPublic: !Equals
-    - !Ref RouteType
+    - !Ref cfparamRouteType
     - public
   IsNAT: !Equals
-    - !Ref RouteType
+    - !Ref cfparamRouteType
     - nat
 
 Resources:
   RouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
-      VpcId: !ref cfparamVpcId/ec2/..
+      VpcId: !ref cfparamVpcId
       Tags:
         - Key: Name
           Value: !Ref cfparamName
@@ -46,7 +46,7 @@ Resources:
     Condition: IsPublic
     Properties:
       InternetGatewayId: !Ref IGW
-      VpcId: !Ref cfparamVpcId/ec2/..
+      VpcId: !Ref cfparamVpcId
 
   PublicRoute:
     Type: AWS::EC2::Route

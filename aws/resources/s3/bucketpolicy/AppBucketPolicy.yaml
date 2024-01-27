@@ -1,13 +1,12 @@
-#
-#
+
 Parameters:
-  BucketNameSuffixParam:
+  cfparamBucketNameSuffix:
     Type: String
-  AppcfparamName:
+  cfparamAppName:
     Type: String
   cfparamService:
     Type: String
-  ReadOrWriteParam:
+  cfparamReadOrWrite:
     Type: String
     AllowedValues:
       - "Read"
@@ -24,7 +23,7 @@ Resources:
           - "-"
           - !Sub "{{resolve:ssm:EnvironmentOrg}}"
           - "-"
-          - !Ref AppcfparamName
+          - !Ref cfparamAppName
     PolicyDocument:
       Version: 2012-10-17
       Statement:
@@ -39,7 +38,7 @@ Resources:
                 - "-"
                 - !Sub "{{resolve:ssm:EnvironmentOrg}}"
                 - "-"
-                - !Ref BucketNameSuffixParam
+                - !Ref cfparamBucketNameSuffix
                 - "/*"
           Principal: 
             AWS: 
@@ -48,7 +47,7 @@ Resources:
                 - - "arn:aws:iam::"
                   - !Sub "{{resolve:ssm:EnvironmentAdminAccount}}"
                   - ":role/"
-                  - !Ref AppcfparamName
+                  - !Ref cfparamAppName
                   - !Sub cfparamService
                   - "Role" 
         - Effect: Allow
@@ -62,7 +61,7 @@ Resources:
                 - "-"
                 - !Sub "{{resolve:ssm:EnvironmentOrg}}"
                 - "-"
-                - !Ref BucketNameSuffixParam
+                - !Ref cfparamBucketNameSuffix
           Principal: 
             AWS: 
               !Join
@@ -70,6 +69,6 @@ Resources:
                 - - "arn:aws:iam::"
                   - !Sub "{{resolve:ssm:EnvironmentAdminAccount}}"
                   - ":role/"
-                  - !Ref AppcfparamName
+                  - !Ref cfparamAppName
                   - !Sub cfparamService
                   - "Role"

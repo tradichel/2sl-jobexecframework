@@ -19,6 +19,10 @@ source resources/secretsmanager/secret/secret_functions.sh
 #customer-managed key and the user that
 #owns the key can access to retrieve the key
 ##################
+
+#do not recommend creating a key pair with CloudFormation due
+#to where it ends up after the process.
+
 deploy_keypair(){
 	env="$1"
 	username="$2"
@@ -51,19 +55,6 @@ deploy_keypair(){
   set_secret_textfile_value $secretnametext $filepath
 }
 
-deploy_keypair_with_cloudformation_if_you_must(){
-	keypairname="$1"
-
-	function=${FUNCNAME[0]}
-  validate_var "$function" "keypairname" $keypairname
-
-	cat="ec2"
-  resourcetype="keypair"
- 	
-	p=$(add_parameter "cfparamName" $keypairname)
-
-  deploy_stack $name $cat $resourcetype $p
-}
 
 #################################################################################
 # Copyright Notice

@@ -7,36 +7,34 @@
 
 source shared/functions.sh
 source shared/validate.sh
-#circular dependency
-#source resources/ec2/vpc/vpc_functions.sh
-source resources/ec2/prefixlist/prefixlist_functions.sh
 
-category="ec2"
+local category="ec2"
 
 clean_up_default_sg(){
 
-  vpcname="$1"
+  local vpcname="$1"
 
 	echo "Clean up default security group"
 
-  vpcid=$(get_vpc_id_by_name $vpcname)
+	local file="resources/ec2/vpc/vpc_functions.sh"
+  id=$(sh -c "source $file; get_id $vpcname")
 
-  sgid=$(aws ec2 describe-security-groups \
+  local sgid=$(aws ec2 describe-security-groups \
         --filter Name=group-name,Values=default Name=vpc-id,Values=$vpcid \
         --query SecurityGroups[*].GroupId --output text --profile $profile)
 
-  sgname=$vpcname'defaultsecuritygroup'
+  local sgname=$vpcname'defaultsecuritygroup'
 
   aws ec2 create-tags \
     --resources $sgid \
     --tags 'Key="Name",Value="'$sgname'"' \
 		--profile $profile
 
-  name=$sgname'securitygrouprules'
-  template='resources/ec2/securitygroup/rules/noaccess.yaml'
+  local name=$sgname'securitygrouprules'
+  local template='resources/ec2/securitygroup/rules/noaccess.yaml'
 	
-  p=$(add_parameter "SecurityGroupIdParam" $sgid)
-  resourcetype='securitygrouprules'
+  local p=$(add_parameter "cfparamSecurityGroupId" $sgid)
+  local resourcetype='securitygrouprules'
   deploy_stack $name $category $resourcetype $p $template
 
 }
@@ -45,17 +43,21 @@ clean_up_default_sg(){
 #or something - don't use this until revisit
 deploy_remote_access_sgs_for_group() {
 
-	group="$1"
-	vpc="$2"
+	local group="$1"
+	local vpc="$2"
 	#need to get allowcidr and pass in as parameter to job
-  allowcidr="$3"
+  local allowcidr="$3"
 
 	echo " --------------Deploy remote access security groups for $group --------------"
   f=${FUNCNAME[0]}
   validate_var $f "group" "$group"
   validate_var $f "vpc" "$vpc" 
 
-	members=$(get_users_in_group $group $profile)
+	local members=$(get_users_in_group $group $profile)
+
+	local prefix
+	local desc
+	local template 
 
 	echo 'Members: '$members
 	for user in ${members//,/ }
@@ -81,32 +83,11 @@ deploy_remote_access_sgs_for_group() {
 
 }
 
-deploy_securitygroup() {
+get_id(){
+	local groupname="$1"
 
-	vpcid="$1"
-	sgname="$2"
-	desc="$3"
-	
-  f=${FUNCNAME[0]}
-  validate_var $f "vpcid" "$vpcid" 
-  validate_var $f "sgname" "$sgname" 
-  validate_var $f "desc" "$desc"
-  
-	category="ec2"
-	resourcetype="securitygroup"
-	p=$(add_parameter "cfparamName" $sgname)
-	p=$(add_parameter "cfparamVPCId/ec2/.." $vpcid $p)
-	p=$(add_parameter "GroupDescriptionParam" "$desc" $p)
-	
-	deploy_stack $sgname $category $resourcetype $p
-
-}
-
-get_securitygroup_id(){
-	groupname="$1"
-
-	query='SecurityGroups[?GroupName==`'$groupname'`].[GroupId]'
-	sgid=$(aws ec2 describe-security-groups \
+	local query='SecurityGroups[?GroupName==`'$groupname'`].[GroupId]'
+	local sgid=$(aws ec2 describe-security-groups \
  		--query $query \
 		--output text \
 		--profile $profile)

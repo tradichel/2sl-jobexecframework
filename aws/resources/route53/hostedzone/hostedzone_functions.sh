@@ -20,35 +20,7 @@ get_ns_records(){
   echo $ns
 }
 
-deploy_hostedzone() {
-  domain="$1"
-  env="$2"
-
-  function=${FUNCNAME[0]}
-  validate_set $function "env" "$env" 
-  validate_set $function "domain" "$domain"
- 
-	#because aws naming conventions :^|
-	dotstodashes=$(dots_to_dashes $domain)
-  parameters=$(add_parameter "DomainDotsToDashesParam" $dotstodashes)
-  parameters=$(add_parameter "DomaincfparamName" $domain $parameters)
-  
- 	category="route53"
-  resourcetype="hostedzone"
-	resourcename=$env'-'$dotstodashes
-		
-  deploy_stack $resourcename $category $resourcetype $parameters
-	
-	echo "Make sure you update the NS records for this hosted zone"
-	echo "on the apex (primary) domain for a subdomain or on the"
-	echo "domain registration NS server records for the apex domain"
-
-	#TODO: Create an automated test for this:
-	#https://repost.aws/questions/QU3blJ2vdMSdO-T7KcRc5xuQ/pointing-ec2-public-ip-address-to-my-domain-using-a-record
-	
-}
-
-get_hostedzone_id(){
+get_id(){
 	domain="$1"
 
   function=${FUNCNAME[0]}

@@ -73,8 +73,8 @@ import_vpc_default_routetable(){
 	cat $importtemplate
 
   p=$(add_parameter "cfparamName" $routetablename)
-  p=$(add_parameter "cfparamVpcId/ec2/.." $vpcid $p)
-  p=$(add_parameter "RouteType" $rttype $p)
+  p=$(add_parameter "cfparamVpcId" $vpcid $p)
+  p=$(add_parameter "cfparamRouteType" $rttype $p)
 
   import_resource_to_stack \
     $routetablename \

@@ -155,7 +155,7 @@ deploy_security_group() {
 	sgname=$vpc$prefix
 	p=$(add_parameter "cfparamName" $sgname)
 	p=$(add_parameter "VPCExportParam" $vpc $p)
-	p=$(add_parameter "GroupDescriptionParam" "$desc" $p)
+	p=$(add_parameter "cfparamGroupDescription" "$desc" $p)
 	
 	deploy_stack $profile $sgname $resourcetype $template "$p"
 
@@ -353,7 +353,7 @@ deploy_s3_security_group() {
   sgname=$vpc$prefix
   p=$(add_parameter "cfparamName" $sgname)
   p=$(add_parameter "VPCExportParam" $vpc $p)
-  p=$(add_parameter "GroupDescriptionParam" "$desc" $p)
+  p=$(add_parameter "cfparamGroupDescription" "$desc" $p)
   
   deploy_stack $profile $sgname $resourcetype $template "$p"
 
@@ -361,7 +361,7 @@ deploy_s3_security_group() {
   template='cfn/SGRules/S3.yaml'
   p=$(add_parameter "cfparamName" $name)
   p=$(add_parameter "SGExportParam" $sgname $p)
-  p=$(add_parameter "S3PrefixIdParam" "$prefixlistid" $p)
+  p=$(add_parameter "cfparamS3PrefixIdParam" "$prefixlistid" $p)
   resourcetype='SGRules'
   deploy_stack $profile $name $resourcetype $template "$p"
 

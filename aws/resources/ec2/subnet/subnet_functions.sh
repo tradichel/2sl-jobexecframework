@@ -70,7 +70,7 @@ deploy_subnet(){
 	category='ec2'
   resourcetype='subnet'
 	p=$(add_parameter "cfparamName" $subnetname)
-  p=$(add_parameter "cfparamVPCId/ec2/.." $vpcid $p)
+  p=$(add_parameter "cfparamVPCId" $vpcid $p)
   p=$(add_parameter "AZParam" $az $p)
   p=$(add_parameter "VPCCidrParam" $vpccidr $p)
   p=$(add_parameter "CidrIndexParam" $cidrindex $p)

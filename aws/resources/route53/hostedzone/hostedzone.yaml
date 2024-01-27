@@ -6,10 +6,10 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: Deploy a Sub Domain for a Domain
   
 Parameters: 
-  DomainDotsToDashesParam: 
+  cfparamDomainDotsToDashes: 
     Description: Because AWS Naming Conventions :^|
     Type: String
-  DomaincfparamName: 
+  cfparamDomainName: 
     Description: Create a Domain Name
     Type: String
 
@@ -17,24 +17,24 @@ Resources:
   HostedZone:
     Type: AWS::Route53::HostedZone
     Properties: 
-      Name: !Ref DomaincfparamName
+      Name: !Ref cfparamDomainName
       HostedZoneTags: 
         - Key: "DomainDotsToDashes"
-          Value: !Ref DomainDotsToDashesParam
+          Value: !Ref cfparamDomainDotsToDashes
    
 Outputs:
   HostedZoneID:
     Value: !GetAtt HostedZone.Id
     Export:
-     Name: !Sub id-route53-hostedzone-${DomainDotsToDashesParam}
+     Name: !Sub id-route53-hostedzone-${cfparamDomainDotsToDashes}
   HostedZoneArn:
     Value: !GetAtt HostedZone.Id
     Export:
-     Name: !Sub arn-route53-hostedzone-${DomainDotsToDashesParam}
+     Name: !Sub arn-route53-hostedzone-${cfparamDomainDotsToDashes}
   HostedZoneNameServers:
     Value: !Join [',', !GetAtt HostedZone.NameServers]
     Export:
-     Name: !Sub nameservers-organizations-hostedzone-${DomainDotsToDashesParam}
+     Name: !Sub nameservers-organizations-hostedzone-${cfparamDomainDotsToDashes}
 
 #################################################################################
 # Copyright Notice

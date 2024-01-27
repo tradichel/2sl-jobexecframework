@@ -12,7 +12,7 @@
 Parameters:
   cfparamName:
     Type: String
-  KeyFormatParam:
+  cfparamKeyFormat:
     Type: String
     Default: pem
 
@@ -20,7 +20,7 @@ Resources:
   Keypair:
     Type: AWS::EC2::KeyPair
     Properties:
-      KeyFormat: !Ref KeyFormatParam
+      KeyFormat: !Ref cfparamKeyFormat
       KeyName: !Ref cfparamName
       KeyType: "ed25519"
 

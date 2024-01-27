@@ -6,7 +6,7 @@
 Parameters: 
   cfparamName:
     Type: String
-  cfparamVPCId/ec2/..:
+  cfparamVPCId:
     Type: String
   AZParam:
     Type: String
@@ -23,7 +23,7 @@ Resources:
   Subnet:
     Type: AWS::EC2::Subnet
     Properties:
-      VpcId: !Ref cfparamVPCId/ec2/..
+      VpcId: !Ref cfparamVPCId
 
       # The !Cidr function will generate
       # $SubnetCountParam number of 

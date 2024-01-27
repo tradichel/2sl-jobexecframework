@@ -5,13 +5,13 @@
 Description: Create a CNAME record for an AWS Route53 Hosted Zone
 
 Parameters: 
-  CcfparamName: 
+  cfparamName: 
     Type: String
-  CNameValueParam: 
+  cfparamCNameValue: 
     Type: String
-  HostedZoneIdParam:
+  cfparamHostedZoneId:
     Type: String
-  TtlParam:
+  cfparamTtlParam:
     Type: String
       
 Resources:
@@ -19,13 +19,13 @@ Resources:
     Type: AWS::Route53::RecordSetGroup
     DeletionPolicy: Delete
     Properties:
-      HostedZoneId: !Ref HostedZoneIdParam
+      HostedZoneId: !Ref cfparamHostedZoneId
       RecordSets:
-      - Name: !Ref CcfparamName
+      - Name: !Ref cfparamName
         Type: CNAME
-        TTL: !Ref TtlParam
+        TTL: !Ref cfparamTtlParam
         ResourceRecords:
-        - !Ref CNameValueParam
+        - !Ref cfparamCNameValue
 
 #################################################################################
 # Copyright Notice

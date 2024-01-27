@@ -5,82 +5,15 @@
 ##############################################################
 source shared/functions.sh
 
-deploy_bucket() {
- 
-  bucketname="$1"
-  kmskeyid="$2"
-	deploylogbucket="$3"
-	kmskeyidlogs="$4"
+get_id(){
+  local name="$1"
 
-  f=${FUNCNAME[0]}
-  validate_var $f "bucketname" "$bucketname"
-  validate_var $f "kmskeyid" "$kmskeyid"
+  validate_set "${FUNCNAME[0]}" "name" "$name"
 
-	#bucket names are lowercase
-  bucketnamesuffix=$(echo $bucketname | tr '[:upper:]' '[:lower:]')
-
-  category='s3'
-  resourcetype='bucket'
-
-	#if log bucket specified, deploy it
-	if [ "$deploylogbucket" == "true" ]; then
-		
-	 	validate_var $f "kmskeyidlogs" "$kmskeyidlogs"
-    parameters=$(add_parameter "cfparamName" "$bucketname-logs")
-    parameters=$(add_parameter "KMScfparamKeyId" $kmskeyidlogs $parameters)
-		parameters=$(add_parameter "DeployLogBucketParam" "false" $parameters)
-    deploy_stack $bucketname $category $resourcetype "$parameters"
-
-	else
-		#in case not set at all
-		deploylogbucket="false"
-  fi
-	
-	#deploy the s3 bucket
-  parameters=$(add_parameter "cfparamName" "$bucketname")
-  parameters=$(add_parameter "KMScfparamKeyId" $kmskeyid $parameters)
-	parameters=$(add_parameter "DeployLogBucketParam" "$deploylogbucket" $parameters)
-	deploy_stack $bucketname $category $resourcetype $parameters
-
+  echo "get_id not implemented for {{resource_type}}"
+  exit 1
 }
 
-deploy_s3_bucket_for_public_static_site(){
-  domainname="$1"
-	envparam="$2"
-
-	kmskeyalias="$envparam-Apps"
-	appname=$(echo $domainname | sed 's/\.//g')
-	deploylogbucket="true"
-	kmskeyaliaslogs=$kmskeyalias
-
-	deploy_s3_bucket $appname $kmskeyalias $deploylogbucket $kmskeyaliaslogs
-
-}
-
-deploy_app_s3_bucket_policy(){
-	bucketnamesuffix="$1"
-	appname="$2"
-  service="$3"
-	readorwrite="$4"
-
-  f=${FUNCNAME[0]}
-	validate_var $f "bucketnamesuffix" "$bucketnamesuffix"
-  validate_var $f "appname" "$appname"
-	validate_var $f "service" "$service"
-	validate_var $f "readorwrite" "$readorwrite"
-
-	parameters=$(add_parameter "BucketNameSuffixParam" "$bucketnamesuffix")  
-	parameters=$(add_parameter "AppcfparamName" "$appname" "$parameters")
-	parameters=$(add_parameter "cfparamService" "$service" "$parameters")
-	parameters=$(add_parameter "ReadOrWriteParam" "$readorwrite" "$parameters")
-
-  category="s3"
-	resourcetype='bucket'
-	policyname=$env'-'$bucketname'appbucketpolicy'
-
-  deploy_stack $policyname $category $resourcetype $parameters $policyname
-	
-}
 
 #################################################################################
 # Copyright Notice

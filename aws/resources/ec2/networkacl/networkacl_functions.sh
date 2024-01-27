@@ -7,26 +7,8 @@
 
 source shared/functions.sh
 source shared/validate.sh
-source resources/ec2/vpc/vpc_functions.sh
 
-#deploy the nacl
-#then add the template
-deploy_networkacl(){
-	naclname="$1"
-	vpcid="$2"
-
-  f=${FUNCNAME[0]}	
-	validate_var $f "vcpid" $vpcid
-	validate_var $f "naclname" $naclname
-
-	category='ec2'
-	resourcetype='networkacl'
-	p=$(add_parameter "cfparamName" $naclname)
-	p=$(add_parameter "cfparamVPCId/ec2/.." $vpcid $p)
-	deploy_stack $naclname $category $resourcetype $p
-}
-
-get_networkacl_id(){
+get_id(){
 	naclname="$1"
 	
 	f=${FUNCNAME[0]}

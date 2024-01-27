@@ -3,9 +3,9 @@
 # author: @teriradichel @2ndsightlab
 ##############################################################
 Parameters: 
-  cfparamSubnetId/ec2/..:
+  cfparamSubnetId:
     Type: String
-  cfparamNACLId/ec2/..:
+  cfparamNACLId:
     Type: String
   cfparamTimestamp:
     Type: String

@@ -3,7 +3,7 @@
 # author: @teriradichel @2ndsightlab
 ##############################################################
 Parameters:
-  SecurityGroupIdParam:
+  cfparamSecurityGroupId:
     Type: String
   cfparamAllowCidr:
     Type: String
@@ -15,7 +15,7 @@ Resources:
     Properties: 
       CidrIp: !Ref cfparamAllowCidr
       Description: 'RDP for remote access to AWS'
-      GroupId: !Ref SecurityGroupIdParam
+      GroupId: !Ref cfparamSecurityGroupId
       IpProtocol: TCP
       FromPort: 22
       ToPort: 22

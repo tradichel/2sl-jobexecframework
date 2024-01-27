@@ -3,9 +3,9 @@
 # author: @teriradichel @2ndsightlab
 ##############################################################
 Parameters:
-  SecurityGroupIdParam:
+  cfparamSecurityGroupId:
     Type: String
-  DestinationPrefixListId: !Ref PrefixListIdParam
+  cfparamDestinationPrefixListId: !Ref PrefixListIdParam
 
 #note that the github prefix list needs to be deployed
 #first and updated periodically
@@ -13,11 +13,11 @@ Resources:
   EgressGithub:
     Type: AWS::EC2::SecurityGroupEgress
     Properties:
-      DestinationPrefixListId: !Ref PrefixListIdParam
+      cfparamDestinationPrefixListId: !Ref PrefixListIdParam
       Description: 'Github'
       FromPort: 443
       ToPort: 443
-      GroupId: !Ref SecurityGroupIdParam
+      GroupId: !Ref cfparamSecurityGroupId
       IpProtocol: 6
 
 #################################################################################

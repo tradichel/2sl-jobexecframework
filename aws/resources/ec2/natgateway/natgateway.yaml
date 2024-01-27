@@ -6,7 +6,7 @@
 Parameters: 
   cfparamName:
     Type: String
-  EIPIdExportParam:
+  cfparamEIPIdExport:
     Type: String
   cfparamSubnetIdExport:
     Type: String
@@ -17,7 +17,7 @@ Resources:
     Properties:
       AllocationId: 
         Fn::ImportValue:
-          !Ref EIPIdExportParam
+          !Ref cfparamEIPIdExport
       SubnetId:
         Fn::ImportValue:
           !Ref cfparamSubnetIdExport

@@ -3,9 +3,9 @@
 # author: @teriradichel @2ndsightlab
 ##############################################################
 Parameters:
-  SecurityGroupIdParam:
+  cfparamSecurityGroupId:
     Type: String
-  SourceSecurityGroupIDParam:
+  cfparamSourceSecurityGroupIDParam:
     Type: String
 
 Resources:
@@ -18,7 +18,7 @@ Resources:
       Description: 'allow-outbound-access-to-AWS-services'
       FromPort: 443
       ToPort: 443
-      GroupId: !Ref SecurityGroupIdParam
+      GroupId: !Ref cfparamSecurityGroupId
       IpProtocol: 6
   
   #Inbound from compute resources in the VPC to the 
@@ -26,11 +26,11 @@ Resources:
   IngressHTTP:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
-      SourceSecurityGroupId: !Ref SourceSecurityGroupIdParam
+      SourceSecurityGroupId: !Ref SourcecfparamSecurityGroupId
       Description: 'Allow-access-on-443-to-vpcendpoint'
       FromPort: 443
       ToPort: 443
-      GroupId: !Ref SecurityGroupIdParam
+      GroupId: !Ref cfparamSecurityGroupId
       IpProtocol: 6
 
 #################################################################################

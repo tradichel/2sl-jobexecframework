@@ -1,10 +1,10 @@
 # https://github.com/tradichel/2sl-jobexecframework
-# Org/stacks/S3/cfn/Policy/CloudTrailPolicy.yaml
+# resources/s3/policy/CloudTrailPolicy.yaml
 # author: @tradichel @2ndsightlab
 # description: Bucket policy for CloudTrail bucket
 ##############################################################
 Parameters:
-  CloudTrailArnParam:
+  cfparamCloudTrailArn:
     Type: String
     Default: "*"
   cfparamOrganizationId:
@@ -13,7 +13,7 @@ Parameters:
 Conditions:
    NoCloudTrailArn:
      !Equals 
-        - !Ref CloudTrailArnParam
+        - !Ref cfparamCloudTrailArn
         - "*"
 
 Resources:
@@ -47,7 +47,7 @@ Resources:
                 - NoCloudTrailArn
                 - !Ref AWS::NoValue
                 - StringEquals:
-                    'aws:SourceArn': !Ref CloudTrailArnParam
+                    'aws:SourceArn': !Ref cfparamCloudTrailArn
           - Sid: WriteToBucket
             Effect: Allow
             Principal:
@@ -64,7 +64,7 @@ Resources:
                  - !Ref AWS::NoValue
                  - 
                     StringEquals:
-                      'aws:SourceArn': !Ref CloudTrailArnParam
+                      'aws:SourceArn': !Ref cfparamCloudTrailArn
           - Sid: ListBucket
             Effect: Allow
             Principal:

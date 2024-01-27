@@ -3,7 +3,7 @@
 # author: @teriradichel @2ndsightlab
 ##############################################################
 Parameters:
-  SecurityGroupIdParam:
+  cfparamSecurityGroupId:
     Type: String
 
 Resources:
@@ -12,7 +12,7 @@ Resources:
     Properties: 
       CidrIp: 127.0.0.1/32
       Description: 'Force removal of default outbound rule.'
-      GroupId: !Ref SecurityGroupIdParam
+      GroupId: !Ref cfparamSecurityGroupId
       IpProtocol: -1
 
   IngressLocalhost:
@@ -20,7 +20,7 @@ Resources:
     Properties:
       CidrIp: 127.0.0.1/32
       Description: 'Force removal of any inbound rules.'
-      GroupId: !Ref SecurityGroupIdParam
+      GroupId: !Ref cfparamSecurityGroupId
       IpProtocol: -1
     
 

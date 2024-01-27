@@ -3,7 +3,7 @@
 # author: @teriradichel @2ndsightlab
 ##############################################################
 Parameters:
-  SecurityGroupIdParam:
+  cfparamSecurityGroupId:
     Type: String
   cfparamAllowCidr:
     Type: String
@@ -16,7 +16,7 @@ Resources:
       Description: 'HTTPS Outbound'
       FromPort: 443
       ToPort: 443
-      GroupId: !Ref SecurityGroupIdParam
+      GroupId: !Ref cfparamSecurityGroupId
       IpProtocol: 6
   EgressHttp:
     Type: AWS::EC2::SecurityGroupEgress
@@ -25,7 +25,7 @@ Resources:
       Description: 'HTTP Outbound'
       FromPort: 80
       ToPort: 80
-      GroupId: !Ref SecurityGroupIdParam
+      GroupId: !Ref cfparamSecurityGroupId
       IpProtocol: 6
 
 #################################################################################

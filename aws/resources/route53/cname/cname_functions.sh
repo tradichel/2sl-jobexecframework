@@ -7,38 +7,6 @@ source shared/functions.sh
 source shared/validate.sh
 source resources/route53/hostedzone/hostedzone_functions.sh
 
-deploy_cname() {
-  env="$1"
-	domain="$2"
-  cname="$3"
-  cnamevalue="$4"
-	ttl="$5"
-
-	if [ "$ttl" == "" ]; then ttl="300"; fi
-
-  function=${FUNCNAME[0]}
-  validate_set $function "domain" $domain
-  validate_set $function "cname" $cname 
-  validate_set $function "cnamevalue" $cnamevalue 
-  validate_set $function "env" $env 
-
-	delete_cname_if_exists $domain
-
-  hostedzoneid=$(get_hostedzone_id $domain)
-
-  parameters=$(add_parameter "CcfparamName" $cname)
-  parameters=$(add_parameter "CNameValueParam" $cnamevalue $parameters)
-  parameters=$(add_parameter "HostedZoneIdParam" $hostedzoneid $parameters)
-  parameters=$(add_parameter "TtlParam" $ttl $parameters)
-
-  category="route53"
-  resourcetype="cname"
-	dotstodashes=$(dots_to_dashes $domain)
-
-  deploy_stack $env'-'$dotstodashes $category $resourcetype $parameters
-
-}
-
 get_cname_value(){
   domain="$1"
   name="$2"

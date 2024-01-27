@@ -3,9 +3,9 @@
 # author: @teriradichel @2ndsightlab
 ##############################################################
 Parameters:
-  SecurityGroupIdParam:
+  cfparamSecurityGroupId:
     Type: String
-  DestinationSecurityGroupIdParam:
+  cfparamDestinationSecurityGroupId:
     Type: String
 
 Resources:
@@ -16,7 +16,7 @@ Resources:
       Description: !Sub 'VPC Endpoint Access'
       FromPort: 443
       ToPort: 443
-      GroupId: !Ref SecurityGroupIdParam
+      GroupId: !Ref cfparamSecurityGroupId
       #tcp=6
       IpProtocol: 6
   

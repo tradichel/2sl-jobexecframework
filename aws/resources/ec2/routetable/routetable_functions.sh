@@ -8,33 +8,6 @@
 source "shared/functions.sh"
 source "shared/validate.sh"
 
-deploy_route_table(){
-	vpcid="$1"
-	rttype="$2"
-	gatewayid="$3"
-
-	category="ec2"
-  resourcetype="routetable"
-  rtname=$vpcname$rttype'routetable'
-  vpcstack='id-ec2-vpc-'$vpcname
-
-	p=$(add_parameter "cfparamName" $rtname)
-  p=$(add_parameter "cfparamVpcId/ec2/.." $vpcid $p)
-  p=$(add_parameter "RouteType" $rttype $p)
-	
-	if [ "$rttype" == "nat" ]; then
-	  if [ "$gatewayid" == "" ]; then
-			echo "Gateway name must be set for NAT route table type."
-			exit
-		fi
-		p=$(add_parameter "GatewayIdParam" $gatewayid $p)
-	fi
-	
-	echo $p
-	deploy_stack $rtname $category $resourcetype $p
-
-}
-
 fix_vpc_route_table(){
 
 	vpcname="$1"

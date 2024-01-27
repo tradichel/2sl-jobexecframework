@@ -5,14 +5,14 @@
 Parameters: 
   cfparamName:
     Type: String
-  cfparamVPCId/ec2/..:
+  cfparamVPCId:
     Type: String
 
 Resources:
   nacl:
     Type: AWS::EC2::NetworkAcl
     Properties:
-      VpcId: !Ref cfparamVPCId/ec2/..
+      VpcId: !Ref cfparamVPCId
       Tags:
       - Key: Name
         Value: !Ref cfparamName

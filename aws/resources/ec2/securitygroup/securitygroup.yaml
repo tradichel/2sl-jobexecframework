@@ -5,9 +5,9 @@
 Parameters: 
   cfparamName:
     Type: String
-  cfparamVPCId/ec2/..:
+  cfparamVPCId:
     Type: String
-  GroupDescriptionParam:
+  cfparamGroupDescription:
     Type: String
 
 Resources:
@@ -15,8 +15,8 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupName: !Ref cfparamName
-      GroupDescription: !Ref GroupDescriptionParam
-      VpcId: !Ref cfparamVPCId/ec2/..
+      GroupDescription: !Ref cfparamGroupDescription
+      VpcId: !Ref cfparamVPCId
       Tags:
       - Key: Name
         Value: !Ref cfparamName

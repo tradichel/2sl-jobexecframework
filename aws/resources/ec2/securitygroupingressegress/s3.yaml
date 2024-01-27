@@ -3,16 +3,16 @@
 # author: @teriradichel @2ndsightlab
 ##############################################################
 Parameters:
-  SecurityGroupIdParam:
+  cfparamSecurityGroupId:
     Type: String
-  S3PrefixIdParam:
+  cfparamS3PrefixIdParam:
     Type: String
 
 Resources:
   EgressS3:
     Type: AWS::EC2::SecurityGroupEgress
     Properties: 
-      DestinationPrefixListId: !Ref S3PrefixIdParam
+      cfparamDestinationPrefixListId: !Ref cfparamS3PrefixIdParam
       Description: 'S3'
       FromPort: 443
       ToPort: 443
