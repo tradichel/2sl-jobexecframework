@@ -93,12 +93,12 @@ deploy() {
   local rcat=$(echo $resource | cut -d "-" -f1)
   local job_config=$(get_ssm_parameter_job_config $job_parameter)
 	
-	IFS=$' ' readarray -t a <<< "$config"
+	IFS=$' ' readarray -t c <<< "$config"
 	
 	if [ "$rcat" == "stack" ]; then
-    deploy_stack_config "${config[@]}"
+    deploy_stack_config "${c[@]}"
 	else
-		deploy_resource_config $job_parameter "${config[@]}"
+		deploy_resource_config $job_parameter "${c[@]}"
 	fi
 }
 
