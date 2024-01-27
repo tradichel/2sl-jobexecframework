@@ -93,7 +93,7 @@ deploy() {
   local rcat=$(echo $resource | cut -d "-" -f1)
   local job_config=$(get_ssm_parameter_job_config $job_parameter)
 	
-	declare -a config
+	local -a config
 	read -a config <<<"$job_config"
 
 	if [ "$rcat" == "stack" ]; then
@@ -107,7 +107,7 @@ deploy_stack_config(){
   local -n stack_config=$1
 
 	local job_parameter=""
-	declare -a job_config
+	local -a job_config
 
   for i in "${stack_config[@]}"
   do
@@ -134,7 +134,7 @@ deploy_stack_config(){
 					echo "Deploy..."
 					echo "deploy_resource_config $job_parameter $job_config"
 					local job_parameter=""
-					local job_config=$@
+					local -a job_config
 				fi
 		 fi
  
