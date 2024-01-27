@@ -93,9 +93,8 @@ deploy() {
   local rcat=$(echo $resource | cut -d "-" -f1)
   local job_config=$(get_ssm_parameter_job_config $job_parameter)
 	
-	local -a config
-	read -a config <<<"$job_config"
-
+	IFS=$' ' readarray -t a <<< "$config"
+	
 	if [ "$rcat" == "stack" ]; then
     deploy_stack_config "${config[@]}"
 	else
@@ -103,11 +102,10 @@ deploy() {
 	fi
 }
 
-deploy_stack_config(){
-  local -n stack_config=$1
+local job_parameter=""
 
-	local job_parameter=""
-	local -a job_config
+deploy_stack_config(){
+  local stack_config=("$@")
 
   for i in "${stack_config[@]}"
   do
@@ -120,21 +118,19 @@ deploy_stack_config(){
      echo $pname
 
      if [[ $pname == /job/* ]]; then 
-        local job_parameter=$pname 
+        job_parameter=$pname 
 				echo "Processing: $job_parameter"
+				declare -a job_config
      fi
 
 		 if [ "$job_parameter" != "" ]; then
 				if [[ $pname ==  -* ]]; then 
 					job_config+=($i)
 				else
-					echo "Deploy job config: $job_parameter"
-					echo "Job Config:"
-					echo $job_config
-					echo "Deploy..."
-					echo "deploy_resource_config $job_parameter $job_config"
+					echo "Deploy resource: $job_parameter"
+					declare -p job_config
+					deploy_resource_config $job_parameter "${config[@]}"
 					local job_parameter=""
-					local -a job_config
 				fi
 		 fi
  
