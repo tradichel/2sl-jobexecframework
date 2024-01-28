@@ -146,7 +146,7 @@ deploy_stack_config(){
              echo "Deploy job $job_parameter"
              #declare -p job_config
 						 if [ "$parallel" == "&" ]; then
-							$(sh -c deploy_resource_config $job_parameter \"${config[@]}\") &
+							$(deploy_resource_config $job_parameter \"${config[@]}\") &
 						 else
 							deploy_resource_config $job_parameter \"${config[@]}\"
 						 fi
