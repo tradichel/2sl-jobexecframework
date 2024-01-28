@@ -74,7 +74,7 @@ main(){
 	aws sts get-caller-identity --profile $PROFILE
 
   #execute the job - using source to use global parameters in execute.sh
-	echo "### Call execute.sh for $job_config_ssm_parameter  ###"
+	echo "### Call execute.sh for $JOB_CONFIG_SSM_PARAMETER with $PROFILE ###"
 	source execute.sh
 	
 }
