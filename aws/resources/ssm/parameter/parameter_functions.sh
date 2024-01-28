@@ -99,7 +99,7 @@ set_ssm_parameter_job_config(){
   func=${FUNCNAME[0]}
   validate_set $func "ssm_name" "$ssm_name"
 
-	if [ "$profile" != "" ]; then useprofile=" --profile $profile"; fi
+	if [ "$profile" != "" ]; then usePROFILE=" --profile $profile"; fi
 
   if [ "$kmskeyid" != "" ]; then
     echo "aws ssm put-parameter --name $ssm_name --overwrite --key-id $kmskeyid --value file://.$ssm_name \

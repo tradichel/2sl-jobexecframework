@@ -80,7 +80,7 @@ configure_cli_profile(){
 }
 
 get_region_for_profile(){
-	local profile="$1"
+	PROFILE="$1"
 
   local func=${FUNCNAME[0]}
   validate_set $func 'profile' $profile
@@ -90,7 +90,7 @@ get_region_for_profile(){
 }
 
 get_account_for_profile(){
-	local profile="$1"
+	PROFILE="$1"
 
   local func=${FUNCNAME[0]}
   validate_set $func 'profile' $profile
@@ -171,7 +171,7 @@ get_stack_status() {
 
 display_stack_errors(){
 	local stackname="$1"
-	local profile="$2"
+	PROFILE="$2"
 
 	aws cloudformation describe-stack-events --stack-name $stackname --max-items 5 \
 		--region $region --profile $profile | grep -i "status"

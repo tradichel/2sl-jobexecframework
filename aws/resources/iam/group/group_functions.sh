@@ -9,7 +9,7 @@ source "shared/validate.sh"
 
 get_users_in_group() {
   groupname="$1"
-  profile="$2"
+  PROFILE="$2"
 
   func=${FUNCNAME[0]}
   validate_set "$func" 'groupname' "$groupname"

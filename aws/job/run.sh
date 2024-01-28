@@ -10,15 +10,19 @@ source shared/validate.sh
 source shared/functions.sh
 source resources/ssm/parameter/parameter_functions.sh
 
+#global parameters
+PROFILE=""
+
+main(){
 
   #configure job role CLI profile
-	parameters="$1"
-	profile=$(get_container_parameter_value $parameters "profile")
-	access_key=$(get_container_parameter_value $parameters "accesskey")
-	secret_key=$(get_container_parameter_value $parameters "secretaccesskey")
-	session_token=$(get_container_parameter_value $parameters "sessiontoken")
-  region=$(get_container_parameter_value $parameters "region")
-	job_config_ssm_parameter=$(get_container_parameter_value $parameters "jobconfig")
+	local parameters="$1"
+	PROFILE=$(get_container_parameter_value $parameters "profile")
+	local access_key=$(get_container_parameter_value $parameters "accesskey")
+	local secret_key=$(get_container_parameter_value $parameters "secretaccesskey")
+	local session_token=$(get_container_parameter_value $parameters "sessiontoken")
+  local region=$(get_container_parameter_value $parameters "region")
+	local job_config_ssm_parameter=$(get_container_parameter_value $parameters "jobconfig")
   	
 	s="job/run.sh"
 	validate_set $s "profile" $profile
@@ -50,5 +54,6 @@ source resources/ssm/parameter/parameter_functions.sh
 	echo "### execute the job - the execution script has container specific execution code ###"
 	./execute.sh $profile $job_config_ssm_parameter
 	
+}
 
-
+main

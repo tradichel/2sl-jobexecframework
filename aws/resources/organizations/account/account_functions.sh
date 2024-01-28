@@ -7,7 +7,7 @@
 
 source shared/functions.sh
 source resources/organizations/organization/organization_functions.sh
-source resources/organizations/organizationalunit/organizationalunit_functions.s
+source resources/organizations/organizationalunit/organizationalunit_functions.sh
 
 get_account_ou(){
 	accountid="$1"
@@ -74,9 +74,9 @@ get_id(){
 
 create_account_alias(){
 	alias="$1"
-	account_profile="$2"
+	account_PROFILE="$2"
 
-	if [ "$account_profile" == "" ]; then account_profile=$profile; fi
+	if [ "$account_profile" == "" ]; then account_PROFILE=$profile; fi
 
   function=${FUNCNAME[0]}
   validate_var $function "alias" "$alias"	
@@ -104,10 +104,10 @@ create_account_alias(){
 
 delete_account_alias(){
   alias="$1"
-	account_profile="$2"
+	account_PROFILE="$2"
 
   if [ "$account_profile" == "" ]; then
-    account_profile=$profile
+    account_PROFILE=$profile
   fi
 
   function=${FUNCNAME[0]}
@@ -181,7 +181,7 @@ assume_organizations_role(){
   secret_key=""
   session_token=""
 
-	profile=$accountname
+	PROFILE=$accountname
 
   echo "### Created AWS CLI profile: $accountname ###"
   aws sts get-caller-identity --profile $profile
