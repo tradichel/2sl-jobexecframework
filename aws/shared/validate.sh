@@ -2,9 +2,9 @@
 
 #validate argument passed to a bash function
 validate_var(){
-  varfunc="$1"
-  varname="$2"
-  varvalue="$3"
+  local varfunc="$1"
+  local varname="$2"
+  local varvalue="$3"
 
   validate_set $varfunc $varname $varvalue
 
@@ -12,9 +12,9 @@ validate_var(){
 
 #validate that resource starts with valid environment name
 validate_resource_name(){
-	resourcename="$1"
+	local resourcename="$1"
 
-	env=$(echo $resourcename | cut -d "-" -f1)
+	local env=$(echo $resourcename | cut -d "-" -f1)
   validate_env $env
 }
 
@@ -22,7 +22,7 @@ validate_resource_name(){
 #validate that the value only has alphanumeric characters,
 #dashes (-) or underscores (_).
 validate_alphanumeric_underscore_dash_period(){
-	v=$(echo "$1" | sed 's/[^[:alnum:]_-.]//g')
+	local v=$(echo "$1" | sed 's/[^[:alnum:]_-.]//g')
 
 	if [ "$1" != "$v" ]; then
 
@@ -34,9 +34,9 @@ validate_alphanumeric_underscore_dash_period(){
 #validate the value is set (not null, not empty string)
 #first parameter is the value, 2nd parameter is the name
 validate_set(){
-	varcaller="$1"
-	varname="$2"
-	varvalue=$3
+	local varcaller="$1"
+	local varname="$2"
+	local varvalue=$3
 
 	#remove quotes in varname
 	varname=$(echo $varname | sed 's/"//g')
@@ -112,39 +112,39 @@ validate_set(){
 
 #replace periods with dashes
 dots_to_dashes(){
-	s="$1"
+	local s="$1"
 	s=$(echo $s | sed 's/\./-/g')
 	echo $s
 }
 
 toupper(){
-	value="$1"
+	local value="$1"
   echo $value | tr '[:lower:]' '[:upper:]'
 }
 
 tolower(){
-	value="$1"
+	local value="$1"
 	echo $value | tr '[:upper:]' '[:lower:]'
 }
 
 truncate(){
-	value="$1"
-	length=$2
+	local value="$1"
+	local length=$2
 
 	value=$(echo "${value:0:$length}")
 	echo "$value"
 }
 
 remove_period_at_end(){
-	s="$1"
+	local s="$1"
 	s=${s%.*}
 	echo $s
 }
 
 
 validate_region(){
-	src="$1"
-	region="$2"
+	local src="$1"
+	local region="$2"
 
 	validate_set "$src" "region" "$region"
  
@@ -155,9 +155,9 @@ validate_region(){
 }
 
 validate_environment(){
-	varcaller="$1"
-	env="$2"
-	resourcename="$3" #optional
+	local varcaller="$1"
+	local env="$2"
+	local resourcename="$3" #optional
 
 
 	echo "Validating environment. Source: $varcaller Env: $env Resource: $resourcename"
@@ -180,7 +180,7 @@ validate_environment(){
 }
 
 validate_alphanumeric(){
-  v=$(echo "$1" | sed 's/[^[:alnum:]]//g')
+  local v=$(echo "$1" | sed 's/[^[:alnum:]]//g')
 
   if [ "$1" != "$v" ]; then
 
@@ -190,7 +190,7 @@ validate_alphanumeric(){
 }
 
 validate_numeric(){
-  v=$(echo "$1" | sed 's/[^[:digit:]]//g')
+  local v=$(echo "$1" | sed 's/[^[:digit:]]//g')
 
   if [ "$1" != "$v" ]; then
 
@@ -202,7 +202,7 @@ validate_numeric(){
 #validate that the string does not contain quotes
 #note that this does not check for encoded characters
 validate_no_quotes(){
-  v=$(echo "$1" | sed "s/'//g" | sed 's/"//g' )
+  local v=$(echo "$1" | sed "s/'//g" | sed 's/"//g' )
 
   if [ "$1" != "$v" ]; then
     >&2 echo "Invalid value. No quotes allowed."
@@ -212,26 +212,26 @@ validate_no_quotes(){
 
 #remove unsafe characters and return the result
 safe_string_alphanumeric(){
-  ss=$(echo "$1" | sed "s/[^[:alnum:]]//g")
+  local ss=$(echo "$1" | sed "s/[^[:alnum:]]//g")
   echo $ss
 }
 
 #remove unsafe characters and return the result
 safe_string_alphanumeric_underscore_dash(){
-	ss=$(echo "$1" | sed "s/[^[:alnum:]_-]//g")
+	local ss=$(echo "$1" | sed "s/[^[:alnum:]_-]//g")
 	echo $ss
 }
 
 safe_numeric(){
-	n=$(echo "$1" | sed "s/[^[:digit:]]//g")
+	local n=$(echo "$1" | sed "s/[^[:digit:]]//g")
 	echo $n
 }
 
 valdiate_length(){
-	value="$1"
-	length="$2"
+	local value="$1"
+	local length="$2"
 
-	n=${#value}
+	local n=${#value}
 	if [ "$n" !=  "$length" ]; then
      >&2 echo "Invalid length: $n. Should be $length"
     exit 1
@@ -250,7 +250,7 @@ validate_parameters(){
 }
 
 validate_template(){
-  templatefile=$1
+  local templatefile=$1
   aws cloudformation validate-template --template-body file://$templatefile --profile $profile
 }
 
@@ -268,8 +268,8 @@ validate_param(){
 }
 
 validate_starts_with(){
-	value="$1"
-	match=$2
+	local value="$1"
+	local match=$2
 
 	if [[ ! $value == $match* ]]; then
 			echo "$value does not start with $match"
@@ -279,10 +279,10 @@ validate_starts_with(){
 }
 
 validate_job_param_name(){
-	value="$1"
+	local value="$1"
 
 	#job parameter name should have four slashes
-	slashes=$(echo -n $value | sed 's|[^/]||g' | wc -c)
+	local slashes=$(echo -n $value | sed 's|[^/]||g' | wc -c)
 	
 	if [ ! $slashes -eq 4 ]; then
 		echo "Incorrect number of characters in $value"
@@ -291,7 +291,7 @@ validate_job_param_name(){
 		
 	#only charaters should be alphanumeric or a forward
 	#slash or dash
-	v=$(echo "$value" | sed -r 's|[^[:alnum:]/-]||g')
+	local v=$(echo "$value" | sed -r 's|[^[:alnum:]/-]||g')
 
 	echo "$v"
 

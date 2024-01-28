@@ -84,60 +84,58 @@ deploy_resource_config(){
 }
 
 deploy() {
-	local job_parameter="$1"
+   local job_parameter="$1"
 
-	echo "parse_config: deploy $job_parameter"
+   echo "run job: $job_parameter"
 
- 	local role=$(echo $job_parameter | cut -d "/" -f4)
-  local resource=$(echo $job_parameter | cut -d "/" -f5)
-  local rcat=$(echo $resource | cut -d "-" -f1)
-  local job_config=$(get_ssm_parameter_job_config $job_parameter)
-	
-	IFS=$' ' readarray -t c <<< "$config"
-	
-	if [ "$rcat" == "stack" ]; then
-    deploy_stack_config "${c[@]}"
-	else
-		deploy_resource_config $job_parameter "${c[@]}"
-	fi
+   local role=$(echo $job_parameter | cut -d "/" -f4)
+   local resource=$(echo $job_parameter | cut -d "/" -f5)
+   local rcat=$(echo $resource | cut -d "-" -f1)
+   local config=$(get_ssm_parameter_job_config $job_parameter)
+
+   readarray -t -d ' ' a <<<$config
+   declare -p a
+
+   if [ "$rcat" == "stack" ]; then
+      echo "deploy stack"
+      deploy_stack_config "${a[@]}"
+   else
+     echo "deploy resource"
+     deploy_resource_config $job_parameter "${a[@]}"
+   fi
 }
 
-local job_parameter=""
-
 deploy_stack_config(){
-  local stack_config=("$@")
 
-  for i in "${stack_config[@]}"
-  do
-			
-	   echo "Stack Config Line: $i"
+   local stack_config=("$@")
+
+   local job_parameter=""
+
+   for i in "${stack_config[@]}"
+   do
 
      local pname=$(echo $i | cut -d "=" -f1 | tr -d ' ') 
      local pvalue=$(echo $i | cut -d "=" -f2 | tr -d ' ')
 
-     echo $pname
+     if [ "$pname" == "Sequential:" ]; then parallel=""; continue; fi
+     if [ "$pname" == "Parallel:" ]; then parallel="&"; continue; fi
 
-     if [[ $pname == /job/* ]]; then 
-        job_parameter=$pname 
-				echo "Processing: $job_parameter"
-				declare -a job_config
+     if [[ $pname == /job/* ]]; then
+        if [ "$job_parameter" != "" ]; then
+             echo "~~~~"
+             echo "Deploy job $job_parameter"
+             echo "Parallel: $parallel"
+             declare -p job_config
+             c="deploy_resource_config $job_parameter \"${config[@]}\" $parallel"
+             $($c)
+             echo "~~~"
+        fi
+        job_parameter=$pname
+        declare -a job_config
+        continue
      fi
 
-		 if [ "$job_parameter" != "" ]; then
-				if [[ $pname ==  -* ]]; then 
-					job_config+=($i)
-				else
-					echo "Deploy resource: $job_parameter"
-					declare -p job_config
-					deploy_resource_config $job_parameter "${config[@]}"
-					local job_parameter=""
-				fi
-		 fi
- 
-     if [ "$pname" == "Sequential:" ]; then parallel=0; continue; fi
- 		 if [ "$pname" == "Parallel:" ]; then parallel=1; continue; fi
-
-     echo "Parallel: $parallel"
+     if [[ $pname ==  cfparam* ]]; then job_config+=($i); fi
 
    done
 

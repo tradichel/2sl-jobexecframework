@@ -9,17 +9,17 @@
 ##############################################################
 
 replace_template_var(){
-  tmpfile="$1"
-  placeholder="$2"
-  value="$3"
+  local tmpfile="$1"
+  local placeholder="$2"
+  local value="$3"
 
-  func=${FUNCNAME[0]}
+  local func=${FUNCNAME[0]}
   validate_set $func 'tmpfile' $tmpfile
   validate_set $func 'placeholder' $placeholder
   validate_set $func 'value' $value
 
   #remove quotes from value
-  value=$(echo $value | sed "s/'//g" | sed 's/"//g')
+  local value=$(echo $value | sed "s/'//g" | sed 's/"//g')
   echo sed -i "s|{{$placeholder}}|$value|g" $tmpfile
   sed -i "s|{{$placeholder}}|$value|g" $tmpfile
   cat $tmpfile
@@ -27,21 +27,21 @@ replace_template_var(){
 }
 
 get_container_parameter_value(){
-	params="$1"
-  pname="$2"
+	local params="$1"
+  local pname="$2"
 	
-	func=${FUNCNAME[0]}
+	local func=${FUNCNAME[0]}
 	validate_set $func 'params' $params
 	validate_set $func 'pname' $pname
 
 	for p in ${params//,/ }
 	do
-  	n=$(echo $p | cut -d "=" -f1)
+  	local n=$(echo $p | cut -d "=" -f1)
   	if [ "$n" == "$pname" ]; then
-			value=$(echo $p | sed 's/,//g' | cut -d "=" -f2)
+			local value=$(echo $p | sed 's/,//g' | cut -d "=" -f2)
 			#if value starts with [ get everyting to end because it's the parameter list to forward; remove the ]
 			if [[ $value == [* ]]; then
-				value=$(echo $params | cut -d '[' -f2 | sed 's/]//g')
+				local value=$(echo $params | cut -d '[' -f2 | sed 's/]//g')
 			fi
 			echo $value
 			exit
@@ -54,15 +54,15 @@ get_container_parameter_value(){
 }
 
 configure_cli_profile(){
-	role="$1"
-	access_key_id="$2"
-	aws_secret_access_key="$3"
-	region="$4"
-	mfa_serial="$5"
+	local role="$1"
+	local access_key_id="$2"
+	local aws_secret_access_key="$3"
+	local region="$4"
+	local mfa_serial="$5"
 
-	output="json"
+	local output="json"
 
-  func=${FUNCNAME[0]}
+  local func=${FUNCNAME[0]}
   validate_set $func 'role' $role
   validate_set $func 'access_key_id' $access_key_id
   validate_set $func 'aws_secret_access_key' $aws_secret_access_key
@@ -80,36 +80,36 @@ configure_cli_profile(){
 }
 
 get_region_for_profile(){
-	profile="$1"
+	local profile="$1"
 
-  func=${FUNCNAME[0]}
+  local func=${FUNCNAME[0]}
   validate_set $func 'profile' $profile
 
-	region=$(aws configure list --profile $profile | grep region | awk '{print $2}')
+	local region=$(aws configure list --profile $profile | grep region | awk '{print $2}')
 	echo $region
 }
 
 get_account_for_profile(){
-	profile="$1"
+	local profile="$1"
 
-  func=${FUNCNAME[0]}
+  local func=${FUNCNAME[0]}
   validate_set $func 'profile' $profile
 
-	account=$(aws sts get-caller-identity --query Account --output text --profile $profile)
+	local account=$(aws sts get-caller-identity --query Account --output text --profile $profile)
 	echo $account
 }
 
 get_stack_export(){
 
-  stackname=$1
-  exportname=$2
+  local stackname=$1
+  local exportname=$2
 
-  func=${FUNCNAME[0]}
+  local func=${FUNCNAME[0]}
   validate_set "$func" 'stackname' "$stackname"
   validate_set "$func" 'exportname' "$exportname"
 
-  qry="Stacks[0].Outputs[?ExportName=='$exportname'].OutputValue"
-  value=$(aws cloudformation describe-stacks --stack-name $stackname --query $qry --output text \
+  local qry="Stacks[0].Outputs[?ExportName=='$exportname'].OutputValue"
+  local value=$(aws cloudformation describe-stacks --stack-name $stackname --query $qry --output text \
 		--profile $profile --region $region)
 
   if [ "$value" == "" ]; then
@@ -129,40 +129,40 @@ get_stack_export(){
 
 #get id from cloudforamtion stack
 get_id_from_stack(){
-	role="$1"
-	resource_cat="$2"
-	resource_type="$3"
-	resource_name="$4"
-	env="$5"
+	local role="$1"
+	local resource_cat="$2"
+	local resource_type="$3"
+	local resource_name="$4"
+	local env="$5"
 
-  resource="$resource_cat-$resource_type-$env-$resource_name"
-  stack="$role-$resource"
-  output="arn-$resource"
+  local resource="$resource_cat-$resource_type-$env-$resource_name"
+  local stack="$role-$resource"
+  local output="arn-$resource"
 
-	id=$(get_stack_export $stack $output)	
+	local id=$(get_stack_export $stack $output)	
 	echo $id
 
 }
 
 #get arn from cloudformation stack
 get_arn_from_stack(){
-  role="$1"
-  resource_cat="$2"
-  resource_type="$3"
-  resource_name="$4"
-  env="$5"
+  local role="$1"
+  local resource_cat="$2"
+  local resource_type="$3"
+  local resource_name="$4"
+  local env="$5"
 
-	resource="$resource_cat-$resource_type-$env-$resource_name"
-	stack="$role-$resource"
-	output="arn-$resource"
+	local resource="$resource_cat-$resource_type-$env-$resource_name"
+	local stack="$role-$resource"
+	local output="arn-$resource"
 
-  arn=$(get_stack_export $stack $output)        
+  local arn=$(get_stack_export $stack $output)        
   echo $arn
 }
 
 get_stack_status() {
 
-	stackname="$1"
+	local stackname="$1"
 
   echo $(aws cloudformation describe-stacks --stack-name $stackname --region $region \
      --query Stacks[0].StackStatus --output text --profile $profile 2>/dev/null || true) 
@@ -170,8 +170,8 @@ get_stack_status() {
 }
 
 display_stack_errors(){
-	stackname="$1"
-	profile="$2"
+	local stackname="$1"
+	local profile="$2"
 
 	aws cloudformation describe-stack-events --stack-name $stackname --max-items 5 \
 		--region $region --profile $profile | grep -i "status"
@@ -180,28 +180,28 @@ display_stack_errors(){
 #get the role that is making the call to deploy something
 get_sts_role_name(){
 	#rolenames cannot start with a letter or the stack name will fail.
-  role=$(aws sts get-caller-identity --region $region --profile $profile --output text --query Arn | cut -d '/' -f2)
+  local role=$(aws sts get-caller-identity --region $region --profile $profile --output text --query Arn | cut -d '/' -f2)
 	echo $role
 }
 
 get_sts_role_arn(){
   #rolenames cannot start with a letter or the stack name will fail.
-  role=$(aws sts get-caller-identity --profile $profile --region $region --output text --query Arn)
+  local role=$(aws sts get-caller-identity --profile $profile --region $region --output text --query Arn)
   echo $role
 }
 
 #add parameter to the list for the 
 #deploy_stack function (below)
 add_parameter () {
-  paramkey=$1
-  paramvalue=$2
-  addtoparams=$3
+  local paramkey=$1
+  local paramvalue=$2
+  local addtoparams=$3
 
   func=${FUNCNAME[0]}
   validate_set $func "key" $paramkey
   validate_set $func "value" $paramvalue
 
-  addp="\"$paramkey=$paramvalue\""
+  local addp="\"$paramkey=$paramvalue\""
   if [ "$addtoparams" == "" ]; then echo $addp; exit; fi
   echo $addtoparams,$addp
 
@@ -214,15 +214,15 @@ add_parameter () {
 #pass in parameters in this format, with quotes:
 #"key=value","key=value","key=value"
 deploy_stack () {
-  resourcename="$1"
-	category="$2"
-  resourcetype="$3"
-	env="$4"
-	region="$5"
-  parameters="$6"
-	template="$7"
+  local resourcename="$1"
+	local category="$2"
+  local resourcetype="$3"
+	local env="$4"
+	local region="$5"
+  local parameters="$6"
+	local template="$7"
 
-  func=${FUNCNAME[0]}
+  local func=${FUNCNAME[0]}
   validate_set $func 'resourcename' $resourcename
   validate_set $func 'resourcetype' $resourcetype
   validate_set $func 'category' $category
@@ -236,11 +236,11 @@ deploy_stack () {
 
 		#kms key aliases start with alias/ because why? IDK
 		if [ "$resourcetype" == "keyalias" ]; then
-			resourcename=$(echo $resourcename | cut -d "/" -f2)
+			local resourcename=$(echo $resourcename | cut -d "/" -f2)
 		fi
 
 		#the prefix before the dash should be the environment name
-		env=$(echo $resourcename | cut -d "-" -f1)
+		local env=$(echo $resourcename | cut -d "-" -f1)
 	
 		#if the name is missing after "env-" throw an error
 		if [ "$(echo $resourcename | cut -d "-" -f2)" == "" ];	then
@@ -257,17 +257,17 @@ deploy_stack () {
 	if [ "$template" == "" ]; then template=$resourcetype'.yaml';fi
 	
 	if ! [[ "$template" =~ '/' ]]; then
-		template='resources/'$category'/'$resourcetype'/'$template
+		local template='resources/'$category'/'$resourcetype'/'$template
 	fi
 
 	#add parameters if any were passed in
   if [ "$parameters" != "" ]; then parameters="[$parameters]"; fi
 	
 	#formulate the stack name
-  stackname=$profile'-'$category'-'$resourcetype'-'$resourcename
+  local stackname=$profile'-'$category'-'$resourcetype'-'$resourcename
 	
 	#get the status if the stack already exists
-	status=$(get_stack_status $stackname)
+	local status=$(get_stack_status $stackname)
 
 	#delete the stack if it already exists
 	if [ "$status" == "ROLLBACK_COMPLETE" ]; then
@@ -280,21 +280,21 @@ deploy_stack () {
 
   echo "-------------- Deploying $stackname -------------------"
 
-	c="aws cloudformation deploy --profile $profile 
+	local c="aws cloudformation deploy --profile $profile 
 			--stack-name $stackname --region $region
       --template-file $template"  
 	
   #allowing IAM for all stacks; presume IAM Policies, SCPs, 
   #and Permission Boundaries will handle this, which is more appropriate
-	c=$c' --capabilities CAPABILITY_NAMED_IAM '
+	local c=$c' --capabilities CAPABILITY_NAMED_IAM '
 
 	if [ "$parameters" != "" ]; then 
-  	  c=$c' --parameter-overrides '$parameters
+  	  local c=$c' --parameter-overrides '$parameters
 	fi
 
 	echo "$c"
 		
-	e="display_stack_errors $stackname $profile"
+	local e="display_stack_errors $stackname $profile"
 
 	cd /job
 
@@ -303,8 +303,8 @@ deploy_stack () {
 
 get_timestamp() {
 
-  timestamp="$(date)"
-  timestamp=$(echo $timestamp | sed 's/ //g')
+  local timestamp="$(date)"
+  local timestamp=$(echo $timestamp | sed 's/ //g')
 	echo $timestamp
 
 }
@@ -312,16 +312,16 @@ get_timestamp() {
 
 #replace a var in {{ }}
 replace_placeholder() {
-	name="$1"
-	value="$2"
-	file="$3"
+	local name="$1"
+	local value="$2"
+	local file="$3"
 
-  s=$(sed -i "s|$name|$value|g" $file)
+  local s=$(sed -i "s|$name|$value|g" $file)
 }
 
 #get the current account ID where resources will be deployed
 get_account_id(){
-  acctid=$(aws sts get-caller-identity --query Account --output text --profile $profile --region $region)
+  local acctid=$(aws sts get-caller-identity --query Account --output text --profile $profile --region $region)
   echo $acctid
 }
 
@@ -332,9 +332,9 @@ get_current_region(){
 }
 
 get_profile_region(){
-   region=$AWS_DEFAULT_REGION
+   local region=$AWS_DEFAULT_REGION
 	 if [ "$region" == "" ]; then 
-	 	 region=$(aws configure get region --profile $profile)	
+	 	 local region=$(aws configure get region --profile $profile)	
 	 fi
 	 echo $region
 }
