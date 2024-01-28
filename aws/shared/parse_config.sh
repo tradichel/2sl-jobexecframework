@@ -13,11 +13,11 @@ source shared/functions.sh
 get_config_resource_id(){
   value="$1"
 
-  category=$(echo $value | cut -d ':' -f3)
-  resource_type=$(echo $value | cut -d ':' -f4)
-  name=$(echo $value | cut -d ':' -f5)
+  local category=$(echo $value | cut -d ':' -f3)
+  local resource_type=$(echo $value | cut -d ':' -f4)
+  local name=$(echo $value | cut -d ':' -f5)
 
-  file='resources/'$category'/'$resource_type'/'$resource_type'_functions.sh'
+  local file='resources/'$category'/'$resource_type'/'$resource_type'_functions.sh'
   
 	#source $file
   #id=$(get_id $name)
@@ -51,7 +51,7 @@ deploy_resource_config(){
      pvalue=$(echo $i | cut -d "=" -f2 | tr -d ' ')
 
      if [ "$pname" == "env" ]; then 
-				 env=$pvalue;
+				 env=$pvalue; echo "Environment: $env"
          if [ "$rname" != "$env" ]; then rname=$env'-'$rname; fi
 		 fi
 
@@ -65,11 +65,13 @@ deploy_resource_config(){
 						parm=$(echo $pvalue | cut -d ":" -f3)
             pvalue=$(get_ssm_parameter_value $parm)
          fi
+				 echo "add_parameter $pname $pvalue $p"
          p=$(add_parameter $pname $pvalue $p)
 		 fi
      
    done
 
+	 echo "add_parameter $pname $pvalue $p"
    p=$(add_parameter "cfparamName" $rname $p)
 
    f=${FUNCNAME[0]}	 
@@ -86,7 +88,7 @@ deploy_resource_config(){
 deploy() {
    local job_parameter="$1"
 
-   echo "run job: $job_parameter"
+   echo "run job: $job_parameter with profile: $PROFILE"
 
    local role=$(echo $job_parameter | cut -d "/" -f4)
    local resource=$(echo $job_parameter | cut -d "/" -f5)

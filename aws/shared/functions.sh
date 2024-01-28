@@ -27,7 +27,7 @@ replace_template_var(){
 }
 
 
-configure_cli_PROFILE(){
+configure_cli_profile(){
 	local role="$1"
 	local access_key_id="$2"
 	local aws_secret_access_key="$3"

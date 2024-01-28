@@ -32,10 +32,6 @@ get_container_parameter_value(){
       exit
     fi
   done
-
-  #may have optional parameter
-  #need to check if value is set outside of this function because bash
-
 }
 
 main(){
@@ -43,12 +39,15 @@ main(){
 	parameters="$1"
 
 	PROFILE=$(get_container_parameter_value $parameters "profile")
+  echo "### Profile passed to job: $PROFILE ###"
+
 	local access_key=$(get_container_parameter_value $parameters "accesskey")
 	local secret_key=$(get_container_parameter_value $parameters "secretaccesskey")
 	local session_token=$(get_container_parameter_value $parameters "sessiontoken")
   local region=$(get_container_parameter_value $parameters "region")
 	local job_config_ssm_parameter=$(get_container_parameter_value $parameters "jobconfig")
   	
+	echo "### Validate parameters passed to job ###"
 	s="job/run.sh"
 	validate_set $s "PROFILE" $PROFILE
 	validate_set $s "access_key" $access_key
@@ -76,9 +75,11 @@ main(){
 	aws sts get-caller-identity --profile $PROFILE
 
   #execute the job
-	echo "### execute the job - the execution script has container specific execution code ###"
+	echo "### Call execute.sh for $job_config_ssm_parameter  ###"
 	./execute.sh $PROFILE $job_config_ssm_parameter
 	
 }
+
+echo "Executing job/aws/run.sh"
 
 main $1
