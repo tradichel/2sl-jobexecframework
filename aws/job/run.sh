@@ -16,7 +16,7 @@ PROFILE=""
 main(){
 
   #configure job role CLI profile
-	local parameters="$1"
+	parameters="$1"
 	PROFILE=$(get_container_parameter_value $parameters "profile")
 	local access_key=$(get_container_parameter_value $parameters "accesskey")
 	local secret_key=$(get_container_parameter_value $parameters "secretaccesskey")
@@ -25,7 +25,7 @@ main(){
 	local job_config_ssm_parameter=$(get_container_parameter_value $parameters "jobconfig")
   	
 	s="job/run.sh"
-	validate_set $s "profile" $profile
+	validate_set $s "PROFILE" $PROFILE
 	validate_set $s "access_key" $access_key
 	validate_set $s "secret_key" $secret_key
 	validate_set $s "session_token" $session_token
