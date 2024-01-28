@@ -10,7 +10,9 @@ source shared/validate.sh
 source shared/functions.sh
 source resources/ssm/parameter/parameter_functions.sh
 
-#configure job role CLI profile
+main(){
+
+  #configure job role CLI profile
 	local parameters="$1"
 	local profile=$(get_container_parameter_value $parameters "profile")
 	local access_key=$(get_container_parameter_value $parameters "accesskey")
@@ -45,9 +47,11 @@ source resources/ssm/parameter/parameter_functions.sh
   echo "### Created AWS CLI profile in container for: $profile ###"
 	aws sts get-caller-identity --profile $profile
 
-#execute the job
+  #execute the job
 	echo "### execute the job - the execution script has container specific execution code ###"
 	./execute.sh $profile $job_config_ssm_parameter
 	
+}
 
+main
 
