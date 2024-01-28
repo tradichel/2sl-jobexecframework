@@ -36,8 +36,9 @@ deploy_resource_config(){
 	echo "Config in deploy_resource_config:"
 	declare -p $config
   
-	if [ "$(ssm_parameter_exists $job_parameter)" != "true" ] then 
-		echo "SSM Parameter $job_parameter does not exist"; exit 1;
+	if [ "$(ssm_parameter_exists $job_parameter)" != "true" ]; then 
+		echo "SSM Parameter $job_parameter does not exist"
+		exit 1
 	fi
 
 	local resource=$(echo $job_parameter | cut -d "/" -f5)
