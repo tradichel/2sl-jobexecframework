@@ -39,7 +39,9 @@ main(){
 	parameters="$1"
 
 	PROFILE=$(get_container_parameter_value $parameters "profile")
+  echo "Set global PROFILE: $PROFILE)
   JOB_CONFIG_SSM_PARAMETER=$(get_container_parameter_value $parameters "jobconfig")
+	echo "Set global JOB_CONFIG_SSM_PARAMETER: $JOB_CONFIG_SSM_PARAMETER)
 
 	local access_key=$(get_container_parameter_value $parameters "accesskey")
 	local secret_key=$(get_container_parameter_value $parameters "secretaccesskey")
@@ -53,7 +55,8 @@ main(){
 	validate_set $s "secret_key" $secret_key
 	validate_set $s "session_token" $session_token
   validate_set $s "region" $region
-	
+	validate_set $s "JOB_CONFIG_SSM_PARAMETER" $JOB_CONFIG_SSM_PARAMETER
+
 	if [ "$job_config_ssm_paramter" != "" ]; then
 		validate_job_param_name $JOB_CONFIG_SSM_PARAMETER
 	fi
@@ -76,7 +79,7 @@ main(){
   #execute the job - using source to use global parameters in execute.sh
 	echo "### Call execute.sh for $JOB_CONFIG_SSM_PARAMETER with $PROFILE ###"
 	source execute.sh
-	
+
 }
 
 echo "Executing job/aws/run.sh"
