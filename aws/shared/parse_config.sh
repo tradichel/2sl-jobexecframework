@@ -71,6 +71,7 @@ deploy_resource_config(){
             pvalue=$(get_config_resource_id $pvalue)
          fi
          if [[ $pvalue == :ssm:* ]]; then
+						echo "Get ssm parameter value from $pvalue"
 						parm=$(echo $pvalue | cut -d ":" -f3)
             pvalue=$(get_ssm_parameter_value $parm)
          fi
@@ -78,8 +79,7 @@ deploy_resource_config(){
          p=$(add_parameter $pname $pvalue $p)
 		 fi
      
-   done
-
+	 done
 
    validate_set $f "env" $env
    validate_set $f "region" $region
