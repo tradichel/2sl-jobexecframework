@@ -7,16 +7,41 @@
  
 #include files
 source shared/validate.sh
-source shared/functions.sh
-source resources/ssm/parameter/parameter_functions.sh
 
-#global parameters
+#global profile value used by aws jobs
 PROFILE=""
 
-main(){
+get_container_parameter_value(){
+  local params="$1"
+  local pname="$2"
 
+  local func=${FUNCNAME[0]}
+  validate_set $func 'params' $params
+  validate_set $func 'pname' $pname
+
+  for p in ${params//,/ }
+  do
+    local n=$(echo $p | cut -d "=" -f1)
+    if [ "$n" == "$pname" ]; then
+      local value=$(echo $p | sed 's/,//g' | cut -d "=" -f2)
+      #if value starts with [ get everyting to end because it's the parameter list to forward; remove the ]
+      if [[ $value == [* ]]; then
+        local value=$(echo $params | cut -d '[' -f2 | sed 's/]//g')
+      fi
+      echo $value
+      exit
+    fi
+  done
+
+  #may have optional parameter
+  #need to check if value is set outside of this function because bash
+
+}
+
+main(){
   #configure job role CLI profile
 	parameters="$1"
+
 	PROFILE=$(get_container_parameter_value $parameters "profile")
 	local access_key=$(get_container_parameter_value $parameters "accesskey")
 	local secret_key=$(get_container_parameter_value $parameters "secretaccesskey")
@@ -56,4 +81,4 @@ main(){
 	
 }
 
-main
+main $1
