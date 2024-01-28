@@ -146,10 +146,8 @@ deploy_stack_config(){
              echo "Deploy job $job_parameter"
              #declare -p job_config
 						 if [ "$parallel" == "&" ]; then
-					  	"parallel"
-							deploy_resource_config $job_parameter \"${config[@]}\" &
+							$(sh -c deploy_resource_config $job_parameter \"${config[@]}\") &
 						 else
-							"sequential"
 							deploy_resource_config $job_parameter \"${config[@]}\"
 						 fi
              echo "~~~"
