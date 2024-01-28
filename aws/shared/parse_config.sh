@@ -37,12 +37,6 @@ deploy_resource_config(){
 	echo "Config in deploy_resource_config:"
 	declare -p $config
 
-	echo "Check to see if ssm parameter exists"  
-	if [ "$(ssm_parameter_exists $job_parameter)" != "true" ]; then 
-		echo "SSM Parameter $job_parameter does not exist"
-		exit 1
-	fi
-
 	echo "Get values from job parmeter name"
 	local resource=$(echo $job_parameter | cut -d "/" -f5)
   local rcat=$(echo $resource | cut -d "-" -f1)
@@ -68,7 +62,6 @@ deploy_resource_config(){
 
      if [ "$pname" == "env" ]; then 
 				 env=$pvalue; echo "Environment: $env"
-         if [ "$rname" != "$env" ]; then rname=$env'-'$rname; fi
 		 fi
 
      if [ "$pname" == "region" ]; then region=$pvalue; fi
@@ -87,11 +80,13 @@ deploy_resource_config(){
      
    done
 
+
+   validate_set $f "env" $env
+   validate_set $f "region" $region
+
+	 if [ "$rname" != "$env" ]; then rname=$env'-'$rname; fi
 	 echo "add_parameter "cfparamName" $rname $p"
    p=$(add_parameter "cfparamName" $rname $p)
-
-	 validate_set $f "env" $env
-	 validate_set $f "region" $region
 
 	 echo "deploy_stack $rname $rcat $rtype $env $region $p"
    deploy_stack $rname $rcat $rtype $env $region $p
