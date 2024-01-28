@@ -41,7 +41,7 @@ main(){
 	PROFILE=$(get_container_parameter_value $parameters "profile")
   echo "Set global PROFILE: $PROFILE)
   JOB_CONFIG_SSM_PARAMETER=$(get_container_parameter_value $parameters "jobconfig")
-	echo "Set global JOB_CONFIG_SSM_PARAMETER: $JOB_CONFIG_SSM_PARAMETER)
+	echo "Set global JOB_CONFIG_SSM_PARAMETER: $JOB_CONFIG_SSM_PARAMETER"
 
 	local access_key=$(get_container_parameter_value $parameters "accesskey")
 	local secret_key=$(get_container_parameter_value $parameters "secretaccesskey")
