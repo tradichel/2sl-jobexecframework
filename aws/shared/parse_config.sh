@@ -94,7 +94,7 @@ deploy() {
    local config=$(get_ssm_parameter_job_config $job_parameter)
 
    readarray -t -d ' ' a <<<$config
-   declare -p a
+   #declare -p a 
 
    if [ "$rcat" == "stack" ]; then
       echo "deploy stack"
@@ -110,6 +110,7 @@ deploy_stack_config(){
    local stack_config=("$@")
 
    local job_parameter=""
+	 local first="true"
 
    for i in "${stack_config[@]}"
    do
@@ -118,8 +119,12 @@ deploy_stack_config(){
      local pvalue=$(echo $i | cut -d "=" -f2 | tr -d ' ')
 
      if [ "$pname" == "Sequential:" ]; then parallel=""; continue; fi
-     if [ "$pname" == "Parallel:" ]; then parallel="&"; continue; fi
-
+     if [ "$pname" == "Parallel:" ]; then 
+			parallel="&"; 
+			if [ "first" == "true" ]; then first="false"; else wait; fi
+			continue; 
+     fi
+			
      if [[ $pname == /job/* ]]; then
         if [ "$job_parameter" != "" ]; then
              echo "~~~~"
