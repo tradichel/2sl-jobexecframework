@@ -70,7 +70,7 @@ deploy_github_prefix_list() {
 
 #get the s3 prefix list for the current region
 get_s3_prefix_list(){
-	echo $(aws ec2 describe-managed-prefix-lists --filters Name=owner-id,Values=AWS --output text --PROFILE $PROFILE | grep s3 | cut -f5)
+	echo $(aws ec2 describe-managed-prefix-lists --filters Name=owner-id,Values=AWS --output text --profile $PROFILE | grep s3 | cut -f5)
 }
 
 #################################################################################

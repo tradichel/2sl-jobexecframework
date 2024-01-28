@@ -41,11 +41,11 @@ get_id(){
 
 	#loop through child nodes for parent
 	for n in $(aws organizations list-organizational-units-for-parent --parent-id $parent_id \
-      --query 'OrganizationalUnits[*].Name' --output text --PROFILE $PROFILE); do
+      --query 'OrganizationalUnits[*].Name' --output text --profile $PROFILE); do
 			if [ "$n" == "$ou_name" ]; then
 				#if the current ou name matches the target ou name, return the id
   			id=$(aws organizations list-organizational-units-for-parent --parent-id $parent_id \
-     	 		--query 'OrganizationalUnits[?Name == `'$ou_name'`].Id' --output text --PROFILE $PROFILE)
+     	 		--query 'OrganizationalUnits[?Name == `'$ou_name'`].Id' --output text --profile $PROFILE)
 		  	echo $id; exit
 			fi
 	done
@@ -53,7 +53,7 @@ get_id(){
 	#If we haven't exited yet, we don't have an id yet
 	#Loop through the child OUs and use those as the parent id to recursively call the function again
 	for pid in $(aws organizations list-organizational-units-for-parent --parent-id $parent_id \
-     --query 'OrganizationalUnits[*].Id' --output text --PROFILE $PROFILE); do
+     --query 'OrganizationalUnits[*].Id' --output text --profile $PROFILE); do
 		get_ou_id_from_name $ou_name $pid
 	done
 

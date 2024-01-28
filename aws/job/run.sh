@@ -61,11 +61,11 @@ main(){
 	fi
   
   echo "### Creating PROFILE for $PROFILE ###"
-  aws configure set aws_access_key_id $access_key --PROFILE $PROFILE
-  aws configure set aws_secret_access_key $secret_key --PROFILE $PROFILE
-  aws configure set aws_session_token $session_token --PROFILE $PROFILE
-  aws configure set region $region --PROFILE $PROFILE
-  aws configure set output "json" --PROFILE $PROFILE
+  aws configure set aws_access_key_id $access_key --profile $PROFILE
+  aws configure set aws_secret_access_key $secret_key --profile $PROFILE
+  aws configure set aws_session_token $session_token --profile $PROFILE
+  aws configure set region $region --profile $PROFILE
+  aws configure set output "json" --profile $PROFILE
 
   #clear variables
   access_key=""
@@ -73,7 +73,7 @@ main(){
   session_token=""
 
   echo "### Created AWS CLI PROFILE in container for: $PROFILE ###"
-	aws sts get-caller-identity --PROFILE $PROFILE
+	aws sts get-caller-identity --profile $PROFILE
 
   #execute the job
 	echo "### execute the job - the execution script has container specific execution code ###"

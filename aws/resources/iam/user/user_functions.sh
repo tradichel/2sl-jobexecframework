@@ -20,20 +20,20 @@ create_ssh_key(){
   	echo "Delete and re-create? (y)"
   	read createkey	
 		if [ "$createkey" == "y" ]; then
-			aws ec2 delete-key-pair --key-name $keyname --PROFILE $PROFILE
+			aws ec2 delete-key-pair --key-name $keyname --profile $PROFILE
 		else
 			return 0
 		fi
 	fi
 	
 	#create keypair
-  key=$(aws ec2 create-key-pair --key-name $keyname --PROFILE $PROFILE)
+  key=$(aws ec2 create-key-pair --key-name $keyname --profile $PROFILE)
   keypem=$(echo $key | jq -r ".KeyMaterial")
 	kmskeyid=$(get_stack_export "KMS-Key-DeveloperSecrets" "DeveloperSecretsKeyIDExport")
   
 	#update the secret	
 	cmd="aws secretsmanager update-secret --secret-id $keyname \
-			--kms-key-id $kmskeyid --secret-string \"$keypem\" --PROFILE $PROFILE"
+			--kms-key-id $kmskeyid --secret-string \"$keypem\" --profile $PROFILE"
 
   secret=$(eval $cmd)
 	

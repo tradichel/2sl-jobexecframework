@@ -19,7 +19,7 @@ set_secret_string_value(){
 	#insert: ,\"password\":\"EXAMPLE-PASSWORD\" before the last curly brace
 	secretstring='{"'$key'":"'$value'"}'
 	aws secretsmanager put-secret-value --secret-id $secretname \
-		--secret-string $secretstring --PROFILE $PROFILE 
+		--secret-string $secretstring --profile $PROFILE 
 }
 
 set_secret_textfile_value(){
@@ -29,7 +29,7 @@ set_secret_textfile_value(){
   echo "Updating secret textfile value: $secretname" 
   aws secretsmanager put-secret-value --secret-id $secretname \
     --secret-string file://$file \
-    --PROFILE $PROFILE
+    --profile $PROFILE
 }
 
 #pass in a binary file for file
@@ -40,14 +40,14 @@ set_secret_binary_value(){
 	echo "Updating secret binary value: $secretname" 
   aws secretsmanager put-secret-value --secret-id $secretname \
 		 --secret-binary fileb://$file \
-  	 --PROFILE $PROFILE 
+  	 --profile $PROFILE 
 }
 
 get_secret_value(){
   key="$1"
   secretname="$3"
 
-  secret="$(aws secretsmanager get-secret-value --secret-id $secretname --query SecretString --output text --PROFILE $PROFILE)"
+  secret="$(aws secretsmanager get-secret-value --secret-id $secretname --query SecretString --output text --profile $PROFILE)"
 	value="$(echo $secret | jq -r ."$key")"
   validate_set $value "$key"
   validate_no_quotes $value

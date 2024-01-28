@@ -17,7 +17,7 @@ get_cname_value(){
 
  	query='ResourceRecordSets[?Type==`CNAME`].ResourceRecords[].Value'
   value=$(aws route53 list-resource-record-sets --hosted-zone-id $hostedzoneid \
-    --query $query --PROFILE $PROFILE --region $region --output text)
+    --query $query --profile $PROFILE --region $region --output text)
 
 	echo $value
 
@@ -32,7 +32,7 @@ get_cname_name(){
 
   query='ResourceRecordSets[?Type==`CNAME`].Name'
   name=$(aws route53 list-resource-record-sets --hosted-zone-id $hostedzoneid \
-    --query $query --PROFILE $PROFILE --region $region --output text)
+    --query $query --profile $PROFILE --region $region --output text)
 
   echo $name
 
@@ -47,7 +47,7 @@ get_cname_ttl(){
 
   query='ResourceRecordSets[?Type==`CNAME`].TTL'
   ttl=$(aws route53 list-resource-record-sets --hosted-zone-id $hostedzoneid \
-    --query $query --PROFILE $PROFILE --region $region --output text)
+    --query $query --profile $PROFILE --region $region --output text)
 
   echo $ttl
 

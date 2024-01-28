@@ -79,14 +79,14 @@ clean_up_default_sg(){
 
   sgid=$(aws ec2 describe-security-groups \
         --filter Name=group-name,Values=default Name=vpc-id,Values=$vpcid \
-        --query SecurityGroups[*].GroupId --output text --PROFILE $PROFILE)
+        --query SecurityGroups[*].GroupId --output text --profile $PROFILE)
 
   sgname=$vpcname'Default'
 
   aws ec2 create-tags \
     --resources $sgid \
     --tags 'Key="Name",Value="'$sgname'"' \
-		--PROFILE $PROFILE
+		--profile $PROFILE
 
   name=$sgname'SecurityGroupRules'
   template='cfn/SGRules/NoAccess.yaml'
@@ -240,7 +240,7 @@ deploy_nacl(){
 get_availability_zone () {
 	index="$1"
 
-	azid=$(aws ec2 describe-availability-zones --PROFILE $PROFILE \
+	azid=$(aws ec2 describe-availability-zones --profile $PROFILE \
 			| grep "az$index" -B1 | grep -v "az$index" \
 			| cut -d ":" -f2 | sed 's/ //g' | sed 's/"//g' | sed 's/,//g')
 
@@ -337,7 +337,7 @@ deploy_subnets(){
 
 #get the s3 prefix list for the current region
 get_s3_prefix_list(){
-	echo $(aws ec2 describe-managed-prefix-lists --filters Name=owner-id,Values=AWS --output text --PROFILE $PROFILE | grep s3 | cut -f5)
+	echo $(aws ec2 describe-managed-prefix-lists --filters Name=owner-id,Values=AWS --output text --profile $PROFILE | grep s3 | cut -f5)
 }
 
 deploy_s3_security_group() {

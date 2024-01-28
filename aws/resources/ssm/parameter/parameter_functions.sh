@@ -12,7 +12,7 @@ ssm_parameter_exists(){
  
   validate_set "${FUNCNAME[0]}" "ssm_name" "$ssm_name"
 
-	v=$(aws ssm describe-parameters --filters "Key=Name,Values=$ssm_name" --PROFILE $PROFILE)	
+	v=$(aws ssm describe-parameters --filters "Key=Name,Values=$ssm_name" --profile $PROFILE)	
 	t=$(echo $v | jq '.Parameters | length')
 	if [[ $t == 0 ]]; then
 		echo "false"
@@ -43,7 +43,7 @@ get_ssm_parameter_value(){
 	v=""
 	exists=$(ssm_parameter_exists $ssm_name)
 	if [ "$exists" == "true" ]; then
-  	v=$(aws ssm get-parameter --name $ssm_name --with-decryption --query "Parameter.Value" --output text --PROFILE $PROFILE)
+  	v=$(aws ssm get-parameter --name $ssm_name --with-decryption --query "Parameter.Value" --output text --profile $PROFILE)
   fi
 	echo $v
 }
@@ -71,14 +71,14 @@ set_ssm_parameter_value(){
 
 	if [ "$kmskeyid" != "" ]; then
 		echo "aws ssm put-parameter --name $ssm_name --key-id $kmskeyid \
-    	--value $ssm_value --tier $tier --type $parmtype --PROFILE $PROFILE"
+    	--value $ssm_value --tier $tier --type $parmtype --profile $PROFILE"
   	aws ssm put-parameter --name $ssm_name --overwrite --key-id $kmskeyid --value $ssm_value \
-			 --tier $tier --type $parmtype --PROFILE $PROFILE
+			 --tier $tier --type $parmtype --profile $PROFILE
 	else
     echo "aws ssm put-parameter --name $ssm_name \
-      --value $ssm_value --tier $tier --type $parmtype --PROFILE $PROFILE"
+      --value $ssm_value --tier $tier --type $parmtype --profile $PROFILE"
     aws ssm put-parameter --name $ssm_name --overwrite --value $ssm_value \
-       --tier $tier --type $parmtype --PROFILE $PROFILE
+       --tier $tier --type $parmtype --profile $PROFILE
 	fi
 }
 
@@ -99,7 +99,7 @@ set_ssm_parameter_job_config(){
   func=${FUNCNAME[0]}
   validate_set $func "ssm_name" "$ssm_name"
 
-	if [ "$PROFILE" != "" ]; then usePROFILE=" --PROFILE $PROFILE"; fi
+	if [ "$PROFILE" != "" ]; then usePROFILE=" --profile $PROFILE"; fi
 
   if [ "$kmskeyid" != "" ]; then
     echo "aws ssm put-parameter --name $ssm_name --overwrite --key-id $kmskeyid --value file://.$ssm_name \

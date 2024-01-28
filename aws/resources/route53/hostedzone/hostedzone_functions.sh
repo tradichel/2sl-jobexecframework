@@ -13,7 +13,7 @@ get_ns_records(){
   hostedzoneid=$(get_hostedzone $domain)
 
 	ns=$(aws route53  list-resource-record-sets --hosted-zone-id $hostedzoneid \
-  --PROFILE $PROFILE --region $region \
+  --profile $PROFILE --region $region \
    | grep "ns-" | grep -v "hostmaster" | cut -d ":" -f2 | \
    sed 's/ //g' | sed 's/"//g' | sed 's/^/Name=/g' | paste -d " "  -s)
 
@@ -26,7 +26,7 @@ get_id(){
   function=${FUNCNAME[0]}
   validate_set $function "domain" $domain
 
-	hostedzoneid=$(aws route53 list-hosted-zones-by-name --dns-name $domain --region $region --output text --PROFILE $PROFILE --query 'HostedZones[0].Id' | cut -d "/" -f3)
+	hostedzoneid=$(aws route53 list-hosted-zones-by-name --dns-name $domain --region $region --output text --profile $PROFILE --query 'HostedZones[0].Id' | cut -d "/" -f3)
 	
 	echo "$hostedzoneid"
 }
@@ -43,7 +43,7 @@ get_name_servers(){
   validate_set $function "hostedzoneid" "$hostedzoneid"
  
 	ns=$(aws route53  list-resource-record-sets --hosted-zone-id $hostedzoneid \
-   --PROFILE $PROFILE --region $region | grep "ns-" | grep -v "hostmaster" | \
+   --profile $PROFILE --region $region | grep "ns-" | grep -v "hostmaster" | \
 		cut -d ":" -f2 | sed 's/ //g' | sed 's/"//g' | paste -d " "  -s | sed 's/ /,/g')
 
 	echo $ns
@@ -61,7 +61,7 @@ get_name_servers_for_cli_command(){
   validate_set $function "hostedzoneid" $hostedzoneid
 
   ns=$(aws route53  list-resource-record-sets --hosted-zone-id $hostedzoneid \
-	--PROFILE $PROFILE --region $region | grep "ns-" | grep -v "hostmaster" | cut -d ":" -f2 | sed 's/ //g' \
+	--profile $PROFILE --region $region | grep "ns-" | grep -v "hostmaster" | cut -d ":" -f2 | sed 's/ //g' \
 	 | sed 's/"//g' | sed 's/^/{\"Value\":\"/g' | paste -d " "  -s | sed 's/ /\"},/g' | sed 's/$/\"}/g')
 	
   echo $ns
@@ -86,7 +86,7 @@ update_name_servers(){
   validate_set $function "nameservers" $nameservers
 	
 	aws route53domains update-domain-nameservers --domain-name $primaydomain \
-		 --nameservers $nameservers --PROFILE $PROFILE --region $region
+		 --nameservers $nameservers --profile $PROFILE --region $region
 }
 
 #call the following using the appropriate PROFILE with 
@@ -117,7 +117,7 @@ export_zone(){
   hostedzoneid=$(get_hostedzone_id $domain)
 
 	aws route53 list-resource-record-sets --hosted-zone-id $hostedzoneid \
-	--PROFILE $PROFILE --output json --region $region | jq -jr '.ResourceRecordSets[] \
+	--profile $PROFILE --output json --region $region | jq -jr '.ResourceRecordSets[] \
 	| "\(.Name) \t\(.TTL) \t\(.Type) \t\(.ResourceRecords[]?.Value)\n"'
 
 }
@@ -137,7 +137,7 @@ delete_dns_record(){
 	stackname="$PROFILE-$type-$appname"
 
 	echo "Deleting stack: $stackname"
-	aws cloudformation delete-stack --stack-name $stackname --PROFILE $PROFILE --region $region
+	aws cloudformation delete-stack --stack-name $stackname --profile $PROFILE --region $region
 
 	action="DELETE"
 
@@ -165,7 +165,7 @@ delete_dns_record(){
 
 	#dangerously ignoring error - should instead check if exists, then delete, but this is too painful
   aws route53 change-resource-record-sets --hosted-zone-id $hostedzoneid \
-		--change-batch "file://$f" --PROFILE $PROFILE --region $region
+		--change-batch "file://$f" --profile $PROFILE --region $region
 
 }
 
@@ -220,7 +220,7 @@ add_ns_record_for_subdomain_via_cli(){
 	cat $f
 
 	aws route53 change-resource-record-sets --hosted-zone-id $hostedzoneid \
-		--change-batch "file://$f" --PROFILE $PROFILE --region $region
+		--change-batch "file://$f" --profile $PROFILE --region $region
 
 }
 

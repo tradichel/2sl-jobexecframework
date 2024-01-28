@@ -15,7 +15,7 @@ get_id() {
 
   vpcid=$(aws ec2 describe-vpcs \
           --filter Name=tag:Name,Values=$vpcname \
-          --query Vpcs[*].VpcId --output text --PROFILE $PROFILE)
+          --query Vpcs[*].VpcId --output text --profile $PROFILE)
   echo $vpcid
 
 }
@@ -27,7 +27,7 @@ get_default_security_group_id(){
  defaultsg=$(aws ec2 describe-security-groups \
   --query $query \
 	--filters "Name=vpc-id,Values=$vpcid" \
-  --PROFILE $PROFILE \
+  --profile $PROFILE \
   --output text)
  echo $defaultsg
 
@@ -40,7 +40,7 @@ get_main_route_table_id(){
  mainrt=$(aws ec2 describe-route-tables \
   --query $query \
   --filters "Name=vpc-id,Values=$vpcid" \
-  --PROFILE $PROFILE \
+  --profile $PROFILE \
   --output text)
  echo $mainrt
 
@@ -159,7 +159,7 @@ import_resource_to_stack(){
  	aws cloudformation deploy \
 		--template-file "resources/emptystack/emptystack.yaml" \
 		--stack-name $stackname \
-		--PROFILE $PROFILE
+		--profile $PROFILE
 
  	#create a change set
  	aws cloudformation create-change-set \
@@ -167,25 +167,25 @@ import_resource_to_stack(){
 			--change-set-name $changesetname \
 			--change-set-type IMPORT \
   		--resources-to-import $import \
-      --PROFILE $PROFILE \
+      --profile $PROFILE \
 			--template-body "file://$importtemplate"
 	
 	#wait for the changeset creation to complete
 	aws cloudformation wait change-set-create-complete \
   	--stack-name $stackname \
   	--change-set-name $changesetname \
-		--PROFILE $PROFILE
+		--profile $PROFILE
 
 	#execute change set
 	aws cloudformation execute-change-set \
 		--change-set-name $changesetname \
 		--stack-name $stackname \
- 		--PROFILE $PROFILE
+ 		--profile $PROFILE
 
  	#wait until import is complete
  	aws cloudformation wait stack-import-complete \
      --stack-name $stackname \
-  	 --PROFILE $PROFILE
+  	 --profile $PROFILE
 
 	if [ "$finaltemplate" != "" ]; then
 		category=$(tolower $cat)
@@ -200,7 +200,7 @@ get_vpc_id() {
 
  	vpcid=$(aws ec2 describe-vpcs \
           --filter Name=tag:Name,Values=$vpcname \
-          --query Vpcs[*].VpcId --output text --PROFILE $PROFILE)
+          --query Vpcs[*].VpcId --output text --profile $PROFILE)
 	echo $vpcid
 }
 
@@ -212,7 +212,7 @@ get_vpc_cidr(){
 	--query 'Vpcs[*].{CidrBlock:CidrBlock}' \
 	describe-vpcs \
 	--filter Name=tag:Name,Values=$vpcname \
-	--PROFILE $PROFILE)
+	--profile $PROFILE)
 
 	echo $vpccidr
 }

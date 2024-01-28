@@ -16,7 +16,7 @@ get_users_in_group() {
   validate_set "$func" 'PROFILE' "$PROFILE"
 
   #retrieve a list of user ARNs in the group
-  users=$(aws iam get-group --group-name $groupname --PROFILE $PROFILE --region $region \
+  users=$(aws iam get-group --group-name $groupname --profile $PROFILE --region $region \
       --query Users[*].Arn --output text | sed 's/\t/,/g')
 
   echo $users

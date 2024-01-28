@@ -251,7 +251,7 @@ validate_parameters(){
 
 validate_template(){
   local templatefile=$1
-  aws cloudformation validate-template --template-body file://$templatefile --PROFILE $PROFILE
+  aws cloudformation validate-template --template-body file://$templatefile --profile $PROFILE
 }
 
 validate_all_templates(){

@@ -19,7 +19,7 @@ get_availability_zone_name () {
 	query='AvailabilityZones[?ends_with(ZoneId,`az'$index'`)].ZoneName'
 	azname=$(aws ec2 describe-availability-zones \
 	--query $query \
-	--PROFILE $PROFILE \
+	--profile $PROFILE \
 	--output text)
 	echo $azname
 }
@@ -34,7 +34,7 @@ get_next_available_az_index () {
 		query='AvailabilityZones[?ends_with(ZoneId,`az'$index'`)].State'
 		state=$(aws ec2 describe-availability-zones \
  	 	--query $query \
-		--PROFILE $PROFILE \
+		--profile $PROFILE \
  	 	--output text)
 		if [ "$state" == "available" ]; then echo $index; break; fi
 		index=$((index+1))
@@ -149,7 +149,7 @@ get_id(){
 	subnetid=$(aws ec2 describe-subnets \
 	 --query $query \
 	 --filter Name=tag:Name,Values=$subnetname \
-	 --PROFILE $PROFILE \
+	 --profile $PROFILE \
 	 --output text)
 	echo $subnetid
 }

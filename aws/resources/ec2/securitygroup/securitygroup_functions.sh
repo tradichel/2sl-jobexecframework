@@ -21,14 +21,14 @@ clean_up_default_sg(){
 
   local sgid=$(aws ec2 describe-security-groups \
         --filter Name=group-name,Values=default Name=vpc-id,Values=$vpcid \
-        --query SecurityGroups[*].GroupId --output text --PROFILE $PROFILE)
+        --query SecurityGroups[*].GroupId --output text --profile $PROFILE)
 
   local sgname=$vpcname'defaultsecuritygroup'
 
   aws ec2 create-tags \
     --resources $sgid \
     --tags 'Key="Name",Value="'$sgname'"' \
-		--PROFILE $PROFILE
+		--profile $PROFILE
 
   local name=$sgname'securitygrouprules'
   local template='resources/ec2/securitygroup/rules/noaccess.yaml'
@@ -90,7 +90,7 @@ get_id(){
 	local sgid=$(aws ec2 describe-security-groups \
  		--query $query \
 		--output text \
-		--PROFILE $PROFILE)
+		--profile $PROFILE)
 
 	echo $sgid 
 

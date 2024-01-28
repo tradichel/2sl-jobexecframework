@@ -33,21 +33,21 @@ deploy_keypair(){
 	secretnametext=$keyname'-string'
 
   echo "--------------CREATE SSH KEY PAIR: $key-------------------"
-  keys=$(aws ec2 describe-key-pairs --PROFILE $PROFILE)
+  keys=$(aws ec2 describe-key-pairs --profile $PROFILE)
 
 	echo "Checking for existing keypair"
   if [[ "$keys" == *"$keyname"* ]]; then
     echo "Key pair found: $keyname"
     if [ $deleteexisting ]; then
 			echo "Deleting and recreating key"
-      aws ec2 delete-key-pair --key-name $keyname --PROFILE $PROFILE
+      aws ec2 delete-key-pair --key-name $keyname --profile $PROFILE
     else
       return 0
     fi
   fi
 
   echo "Create new keypair"
-  key=$(aws ec2 create-key-pair --key-name $keyname --PROFILE $PROFILE)
+  key=$(aws ec2 create-key-pair --key-name $keyname --profile $PROFILE)
 	filepath='/tmp/keypair.txt'
   echo $key | jq -r ".KeyMaterial" > $filepath
 	

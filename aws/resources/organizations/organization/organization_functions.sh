@@ -23,12 +23,12 @@ deploy_organization(){
 	#create a common import function
 
 	stackname="root-organizations-organization-$org"
-	orgid=$(aws organizations describe-organization --query Organization.Id --output text --PROFILE $PROFILE --region $region)
+	orgid=$(aws organizations describe-organization --query Organization.Id --output text --profile $PROFILE --region $region)
 
 	exists=$(aws cloudformation describe-stacks \
 			--stack-name $stackname \
 			--query 'Stacks[0].Outputs[?ExportName==`'$org'`].OutputValue' \
-			--output text --PROFILE $PROFILE --region $region || echo "")
+			--output text --profile $PROFILE --region $region || echo "")
 
 	if [ "$exists" = "" ] || [ "$exists" == "None" ]; then
 
@@ -37,26 +37,26 @@ deploy_organization(){
 
 		#creates an empty stack so we can import resources we want in it
   	aws cloudformation deploy --template-file resources/emptystack/emptystack.yaml \
-		--stack-name $stackname --PROFILE $PROFILE --region $region
+		--stack-name $stackname --profile $PROFILE --region $region
 
   	#import changeset
   	aws cloudformation create-change-set --stack-name $stackname --change-set-name $changesetname --change-set-type IMPORT \
     	--resources-to-import $import \
 			--template-body file://resources/organizations/organization/organizationimport.yaml \
-			--PROFILE $PROFILE --region $region
+			--profile $PROFILE --region $region
 
   	#wait for the changeset to complete
   	aws cloudformation wait change-set-create-complete \
     	--stack-name $stackname \
     	--change-set-name $changesetname \
-    	--PROFILE $PROFILE --region $region
+    	--profile $PROFILE --region $region
 
   	#execute change set
-  	aws cloudformation execute-change-set --change-set-name $changesetname  --stack-name $stackname  --PROFILE $PROFILE --region $region
+  	aws cloudformation execute-change-set --change-set-name $changesetname  --stack-name $stackname  --profile $PROFILE --region $region
 
   	#wait until import is complete
   	aws cloudformation wait stack-import-complete \
-      --stack-name $stackname --PROFILE $PROFILE --region $region
+      --stack-name $stackname --profile $PROFILE --region $region
 	fi
 
 	#deploy the new organization or the updated template with outputs if the organization was imported
@@ -64,7 +64,7 @@ deploy_organization(){
 	aws cloudformation deploy --template-file resources/organizations/organization/organization.yaml \
 				--stack-name root-organizations-organization-$org \
 				--parameter-overrides cfparamName="$org"  \
-				--PROFILE $PROFILE --region $region
+				--profile $PROFILE --region $region
 }
 
 get_organization_id(){
@@ -72,19 +72,19 @@ get_organization_id(){
 }
 
 get_root_id(){
-	local rootouid=$(aws organizations list-roots --query Roots[0].Id --output text --PROFILE $PROFILE)
+	local rootouid=$(aws organizations list-roots --query Roots[0].Id --output text --profile $PROFILE)
 	echo $rootouid
 }
 
 enable_all_features(){
 
 	 	local enabled=$(aws organizations describe-organization --query \
-		       'Organization.FeatureSet' --output text --PROFILE $PROFILE)
+		       'Organization.FeatureSet' --output text --profile $PROFILE)
 
 	    if [ "$enabled" == "ALL" ]; then
 				echo "ALL features are already enabled"
   	  else
-	      aws organizations enable-all-features --PROFILE $PROFILE
+	      aws organizations enable-all-features --profile $PROFILE
        fi
     }
 
@@ -92,19 +92,19 @@ enable_all_features(){
 enable_scps(){
 	
 	local enabled=$(aws organizations describe-organization --query \
-		 'Organization.AvailablePolicyTypes[?Type==`SERVICE_CONTROL_POLICY`].Status' --output text --PROFILE $PROFILE)
+		 'Organization.AvailablePolicyTypes[?Type==`SERVICE_CONTROL_POLICY`].Status' --output text --profile $PROFILE)
 	
 	if [ "$enabled" == "ENABLED" ]; then
 		echo "SCPs are already enabled."
   else
 		local rootouid=$(get_root_id)
- 	 	aws organizations enable-policy-type --root-id $rootouid --policy-type SERVICE_CONTROL_POLICY --PROFILE $PROFILE
+ 	 	aws organizations enable-policy-type --root-id $rootouid --policy-type SERVICE_CONTROL_POLICY --profile $PROFILE
 	fi
 
 }
 
 get_id(){
-	local orgid=$(aws organizations describe-organization --query 'Organization.Id' --output text --PROFILE $PROFILE)
+	local orgid=$(aws organizations describe-organization --query 'Organization.Id' --output text --profile $PROFILE)
 	echo $orgid
 }
 
@@ -137,7 +137,7 @@ enable_service(){
   echo "Enable trusted access for $servicename"
   aws organizations enable-aws-service-access \
       --service-principal $servicename \
-      --PROFILE $PROFILE
+      --profile $PROFILE
 }
 
 disable_service(){
@@ -147,7 +147,7 @@ disable_service(){
   echo "Disable trusted access for $servicename"
   aws organizations disable-aws-service-access \
       --service-principal $servicename \
-      --PROFILE $PROFILE
+      --profile $PROFILE
 }
 
 register_delegated_administrator(){
@@ -159,7 +159,7 @@ register_delegated_administrator(){
   aws organizations register-delegated-administrator \
 			--account-id $account \
       --service-principal $servicename \
-      --PROFILE $PROFILE
+      --profile $PROFILE
 
 }
 
@@ -172,13 +172,13 @@ deregister_delegated_administrator(){
   aws organizations deregister-delegated-administrator \
       --account-id $account \
       --service-principal $servicename \
-      --PROFILE $PROFILE
+      --profile $PROFILE
 
 }
 
 get_management_account_number(){
  aws organizations describe-organization \
-	 --PROFILE $PROFILE \
+	 --profile $PROFILE \
 	 --query 'Organization.MasterAccountId' \
 	 --output text
 }

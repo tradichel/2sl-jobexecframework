@@ -76,7 +76,7 @@ deploy_certificate(){
 
 		grepvalue="value"
   	s=$(aws cloudformation describe-stack-events --stack-name $stackname --region $region \
-			--PROFILE $PROFILE | grep -i $grepvalue | sed 's/^.*{//g' | sed 's/}.*$//g')
+			--profile $PROFILE | grep -i $grepvalue | sed 's/^.*{//g' | sed 's/}.*$//g')
     
 		if [ "$s" == "" ]; then echo "Waiting for stack to deploy..."; continue; fi
 	
