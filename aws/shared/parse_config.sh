@@ -35,11 +35,20 @@ deploy_resource_config(){
 	validate_job_param_name	$job_parameter
 	echo "Config in deploy_resource_config:"
 	declare -p $config
+  
+	if [ "$(ssm_parameter_exists $job_parameter)" != "true" ] then 
+		echo "SSM Parameter $job_parameter does not exist"; exit 1;
+	fi
 
-  local resource=$(echo $job_parameter | cut -d "/" -f5)
+	local resource=$(echo $job_parameter | cut -d "/" -f5)
   local rcat=$(echo $resource | cut -d "-" -f1)
   local rtype=$(echo $resource | cut -d "-" -f2)
   local rname=$(echo $resource | cut -d "-" -f3)
+
+  validate_set $f "rname" $rname
+  validate_set $f "rcat" $rcat
+  validate_set $f "rtype" $rtype
+
 	local pname=""
 	local pvalue=""
 	local env=""
@@ -77,10 +86,6 @@ deploy_resource_config(){
 	 echo "add_parameter "cfparamName" $rname $p"
    p=$(add_parameter "cfparamName" $rname $p)
 
-   f=${FUNCNAME[0]}	 
-	 validate_set $f "rname" $rname
-	 validate_set $f "rcat" $rcat
-	 validate_set $f "rtype" $rtype
 	 validate_set $f "env" $env
 	 validate_set $f "region" $region
 
