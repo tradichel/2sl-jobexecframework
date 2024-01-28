@@ -31,11 +31,13 @@ deploy_resource_config(){
 	local job_parameter="$1"	
   local config=("$@")
 
+	echo "~~~"
 	echo "job parameter in deploy_resource_config: $job_parameter"
 	validate_job_param_name	$job_parameter
-
+	echo "~~~"
 	echo "Config in deploy_resource_config:"
 	declare -p $config
+	echo "~~~"
 
 	echo "Get values from job parmeter name"
 	local resource=$(echo $job_parameter | cut -d "/" -f5)
@@ -54,9 +56,11 @@ deploy_resource_config(){
 	local p=""
 	local parm=""
 
+	echo " ~~~ Loop through config ~~~"
+
   for i in "${config[@]}"
   do
-		 echo "Line: $i"
+		 echo "~~~ Line: $i ~~~"
      local pname=$(echo $i | cut -d "=" -f1 | tr -d ' ')
      local pvalue=$(echo $i | cut -d "=" -f2 | tr -d ' ')
 
@@ -83,10 +87,12 @@ deploy_resource_config(){
 
    validate_set $f "env" $env
    validate_set $f "region" $region
-
+	 
+	 echo "~~~"
 	 if [ "$rname" != "$env" ]; then rname=$env'-'$rname; fi
 	 echo "add_parameter "cfparamName" $rname $p"
    p=$(add_parameter "cfparamName" $rname $p)
+	 echo "~~~"
 
 	 echo "deploy_stack $rname $rcat $rtype $env $region $p"
    deploy_stack $rname $rcat $rtype $env $region $p
