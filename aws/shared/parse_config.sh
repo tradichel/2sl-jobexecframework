@@ -31,7 +31,10 @@ deploy_resource_config(){
 	local job_parameter="$1"	
   local config=("$@")
 
+	echo "job parameter in deploy_resource_config: $job_parameter"
 	validate_job_param_name	$job_parameter
+	echo "Config in deploy_resource_config:"
+	declare -p $config
 
   local resource=$(echo $job_parameter | cut -d "/" -f5)
   local rcat=$(echo $resource | cut -d "-" -f1)
@@ -47,8 +50,8 @@ deploy_resource_config(){
   for i in "${config[@]}"
   do
 		 echo "Line: $i"
-     pname=$(echo $i | cut -d "=" -f1 | tr -d ' ')
-     pvalue=$(echo $i | cut -d "=" -f2 | tr -d ' ')
+     local pname=$(echo $i | cut -d "=" -f1 | tr -d ' ')
+     local pvalue=$(echo $i | cut -d "=" -f2 | tr -d ' ')
 
      if [ "$pname" == "env" ]; then 
 				 env=$pvalue; echo "Environment: $env"
@@ -71,7 +74,7 @@ deploy_resource_config(){
      
    done
 
-	 echo "add_parameter $pname $pvalue $p"
+	 echo "add_parameter "cfparamName" $rname $p"
    p=$(add_parameter "cfparamName" $rname $p)
 
    f=${FUNCNAME[0]}	 
@@ -134,7 +137,8 @@ deploy_stack_config(){
              echo "Parallel: $parallel"
              declare -p job_config
              c="deploy_resource_config $job_parameter \"${config[@]}\" $parallel"
-             $($c)
+             echo $c
+						 $($c)
              echo "~~~"
         fi
         job_parameter=$pname

@@ -51,16 +51,17 @@ configure_cli_profile(){
 	fi
 
 	aws sts get-caller-identity --profile $role
+	PROFILE=$role
 }
 
-#PROFILE is a global variable
 get_region_for_PROFILE(){
+  local f=${FUNCNAME[0]};validate_set $f 'PROFILE' $PROFILE;validate_set $f 'PROFILE' region
 	local region=$(aws configure list --profile $PROFILE | grep region | awk '{print $2}')
 	echo $region
 }
 
-#PROFILE is a global variable
 get_account_for_PROFILE(){
+  local f=${FUNCNAME[0]};validate_set $f 'PROFILE' $PROFILE;validate_set $f 'PROFILE' region
 	local account=$(aws sts get-caller-identity --query Account --output text --profile $PROFILE)
 	echo $account
 }
@@ -70,9 +71,8 @@ get_stack_export(){
   local stackname=$1
   local exportname=$2
 
-  local func=${FUNCNAME[0]}
-  validate_set "$func" 'stackname' "$stackname"
-  validate_set "$func" 'exportname' "$exportname"
+  local f=${FUNCNAME[0]};validate_set $f 'PROFILE' $PROFILE;validate_set $f 'PROFILE' region
+  validate_set $f 'stackname' $stackname; validate_set $f 'exportname' $exportname
 
   local qry="Stacks[0].Outputs[?ExportName=='$exportname'].OutputValue"
   local value=$(aws cloudformation describe-stacks --stack-name $stackname --query $qry --output text \
@@ -129,6 +129,8 @@ get_arn_from_stack(){
 get_stack_status() {
 
 	local stackname="$1"
+  local f=${FUNCNAME[0]};validate_set $f 'PROFILE' $PROFILE;validate_set $f 'PROFILE' region
+  validate_set $f 'stackname' $stackname
 
   echo $(aws cloudformation describe-stacks --stack-name $stackname --region $region \
      --query Stacks[0].StackStatus --output text --profile $PROFILE 2>/dev/null || true) 
@@ -137,6 +139,9 @@ get_stack_status() {
 
 display_stack_errors(){
 	local stackname="$1"
+
+  local f=${FUNCNAME[0]};validate_set $f 'PROFILE' $PROFILE;validate_set $f 'PROFILE' region
+	validate_set $f 'stackname' $stackname
 	
 	aws cloudformation describe-stack-events --stack-name $stackname --max-items 5 \
 		--region $region --profile $PROFILE | grep -i "status"
@@ -144,13 +149,17 @@ display_stack_errors(){
 
 #get the role that is making the call to deploy something
 get_sts_role_name(){
+  local f=${FUNCNAME[0]};validate_set $f 'PROFILE' $PROFILE;validate_set $f 'PROFILE' region
+
 	#rolenames cannot start with a letter or the stack name will fail.
   local role=$(aws sts get-caller-identity --region $region --profile $PROFILE --output text --query Arn | cut -d '/' -f2)
 	echo $role
 }
 
 get_sts_role_arn(){
-  #rolenames cannot start with a letter or the stack name will fail.
+	local f=${FUNCNAME[0]};validate_set $f 'PROFILE' $PROFILE;validate_set $f 'PROFILE' region
+ 
+ 	#rolenames cannot start with a letter or the stack name will fail.
   local role=$(aws sts get-caller-identity --profile $PROFILE --region $region --output text --query Arn)
   echo $role
 }
@@ -219,14 +228,14 @@ deploy_stack () {
 	fi
  
 	#resource name is template name if not overridden
-	if [ "$template" == "" ]; then template=$resourcetype'.yaml';fi
+	if [ "$template" == "" ]; then local template=$resourcetype'.yaml';fi
 	
 	if ! [[ "$template" =~ '/' ]]; then
 		local template='resources/'$category'/'$resourcetype'/'$template
 	fi
 
 	#add parameters if any were passed in
-  if [ "$parameters" != "" ]; then parameters="[$parameters]"; fi
+  if [ "$parameters" != "" ]; then local parameters="[$parameters]"; fi
 	
 	#formulate the stack name
   local stackname=$PROFILE'-'$category'-'$resourcetype'-'$resourcename
@@ -286,6 +295,7 @@ replace_placeholder() {
 
 #get the current account ID where resources will be deployed
 get_account_id(){
+  local f=${FUNCNAME[0]};validate_set $f 'PROFILE' $PROFILE;validate_set $f 'PROFILE' region
   local acctid=$(aws sts get-caller-identity --query Account --output text --profile $PROFILE --region $region)
   echo $acctid
 }
@@ -298,6 +308,9 @@ get_current_region(){
 
 get_PROFILE_region(){
    local region=$AWS_DEFAULT_REGION
+ 
+   local f=${FUNCNAME[0]};validate_set $f 'PROFILE' $PROFILE;validate_set $f 'PROFILE' region
+
 	 if [ "$region" == "" ]; then 
 	 	 local region=$(aws configure get region --profile $PROFILE)	
 	 fi
