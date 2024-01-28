@@ -4,7 +4,7 @@
 # based on a parameter configuration value in this format:
 # :get_id:resource_category:resource_type:name
 
-#profile must be set to the correct account where the resource exists
+#PROFILE must be set to the correct account where the resource exists
 #or assume the correct role...
 source resources/ssm/parameter/parameter_functions.sh
 source shared/validate.sh

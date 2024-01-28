@@ -12,7 +12,7 @@ ssm_parameter_exists(){
  
   validate_set "${FUNCNAME[0]}" "ssm_name" "$ssm_name"
 
-	v=$(aws ssm describe-parameters --filters "Key=Name,Values=$ssm_name" --profile $profile)	
+	v=$(aws ssm describe-parameters --filters "Key=Name,Values=$ssm_name" --PROFILE $PROFILE)	
 	t=$(echo $v | jq '.Parameters | length')
 	if [[ $t == 0 ]]; then
 		echo "false"
@@ -43,7 +43,7 @@ get_ssm_parameter_value(){
 	v=""
 	exists=$(ssm_parameter_exists $ssm_name)
 	if [ "$exists" == "true" ]; then
-  	v=$(aws ssm get-parameter --name $ssm_name --with-decryption --query "Parameter.Value" --output text --profile $profile)
+  	v=$(aws ssm get-parameter --name $ssm_name --with-decryption --query "Parameter.Value" --output text --PROFILE $PROFILE)
   fi
 	echo $v
 }
@@ -71,14 +71,14 @@ set_ssm_parameter_value(){
 
 	if [ "$kmskeyid" != "" ]; then
 		echo "aws ssm put-parameter --name $ssm_name --key-id $kmskeyid \
-    	--value $ssm_value --tier $tier --type $parmtype --profile $profile"
+    	--value $ssm_value --tier $tier --type $parmtype --PROFILE $PROFILE"
   	aws ssm put-parameter --name $ssm_name --overwrite --key-id $kmskeyid --value $ssm_value \
-			 --tier $tier --type $parmtype --profile $profile
+			 --tier $tier --type $parmtype --PROFILE $PROFILE
 	else
     echo "aws ssm put-parameter --name $ssm_name \
-      --value $ssm_value --tier $tier --type $parmtype --profile $profile"
+      --value $ssm_value --tier $tier --type $parmtype --PROFILE $PROFILE"
     aws ssm put-parameter --name $ssm_name --overwrite --value $ssm_value \
-       --tier $tier --type $parmtype --profile $profile
+       --tier $tier --type $parmtype --PROFILE $PROFILE
 	fi
 }
 
@@ -99,18 +99,18 @@ set_ssm_parameter_job_config(){
   func=${FUNCNAME[0]}
   validate_set $func "ssm_name" "$ssm_name"
 
-	if [ "$profile" != "" ]; then usePROFILE=" --profile $profile"; fi
+	if [ "$PROFILE" != "" ]; then usePROFILE=" --PROFILE $PROFILE"; fi
 
   if [ "$kmskeyid" != "" ]; then
     echo "aws ssm put-parameter --name $ssm_name --overwrite --key-id $kmskeyid --value file://.$ssm_name \
-       --tier $tier --type $parmtype $useprofile"
+       --tier $tier --type $parmtype $usePROFILE"
     aws ssm put-parameter --name $ssm_name --overwrite --key-id $kmskeyid --value file://.$ssm_name \
-       --tier $tier --type $parmtype $useprofile
+       --tier $tier --type $parmtype $usePROFILE
   else
     echo "aws ssm put-parameter --name $ssm_name --overwrite --value file://.$ssm_name \
-       --tier $tier --type $parmtype $useprofile"
+       --tier $tier --type $parmtype $usePROFILE"
     aws ssm put-parameter --name $ssm_name --overwrite --value file://.$ssm_name \
-       --tier $tier --type $parmtype $useprofile
+       --tier $tier --type $parmtype $usePROFILE
   fi
 }
 

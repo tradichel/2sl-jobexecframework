@@ -4,13 +4,13 @@
 # author: @teriradichel @2ndsightlab
 ##############################################################
 
-profile="SandboxAdmin"
+PROFILE="SandboxAdmin"
 repo="sandbox"
 image=$(basename "$PWD")
 echo "Pushing docker image: $image"
 
-region=$(aws configure list --profile $profile | grep region | awk '{print $2}')
-aws_account_id=$(aws sts get-caller-identity --query Account --output text --profile $profile)
+region=$(aws configure list --PROFILE $PROFILE | grep region | awk '{print $2}')
+aws_account_id=$(aws sts get-caller-identity --query Account --output text --PROFILE $PROFILE)
 
 imageid=$(docker images | grep $image | grep 'latest' | awk '{print$3}')
 
@@ -19,7 +19,7 @@ tag="$pass/$repo:$image"
 
 echo "Pushing image id $imageid to $tag"
 
-aws ecr get-login-password --region $region --profile $profile | docker login --username AWS --password-stdin $pass
+aws ecr get-login-password --region $region --PROFILE $PROFILE | docker login --username AWS --password-stdin $pass
 
 docker tag $imageid $tag
 

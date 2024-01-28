@@ -12,7 +12,7 @@ get_key_id(){
 	#for some unknown reason you have to put alias/ in front of KMS aliases
 	#almost everywhere you use them. Why, AWS, WHY???
   query='Aliases[?AliasName==`alias/'$alias'`].TargetKeyId'
-  keyid=$(aws kms list-aliases --query $query --output text --profile $profile)
+  keyid=$(aws kms list-aliases --query $query --output text --PROFILE $PROFILE)
 
   echo $keyid
 }

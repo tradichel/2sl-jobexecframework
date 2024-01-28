@@ -23,21 +23,21 @@ fix_vpc_route_table(){
 	vpcid=$(get_vpc_id_by_name $vpcname)
 
   rtname=$vpcname$rttype'routetable'
-	rtstackname=$profile'-ec2-routetable-'$rtname
+	rtstackname=$PROFILE'-ec2-routetable-'$rtname
 	exportname='id-ec2-routetable-'$rtname
   newrtid=$(get_stack_export $rtstackname $exportname)
 
 	mainrtid=$(aws ec2 describe-route-tables \
 						--filters Name=vpc-id,Values=$vpcid Name=association.main,Values=true \
-						--query RouteTables[0].RouteTableId --output text --profile $profile)
+						--query RouteTables[0].RouteTableId --output text --PROFILE $PROFILE)
 
   if [ "$mainrtid" != "$newrtid" ]; then		
   	echo "Updating VPC: $vpcid main route table $mainrtid to new route table: $newrtid"
 		associd=$(aws ec2 describe-route-tables \
 					--filters Name=vpc-id,Values=$vpcid Name=association.main,Values=true \
-					--query RouteTables[0].Associations[0].RouteTableAssociationId --output text --profile $profile)
-		aws ec2 replace-route-table-association --association-id $associd --route-table-id $newrtid --profile $profile
-		aws ec2 delete-route-table --route-table-id $mainrtid --profile $profile
+					--query RouteTables[0].Associations[0].RouteTableAssociationId --output text --PROFILE $PROFILE)
+		aws ec2 replace-route-table-association --association-id $associd --route-table-id $newrtid --PROFILE $PROFILE
+		aws ec2 delete-route-table --route-table-id $mainrtid --PROFILE $PROFILE
 	fi
 
 	echo "$vpcname Default route table removed and replaced with new route table $newrtid."

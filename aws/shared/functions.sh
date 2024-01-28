@@ -26,34 +26,8 @@ replace_template_var(){
 
 }
 
-get_container_parameter_value(){
-	local params="$1"
-  local pname="$2"
-	
-	local func=${FUNCNAME[0]}
-	validate_set $func 'params' $params
-	validate_set $func 'pname' $pname
 
-	for p in ${params//,/ }
-	do
-  	local n=$(echo $p | cut -d "=" -f1)
-  	if [ "$n" == "$pname" ]; then
-			local value=$(echo $p | sed 's/,//g' | cut -d "=" -f2)
-			#if value starts with [ get everyting to end because it's the parameter list to forward; remove the ]
-			if [[ $value == [* ]]; then
-				local value=$(echo $params | cut -d '[' -f2 | sed 's/]//g')
-			fi
-			echo $value
-			exit
-  	fi
-	done
-
-	#may have optional parameter
-	#need to check if value is set outside of this function because bash
-	
-}
-
-configure_cli_profile(){
+configure_cli_PROFILE(){
 	local role="$1"
 	local access_key_id="$2"
 	local aws_secret_access_key="$3"
@@ -68,34 +42,34 @@ configure_cli_profile(){
   validate_set $func 'aws_secret_access_key' $aws_secret_access_key
 	validate_set $func 'region' $region
 	
-	aws configure set aws_access_key_id $access_key_id --profile $role
-	aws configure set aws_secret_access_key $aws_secret_access_key --profile $role
-	aws configure set region $region --profile $role
-	aws configure set output "json" --profile $role
+	aws configure set aws_access_key_id $access_key_id --PROFILE $role
+	aws configure set aws_secret_access_key $aws_secret_access_key --PROFILE $role
+	aws configure set region $region --PROFILE $role
+	aws configure set output "json" --PROFILE $role
 	if [ "$mfa_serial" != "" ]; then
-		aws configure set mfa_serial $mfa_serial --profile $role
+		aws configure set mfa_serial $mfa_serial --PROFILE $role
 	fi
 
-	aws sts get-caller-identity --profile $role
+	aws sts get-caller-identity --PROFILE $role
 }
 
-get_region_for_profile(){
+get_region_for_PROFILE(){
 	PROFILE="$1"
 
   local func=${FUNCNAME[0]}
-  validate_set $func 'profile' $profile
+  validate_set $func 'PROFILE' $PROFILE
 
-	local region=$(aws configure list --profile $profile | grep region | awk '{print $2}')
+	local region=$(aws configure list --PROFILE $PROFILE | grep region | awk '{print $2}')
 	echo $region
 }
 
-get_account_for_profile(){
+get_account_for_PROFILE(){
 	PROFILE="$1"
 
   local func=${FUNCNAME[0]}
-  validate_set $func 'profile' $profile
+  validate_set $func 'PROFILE' $PROFILE
 
-	local account=$(aws sts get-caller-identity --query Account --output text --profile $profile)
+	local account=$(aws sts get-caller-identity --query Account --output text --PROFILE $PROFILE)
 	echo $account
 }
 
@@ -110,7 +84,7 @@ get_stack_export(){
 
   local qry="Stacks[0].Outputs[?ExportName=='$exportname'].OutputValue"
   local value=$(aws cloudformation describe-stacks --stack-name $stackname --query $qry --output text \
-		--profile $profile --region $region)
+		--PROFILE $PROFILE --region $region)
 
   if [ "$value" == "" ]; then
     echo 'Export '$exportname' for stack '$stackname' did not return a value' 1>&2
@@ -165,7 +139,7 @@ get_stack_status() {
 	local stackname="$1"
 
   echo $(aws cloudformation describe-stacks --stack-name $stackname --region $region \
-     --query Stacks[0].StackStatus --output text --profile $profile 2>/dev/null || true) 
+     --query Stacks[0].StackStatus --output text --PROFILE $PROFILE 2>/dev/null || true) 
 
 }
 
@@ -174,19 +148,19 @@ display_stack_errors(){
 	PROFILE="$2"
 
 	aws cloudformation describe-stack-events --stack-name $stackname --max-items 5 \
-		--region $region --profile $profile | grep -i "status"
+		--region $region --PROFILE $PROFILE | grep -i "status"
 }
 
 #get the role that is making the call to deploy something
 get_sts_role_name(){
 	#rolenames cannot start with a letter or the stack name will fail.
-  local role=$(aws sts get-caller-identity --region $region --profile $profile --output text --query Arn | cut -d '/' -f2)
+  local role=$(aws sts get-caller-identity --region $region --PROFILE $PROFILE --output text --query Arn | cut -d '/' -f2)
 	echo $role
 }
 
 get_sts_role_arn(){
   #rolenames cannot start with a letter or the stack name will fail.
-  local role=$(aws sts get-caller-identity --profile $profile --region $region --output text --query Arn)
+  local role=$(aws sts get-caller-identity --PROFILE $PROFILE --region $region --output text --query Arn)
   echo $role
 }
 
@@ -210,7 +184,7 @@ add_parameter () {
 
 #REQUIREMENTS:
 #must execute scripts from the directory containing the /resources and /deploy directories.
-#must set the value of $profile before calling this function
+#must set the value of $PROFILE before calling this function
 #pass in parameters in this format, with quotes:
 #"key=value","key=value","key=value"
 deploy_stack () {
@@ -227,7 +201,7 @@ deploy_stack () {
   validate_set $func 'resourcetype' $resourcetype
   validate_set $func 'category' $category
   validate_set $func 'region' $region
-  validate_set $func 'profile' $profile
+  validate_set $func 'PROFILE' $PROFILE
 
 	#usernames do not need to be prefixed with environment
 	if [ "$resourcetype" == "user" ]; then
@@ -264,14 +238,14 @@ deploy_stack () {
   if [ "$parameters" != "" ]; then parameters="[$parameters]"; fi
 	
 	#formulate the stack name
-  local stackname=$profile'-'$category'-'$resourcetype'-'$resourcename
+  local stackname=$PROFILE'-'$category'-'$resourcetype'-'$resourcename
 	
 	#get the status if the stack already exists
 	local status=$(get_stack_status $stackname)
 
 	#delete the stack if it already exists
 	if [ "$status" == "ROLLBACK_COMPLETE" ]; then
-		aws cloudformation delete-stack --stack-name $stackname --region $region --profile $profile  
+		aws cloudformation delete-stack --stack-name $stackname --region $region --PROFILE $PROFILE  
         while [ "$(get_stack_status $stackname)" == "DELETE_IN_PROGRESS" ]
         do
 		sleep 5
@@ -280,7 +254,7 @@ deploy_stack () {
 
   echo "-------------- Deploying $stackname -------------------"
 
-	local c="aws cloudformation deploy --profile $profile 
+	local c="aws cloudformation deploy --PROFILE $PROFILE 
 			--stack-name $stackname --region $region
       --template-file $template"  
 	
@@ -294,7 +268,7 @@ deploy_stack () {
 
 	echo "$c"
 		
-	local e="display_stack_errors $stackname $profile"
+	local e="display_stack_errors $stackname $PROFILE"
 
 	cd /job
 
@@ -321,20 +295,20 @@ replace_placeholder() {
 
 #get the current account ID where resources will be deployed
 get_account_id(){
-  local acctid=$(aws sts get-caller-identity --query Account --output text --profile $profile --region $region)
+  local acctid=$(aws sts get-caller-identity --query Account --output text --PROFILE $PROFILE --region $region)
   echo $acctid
 }
 
 #get_account_number moved to account_functions.sh
 
 get_current_region(){
-	echo $(get_profile_region)
+	echo $(get_PROFILE_region)
 }
 
-get_profile_region(){
+get_PROFILE_region(){
    local region=$AWS_DEFAULT_REGION
 	 if [ "$region" == "" ]; then 
-	 	 local region=$(aws configure get region --profile $profile)	
+	 	 local region=$(aws configure get region --PROFILE $PROFILE)	
 	 fi
 	 echo $region
 }

@@ -22,7 +22,7 @@ deploy_certificate(){
   validate_set $func "domain" $domain
   validate_set $func "env" $env
   validate_set $func "region" $region
-  validate_set $func "profile" $profile
+  validate_set $func "PROFILE" $PROFILE
 
   dotstodashes=$(dots_to_dashes $domain)
   hostedzoneid=$(get_hostedzone_id $domain)
@@ -30,7 +30,7 @@ deploy_certificate(){
 
   #certificate statcks hang in a CREATE_IN_PROGRESS state until
   #validation is complete or drop off after 72 hours 
-  stack="$profile-certificatemanager-certificate-$env-$dotstodashes"
+  stack="$PROFILE-certificatemanager-certificate-$env-$dotstodashes"
   status=$(get_stack_status $stack)
   if [ "$status" != "CREATE_IN_PROGRESS" ]; then
 
@@ -55,7 +55,7 @@ deploy_certificate(){
 	#deploys a cname so the certificate validation and stack
 	#can complete and get out of Pending validation status. 
 
-	stackname="$profile-certificatemanager-certificate-$env-$dotstodashes"
+	stackname="$PROFILE-certificatemanager-certificate-$env-$dotstodashes"
   echo "Certificate stackname: $stackname"
   
 	name=""
@@ -76,7 +76,7 @@ deploy_certificate(){
 
 		grepvalue="value"
   	s=$(aws cloudformation describe-stack-events --stack-name $stackname --region $region \
-			--profile $profile | grep -i $grepvalue | sed 's/^.*{//g' | sed 's/}.*$//g')
+			--PROFILE $PROFILE | grep -i $grepvalue | sed 's/^.*{//g' | sed 's/}.*$//g')
     
 		if [ "$s" == "" ]; then echo "Waiting for stack to deploy..."; continue; fi
 	

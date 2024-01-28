@@ -15,7 +15,7 @@ get_account_ou(){
   function=${FUNCNAME[0]}
   validate_var "$function" "accountid" "$accountid"
 
-	ouid=$(aws organizations list-parents --child-id $accountid --output text --query 'Parents[0].Id' --profile $profile)
+	ouid=$(aws organizations list-parents --child-id $accountid --output text --query 'Parents[0].Id' --PROFILE $PROFILE)
 	echo $ouid
 }
 
@@ -30,7 +30,7 @@ move_account(){
   validate_var $function "ou_to" "$ou_to"
 
 	echo "Move $accountid from $ou_from to $ou_to"
-  aws organizations move-account --account-id $accountid --source-parent-id $ou_from --destination-parent-id $ou_to --profile $profile
+  aws organizations move-account --account-id $accountid --source-parent-id $ou_from --destination-parent-id $ou_to --PROFILE $PROFILE
 }
 
 get_account_number_by_account_name_and_stack(){
@@ -66,7 +66,7 @@ get_id(){
 		accountid=$(aws organizations list-accounts \
 		--query 'Accounts[?(Name == `'$account_name'` && Status == `ACTIVE`)].Id' \
 		--output text \
-		--profile $profile)
+		--PROFILE $PROFILE)
   fi
 
 	echo $accountid
@@ -76,13 +76,13 @@ create_account_alias(){
 	alias="$1"
 	account_PROFILE="$2"
 
-	if [ "$account_profile" == "" ]; then account_PROFILE=$profile; fi
+	if [ "$account_PROFILE" == "" ]; then account_PROFILE=$PROFILE; fi
 
   function=${FUNCNAME[0]}
   validate_var $function "alias" "$alias"	
 
   aliascheck=$(aws iam list-account-aliases \
-    --profile $account_profile \
+    --PROFILE $account_PROFILE \
 		--query AccountAliases[0] \
 		--output text)
 
@@ -90,10 +90,10 @@ create_account_alias(){
 
 	aws iam create-account-alias \
     --account-alias $alias \
-		--profile $account_profile
+		--PROFILE $account_PROFILE
 
   aliascheck=$(aws iam list-account-aliases \
-    --profile $account_profile \
+    --PROFILE $account_PROFILE \
     --query AccountAliases[0] \
     --output text)
 
@@ -106,8 +106,8 @@ delete_account_alias(){
   alias="$1"
 	account_PROFILE="$2"
 
-  if [ "$account_profile" == "" ]; then
-    account_PROFILE=$profile
+  if [ "$account_PROFILE" == "" ]; then
+    account_PROFILE=$PROFILE
   fi
 
   function=${FUNCNAME[0]}
@@ -115,7 +115,7 @@ delete_account_alias(){
 
   aws iam delete-account-alias \
     --account-alias $alias \
-    --profile $account_profile
+    --PROFILE $account_PROFILE
 
 	echo "Account alias deleted."
  
@@ -125,23 +125,23 @@ assume_organizations_role(){
 	accountname="$1"
 
 	#the necessary role is already assumed, so exit.
-	if [ "$profile" == "$accountname" ]; then exit; fi
+	if [ "$PROFILE" == "$accountname" ]; then exit; fi
 
 	function=${FUNCNAME[0]}
 	validate_set $function "accountname" $accountname
 	validate_set $function "region" $region 
-  validate_set $function "profile" $profile
+  validate_set $function "PROFILE" $PROFILE
 
 	seconds=900
 	
 	env=$(echo $accountname | cut -d '-' -f1)
 	orgrolename=$env'-adminrole'
 
-	echo "Assume role: $orgrolename using profile: $profile"
+	echo "Assume role: $orgrolename using PROFILE: $PROFILE"
 	accountid=$(get_account_number_by_account_name $accountname)
 	validate_set $function "accountid" $accountid
 
-	session="$profile-$accountname-$orgrolename"
+	session="$PROFILE-$accountname-$orgrolename"
 
 	arn="arn:aws:iam::$accountid:role/$orgrolename"
 
@@ -158,7 +158,7 @@ assume_organizations_role(){
 	creds=$(aws sts assume-role \
 	--role-arn $arn \
 	--role-session-name $session \
-	--profile $profile \
+	--PROFILE $PROFILE \
  	--region $region \
   --duration-seconds $seconds)
 
@@ -169,12 +169,12 @@ assume_organizations_role(){
 	validate_var "accesskeyid" $accesskeyid $function
 	validate_var "secretaccesskey" $secretaccesskey $function
 	
-  echo "### Creating profile for $accountname ###"
-  aws configure set aws_access_key_id $accesskeyid --profile $accountname
-  aws configure set aws_secret_access_key $secretaccesskey --profile $accountname
-  aws configure set aws_session_token $sessiontoken --profile $accountname
-  aws configure set region $region --profile $accountname
-  aws configure set output "json" --profile $accountname
+  echo "### Creating PROFILE for $accountname ###"
+  aws configure set aws_access_key_id $accesskeyid --PROFILE $accountname
+  aws configure set aws_secret_access_key $secretaccesskey --PROFILE $accountname
+  aws configure set aws_session_token $sessiontoken --PROFILE $accountname
+  aws configure set region $region --PROFILE $accountname
+  aws configure set output "json" --PROFILE $accountname
 	
   #clear variables
   access_key=""
@@ -183,8 +183,8 @@ assume_organizations_role(){
 
 	PROFILE=$accountname
 
-  echo "### Created AWS CLI profile: $accountname ###"
-  aws sts get-caller-identity --profile $profile
+  echo "### Created AWS CLI PROFILE: $accountname ###"
+  aws sts get-caller-identity --PROFILE $PROFILE
 	
 }
 

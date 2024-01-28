@@ -64,7 +64,7 @@ deploy_github_prefix_list() {
 
 	p=""
 	resourcetype='PrefixList'
-  deploy_stack $profile $listname $resourcetype $template "$p"
+  deploy_stack $PROFILE $listname $resourcetype $template "$p"
 
 }
 
@@ -79,21 +79,21 @@ clean_up_default_sg(){
 
   sgid=$(aws ec2 describe-security-groups \
         --filter Name=group-name,Values=default Name=vpc-id,Values=$vpcid \
-        --query SecurityGroups[*].GroupId --output text --profile $profile)
+        --query SecurityGroups[*].GroupId --output text --PROFILE $PROFILE)
 
   sgname=$vpcname'Default'
 
   aws ec2 create-tags \
     --resources $sgid \
     --tags 'Key="Name",Value="'$sgname'"' \
-		--profile $profile
+		--PROFILE $PROFILE
 
   name=$sgname'SecurityGroupRules'
   template='cfn/SGRules/NoAccess.yaml'
 	exportparam=$vpcname'DefaultSecurityGroup'
   p=$(add_parameter "SGExportParam" $exportparam)
   resourcetype='SGRules'
-  deploy_stack $profile $name $resourcetype $template "$p"
+  deploy_stack $PROFILE $name $resourcetype $template "$p"
 
 }
 
@@ -107,7 +107,7 @@ deploy_remote_access_sgs_for_group() {
   validate_param "group" "$group" "$function"
   validate_param "vpc" "$vpc" "$function"
 
-	members=$(get_users_in_group $group $profile)
+	members=$(get_users_in_group $group $PROFILE)
 
 	echo 'Members: '$members
 	for user in ${members//,/ }
@@ -157,7 +157,7 @@ deploy_security_group() {
 	p=$(add_parameter "VPCExportParam" $vpc $p)
 	p=$(add_parameter "cfparamGroupDescription" "$desc" $p)
 	
-	deploy_stack $profile $sgname $resourcetype $template "$p"
+	deploy_stack $PROFILE $sgname $resourcetype $template "$p"
 
 	#pass in "none" for template if want to deploy template separately
 	if [ "$rulestemplate" != "none" ]; then
@@ -190,7 +190,7 @@ deploy_sg_rules() {
   resourcetype='SGRules'
   p=$(get_sgrules_parameters $sgname $cidr)
   rulesname=$sgname'Rules'
-  deploy_stack $profile $rulesname $resourcetype $template "$p"
+  deploy_stack $PROFILE $rulesname $resourcetype $template "$p"
 
 }
 
@@ -213,7 +213,7 @@ deploy_vpce_sg_rules() {
 
   resourcetype='SGRules'
   rulesname=$sgname'Rules'
-  deploy_stack $profile $rulesname $resourcetype $template "$p"
+  deploy_stack $PROFILE $rulesname $resourcetype $template "$p"
 
 }
 
@@ -227,20 +227,20 @@ deploy_nacl(){
   resourcetype='NACL'
   p=$(add_parameter "cfparamName" $naclname)
   p=$(add_parameter "VPCExportParam" $vpcexport $p)
-  deploy_stack $profile $naclname $resourcetype "$template" "$p"
+  deploy_stack $PROFILE $naclname $resourcetype "$template" "$p"
 
   #add nacl rules
   resourcetype="NetworkACLEntry"
   name=$naclname'Entries'
   p=$(add_parameter "NACLExportParam" $naclname)
-  deploy_stack $profile $name $resourcetype $naclrulestemplate "$p"
+  deploy_stack $PROFILE $name $resourcetype $naclrulestemplate "$p"
 
 }
 
 get_availability_zone () {
 	index="$1"
 
-	azid=$(aws ec2 describe-availability-zones --profile $profile \
+	azid=$(aws ec2 describe-availability-zones --PROFILE $PROFILE \
 			| grep "az$index" -B1 | grep -v "az$index" \
 			| cut -d ":" -f2 | sed 's/ //g' | sed 's/"//g' | sed 's/,//g')
 
@@ -286,7 +286,7 @@ deploy_subnet(){
   p=$(add_parameter "CidrBitsParam" $cidrbits $p)  
   p=$(add_parameter "SubnetCountParam" $subnetcount $p)
 
-	deploy_stack $profile $subnetname $resourcetype $template "$p"
+	deploy_stack $PROFILE $subnetname $resourcetype $template "$p"
 
 	template=cfn/SubnetNACLAssociation.yaml
 	resourcetype='SubnetNACLAssociation'
@@ -296,7 +296,7 @@ deploy_subnet(){
   p=$(add_parameter "cfparamSubnetIdExport" $subnetname)
   p=$(add_parameter "NACLIdExportParam" $naclname $p) 
 	p=$(add_parameter "cfparamTimestamp" $t $p)
-	deploy_stack $profile $subnetname$naclname $resourcetype $template "$p"
+	deploy_stack $PROFILE $subnetname$naclname $resourcetype $template "$p"
 
   template=cfn/SubnetRouteTableAssociation.yaml
   resourcetype='SubnetRouteTableAssociation'
@@ -305,7 +305,7 @@ deploy_subnet(){
   p=$(add_parameter "cfparamSubnetIdExport" $subnetname)
   p=$(add_parameter "cfparamRouteTableIdExport" $routetablename $p)
   p=$(add_parameter "cfparamTimestamp" $t $p)
-  deploy_stack $profile $subnetname$routetablename $resourcetype $template "$p"
+  deploy_stack $PROFILE $subnetname$routetablename $resourcetype $template "$p"
 
 }
 
@@ -337,7 +337,7 @@ deploy_subnets(){
 
 #get the s3 prefix list for the current region
 get_s3_prefix_list(){
-	echo $(aws ec2 describe-managed-prefix-lists --filters Name=owner-id,Values=AWS --output text --profile $profile | grep s3 | cut -f5)
+	echo $(aws ec2 describe-managed-prefix-lists --filters Name=owner-id,Values=AWS --output text --PROFILE $PROFILE | grep s3 | cut -f5)
 }
 
 deploy_s3_security_group() {
@@ -355,7 +355,7 @@ deploy_s3_security_group() {
   p=$(add_parameter "VPCExportParam" $vpc $p)
   p=$(add_parameter "cfparamGroupDescription" "$desc" $p)
   
-  deploy_stack $profile $sgname $resourcetype $template "$p"
+  deploy_stack $PROFILE $sgname $resourcetype $template "$p"
 
   name=$prefix'Rules'
   template='cfn/SGRules/S3.yaml'
@@ -363,7 +363,7 @@ deploy_s3_security_group() {
   p=$(add_parameter "SGExportParam" $sgname $p)
   p=$(add_parameter "cfparamS3PrefixIdParam" "$prefixlistid" $p)
   resourcetype='SGRules'
-  deploy_stack $profile $name $resourcetype $template "$p"
+  deploy_stack $PROFILE $name $resourcetype $template "$p"
 
 }
 

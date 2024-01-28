@@ -13,7 +13,7 @@ get_ns_records(){
   hostedzoneid=$(get_hostedzone $domain)
 
 	ns=$(aws route53  list-resource-record-sets --hosted-zone-id $hostedzoneid \
-  --profile $profile --region $region \
+  --PROFILE $PROFILE --region $region \
    | grep "ns-" | grep -v "hostmaster" | cut -d ":" -f2 | \
    sed 's/ //g' | sed 's/"//g' | sed 's/^/Name=/g' | paste -d " "  -s)
 
@@ -26,7 +26,7 @@ get_id(){
   function=${FUNCNAME[0]}
   validate_set $function "domain" $domain
 
-	hostedzoneid=$(aws route53 list-hosted-zones-by-name --dns-name $domain --region $region --output text --profile $profile --query 'HostedZones[0].Id' | cut -d "/" -f3)
+	hostedzoneid=$(aws route53 list-hosted-zones-by-name --dns-name $domain --region $region --output text --PROFILE $PROFILE --query 'HostedZones[0].Id' | cut -d "/" -f3)
 	
 	echo "$hostedzoneid"
 }
@@ -43,7 +43,7 @@ get_name_servers(){
   validate_set $function "hostedzoneid" "$hostedzoneid"
  
 	ns=$(aws route53  list-resource-record-sets --hosted-zone-id $hostedzoneid \
-   --profile $profile --region $region | grep "ns-" | grep -v "hostmaster" | \
+   --PROFILE $PROFILE --region $region | grep "ns-" | grep -v "hostmaster" | \
 		cut -d ":" -f2 | sed 's/ //g' | sed 's/"//g' | paste -d " "  -s | sed 's/ /,/g')
 
 	echo $ns
@@ -61,7 +61,7 @@ get_name_servers_for_cli_command(){
   validate_set $function "hostedzoneid" $hostedzoneid
 
   ns=$(aws route53  list-resource-record-sets --hosted-zone-id $hostedzoneid \
-	--profile $profile --region $region | grep "ns-" | grep -v "hostmaster" | cut -d ":" -f2 | sed 's/ //g' \
+	--PROFILE $PROFILE --region $region | grep "ns-" | grep -v "hostmaster" | cut -d ":" -f2 | sed 's/ //g' \
 	 | sed 's/"//g' | sed 's/^/{\"Value\":\"/g' | paste -d " "  -s | sed 's/ /\"},/g' | sed 's/$/\"}/g')
 	
   echo $ns
@@ -86,10 +86,10 @@ update_name_servers(){
   validate_set $function "nameservers" $nameservers
 	
 	aws route53domains update-domain-nameservers --domain-name $primaydomain \
-		 --nameservers $nameservers --profile $profile --region $region
+		 --nameservers $nameservers --PROFILE $PROFILE --region $region
 }
 
-#call the following using the appropriate profile with 
+#call the following using the appropriate PROFILE with 
 #access to the correct account where the subdomain exists
 #ns=$(get_name_servers_for_cli_command $subdomain)
 update_subdomain_name_servers(){
@@ -117,7 +117,7 @@ export_zone(){
   hostedzoneid=$(get_hostedzone_id $domain)
 
 	aws route53 list-resource-record-sets --hosted-zone-id $hostedzoneid \
-	--profile $profile --output json --region $region | jq -jr '.ResourceRecordSets[] \
+	--PROFILE $PROFILE --output json --region $region | jq -jr '.ResourceRecordSets[] \
 	| "\(.Name) \t\(.TTL) \t\(.Type) \t\(.ResourceRecords[]?.Value)\n"'
 
 }
@@ -134,10 +134,10 @@ delete_dns_record(){
 
 	#try to delete AWS CloudFormation stack if it exists
 	appname=$(dots_to_dashes $domain)
-	stackname="$profile-$type-$appname"
+	stackname="$PROFILE-$type-$appname"
 
 	echo "Deleting stack: $stackname"
-	aws cloudformation delete-stack --stack-name $stackname --profile $profile --region $region
+	aws cloudformation delete-stack --stack-name $stackname --PROFILE $PROFILE --region $region
 
 	action="DELETE"
 
@@ -165,11 +165,11 @@ delete_dns_record(){
 
 	#dangerously ignoring error - should instead check if exists, then delete, but this is too painful
   aws route53 change-resource-record-sets --hosted-zone-id $hostedzoneid \
-		--change-batch "file://$f" --profile $profile --region $region
+		--change-batch "file://$f" --PROFILE $PROFILE --region $region
 
 }
 
-#get the ns records for subdomain first - may require a separate profile
+#get the ns records for subdomain first - may require a separate PROFILE
 add_ns_record_for_subdomain_via_cli(){
 	env="$1"
 	parentdomain="$2"
@@ -220,7 +220,7 @@ add_ns_record_for_subdomain_via_cli(){
 	cat $f
 
 	aws route53 change-resource-record-sets --hosted-zone-id $hostedzoneid \
-		--change-batch "file://$f" --profile $profile --region $region
+		--change-batch "file://$f" --PROFILE $PROFILE --region $region
 
 }
 

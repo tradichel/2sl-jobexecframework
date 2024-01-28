@@ -1,7 +1,7 @@
 # https://github.com/tradichel/2sl-jobexecframework/blob/main/iam/batch_job_role/cfn/role_batch_job.yaml
 # IAM/stacks/Role/cfn/EC2InstanceProfile.yaml
 # author: @teriradichel @2ndsightlab
-# description: Generic template to deploy an EC2 instance profile
+# description: Generic template to deploy an EC2 instance PROFILE
 ##############################################################
 Parameters:
   cfparamName:

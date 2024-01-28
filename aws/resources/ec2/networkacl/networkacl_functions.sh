@@ -15,7 +15,7 @@ get_id(){
   validate_var $f "naclname" $naclname
 
 	naclid=$(aws ec2 describe-network-acls --query NetworkAcls[].NetworkAclId \
-	--profile $profile \
+	--PROFILE $PROFILE \
 	--filters 'Name=tag:Name,Values='$naclname \
 	--output text)
 	

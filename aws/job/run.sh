@@ -8,7 +8,7 @@
 #include files
 source shared/validate.sh
 
-#global profile value used by aws jobs
+#global PROFILE value used by aws jobs
 PROFILE=""
 
 get_container_parameter_value(){
@@ -39,10 +39,10 @@ get_container_parameter_value(){
 }
 
 main(){
-  #configure job role CLI profile
+  #configure job role CLI PROFILE
 	parameters="$1"
 
-	PROFILE=$(get_container_parameter_value $parameters "profile")
+	PROFILE=$(get_container_parameter_value $parameters "PROFILE")
 	local access_key=$(get_container_parameter_value $parameters "accesskey")
 	local secret_key=$(get_container_parameter_value $parameters "secretaccesskey")
 	local session_token=$(get_container_parameter_value $parameters "sessiontoken")
@@ -60,24 +60,24 @@ main(){
 		validate_job_param_name $job_config_ssm_parameter
 	fi
   
-  echo "### Creating profile for $profile ###"
-  aws configure set aws_access_key_id $access_key --profile $profile
-  aws configure set aws_secret_access_key $secret_key --profile $profile
-  aws configure set aws_session_token $session_token --profile $profile
-  aws configure set region $region --profile $profile
-  aws configure set output "json" --profile $profile
+  echo "### Creating PROFILE for $PROFILE ###"
+  aws configure set aws_access_key_id $access_key --PROFILE $PROFILE
+  aws configure set aws_secret_access_key $secret_key --PROFILE $PROFILE
+  aws configure set aws_session_token $session_token --PROFILE $PROFILE
+  aws configure set region $region --PROFILE $PROFILE
+  aws configure set output "json" --PROFILE $PROFILE
 
   #clear variables
   access_key=""
   secret_key=""
   session_token=""
 
-  echo "### Created AWS CLI profile in container for: $profile ###"
-	aws sts get-caller-identity --profile $profile
+  echo "### Created AWS CLI PROFILE in container for: $PROFILE ###"
+	aws sts get-caller-identity --PROFILE $PROFILE
 
   #execute the job
 	echo "### execute the job - the execution script has container specific execution code ###"
-	./execute.sh $profile $job_config_ssm_parameter
+	./execute.sh $PROFILE $job_config_ssm_parameter
 	
 }
 
