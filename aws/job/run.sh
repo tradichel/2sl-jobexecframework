@@ -42,7 +42,7 @@ main(){
   #configure job role CLI PROFILE
 	parameters="$1"
 
-	PROFILE=$(get_container_parameter_value $parameters "PROFILE")
+	PROFILE=$(get_container_parameter_value $parameters "profile")
 	local access_key=$(get_container_parameter_value $parameters "accesskey")
 	local secret_key=$(get_container_parameter_value $parameters "secretaccesskey")
 	local session_token=$(get_container_parameter_value $parameters "sessiontoken")
