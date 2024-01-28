@@ -10,6 +10,7 @@ source shared/validate.sh
 
 #global PROFILE value used by aws jobs
 PROFILE=""
+JOB_CONFIG_SSM_PARAMETER=""
 
 get_container_parameter_value(){
   local params="$1"
@@ -35,18 +36,16 @@ get_container_parameter_value(){
 }
 
 main(){
-  #configure job role CLI PROFILE
 	parameters="$1"
 
 	PROFILE=$(get_container_parameter_value $parameters "profile")
-  echo "### Profile passed to job: $PROFILE ###"
+  JOB_CONFIG_SSM_PARAMETER=$(get_container_parameter_value $parameters "jobconfig")
 
 	local access_key=$(get_container_parameter_value $parameters "accesskey")
 	local secret_key=$(get_container_parameter_value $parameters "secretaccesskey")
 	local session_token=$(get_container_parameter_value $parameters "sessiontoken")
   local region=$(get_container_parameter_value $parameters "region")
-	local job_config_ssm_parameter=$(get_container_parameter_value $parameters "jobconfig")
-  	
+	  	
 	echo "### Validate parameters passed to job ###"
 	s="job/run.sh"
 	validate_set $s "PROFILE" $PROFILE
@@ -56,7 +55,7 @@ main(){
   validate_set $s "region" $region
 	
 	if [ "$job_config_ssm_paramter" != "" ]; then
-		validate_job_param_name $job_config_ssm_parameter
+		validate_job_param_name $JOB_CONFIG_SSM_PARAMETER
 	fi
   
   echo "### Creating PROFILE for $PROFILE ###"
@@ -74,12 +73,11 @@ main(){
   echo "### Created AWS CLI PROFILE in container for: $PROFILE ###"
 	aws sts get-caller-identity --profile $PROFILE
 
-  #execute the job
+  #execute the job - using source to use global parameters in execute.sh
 	echo "### Call execute.sh for $job_config_ssm_parameter  ###"
-	./execute.sh $PROFILE $job_config_ssm_parameter
+	source execute.sh
 	
 }
 
 echo "Executing job/aws/run.sh"
-
 main $1
