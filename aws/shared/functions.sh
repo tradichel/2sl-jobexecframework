@@ -53,22 +53,14 @@ configure_cli_profile(){
 	aws sts get-caller-identity --profile $role
 }
 
+#PROFILE is a global variable
 get_region_for_PROFILE(){
-	PROFILE="$1"
-
-  local func=${FUNCNAME[0]}
-  validate_set $func 'PROFILE' $PROFILE
-
 	local region=$(aws configure list --profile $PROFILE | grep region | awk '{print $2}')
 	echo $region
 }
 
+#PROFILE is a global variable
 get_account_for_PROFILE(){
-	PROFILE="$1"
-
-  local func=${FUNCNAME[0]}
-  validate_set $func 'PROFILE' $PROFILE
-
 	local account=$(aws sts get-caller-identity --query Account --output text --profile $PROFILE)
 	echo $account
 }
@@ -145,8 +137,7 @@ get_stack_status() {
 
 display_stack_errors(){
 	local stackname="$1"
-	PROFILE="$2"
-
+	
 	aws cloudformation describe-stack-events --stack-name $stackname --max-items 5 \
 		--region $region --profile $PROFILE | grep -i "status"
 }
