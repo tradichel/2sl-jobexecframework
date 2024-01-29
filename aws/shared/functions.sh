@@ -270,8 +270,6 @@ deploy_stack () {
 		
 	local e="display_stack_errors $stackname $PROFILE"
 
-	cd /job
-
   {	($c) } || { ($e) }	
 }
 
