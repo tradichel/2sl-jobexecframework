@@ -107,8 +107,7 @@ deploy() {
    local config=$(get_ssm_parameter_job_config $job_parameter)
 
    readarray -t -d ' ' a <<<$config
-   #declare -p a 
-
+   
    if [ "$rcat" == "stack" ]; then
       echo "deploy stack"
       deploy_stack_config "${a[@]}"
@@ -135,17 +134,18 @@ deploy_stack_config(){
      if [ "$pname" == "Parallel:" ]; then parallel="&"; wait; continue; fi
 			
      if [[ $pname == /job/* ]]; then
-        if [ "$job_parameter" != "" ]; then
+        if [ "$job_parameter" != "" ] && [ "$pname" != "$job_parameter" ]; then
              echo "~~~~"
-             echo "Deploy job $job_parameter"
-             #declare -p job_config
+             echo "Deploy job $job_parameter $parallel"
 						 if [ "$parallel" == "&" ]; then
-							deploy_resource_config $job_parameter "${config[@]}" &
+							deploy_resource_config $job_parameter "${job_config[@]}" &
 						 else
-							deploy_resource_config $job_parameter "${config[@]}"
+							deploy_resource_config $job_parameter "${job_config[@]}"
 						 fi
              echo "~~~"
         fi
+
+				echo "Set job_parameter = $pname"
         job_parameter=$pname
         declare -a job_config
         continue
