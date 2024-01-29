@@ -42,6 +42,7 @@ deploy_resource_config(){
   local rtype=$(echo $resource | cut -d "-" -f2)
   local rname=$(echo $resource | cut -d "-" -f3)
 
+  f=${FUNCNAME[0]}
   validate_set $f "rname" $rname
   validate_set $f "rcat" $rcat
   validate_set $f "rtype" $rtype
