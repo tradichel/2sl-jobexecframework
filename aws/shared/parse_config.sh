@@ -37,7 +37,10 @@ deploy_resource_config(){
 
 	echo "job parameter in deploy_resource_config: $job_parameter"
 	validate_job_param_name	$job_parameter
-	
+
+	echo "Resourc config:"	
+	declare -p $config
+
 	local resource=$(echo $job_parameter | cut -d "/" -f5)
   local rcat=$(echo $resource | cut -d "-" -f1)
   local rtype=$(echo $resource | cut -d "-" -f2)
