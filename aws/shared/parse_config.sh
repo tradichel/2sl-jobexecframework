@@ -19,12 +19,12 @@ get_config_resource_id(){
 
   local file='resources/'$category'/'$resource_type'/'$resource_type'_functions.sh'
   
-	#source $file
-  #id=$(get_id $name)
+	source $file
+  id=$(get_id $name)
   
   #trying the following when multiple files have get_id
- 	c="PROFILE=$PROFILE; source $file; get_id $name"
-  id=$(sh -c $c)
+ 	#c="PROFILE=$PROFILE; source $file; get_id $name"
+  #id=$(sh -c $c)
 	if [ "$id" == "" ]; then echo "Error getting ID for $value using command: $c"; exit 1; fi
   echo $id
 }
@@ -69,14 +69,16 @@ deploy_resource_config(){
      if [[ $pname == cfparam* ]]; then
          if [[ $pvalue == :get_id:* ]]; then
             pvalue=$(get_config_resource_id $pvalue)
+						if [ "$?" == "1" ]; then echo $pvalue; exit 1; fi
          fi
          if [[ $pvalue == :ssm:* ]]; then
 						parm=$(echo $pvalue | cut -d ":" -f3)
             pvalue=$(get_ssm_parameter_value $parm)
-						if [ "$pvalue" == "" ]; then "Error getting ssm paramter value for $parm"; exit 1; fi
+						if [ "$?" == "1" ] || [ "$pvalue" == "" ]; then "Error getting ssm paramter value for $parm"; exit 1; fi
          fi
-         echo "add_parameter $pname $pvalue"				
+       
          p=$(add_parameter $pname $pvalue $p)
+				 if [ "$?" == "1" ]; then echo "Error addming parameter $pname $pvalue"; exit 1; fi
 		 fi
      
 	 done
@@ -86,7 +88,8 @@ deploy_resource_config(){
 	 
 	 if [ "$rname" != "$env" ]; then rname=$env'-'$rname; fi
    p=$(add_parameter "cfparamName" $rname $p)
-	 
+	 if [ "$?" == "1" ]; then echo "Error addming parameter $pname $pvalue"; exit 1; fi
+
 	 echo "deploy_stack $rname $rcat $rtype $env $region $p"
    deploy_stack $rname $rcat $rtype $env $region $p
 
