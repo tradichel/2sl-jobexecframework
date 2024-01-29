@@ -23,7 +23,8 @@ get_config_resource_id(){
   #id=$(get_id $name)
   
   #trying the following when multiple files have get_id
-  id=$(sh -c "source $file; get_id $name")
+ 	c="PROFILE=$PROFILE; source $file; get_id $name"
+  id=$(sh -c $c)
   echo $id
 }
 
@@ -54,11 +55,9 @@ deploy_resource_config(){
 	local p=""
 	local parm=""
 
-	echo " ~~~ Loop through config ~~~"
-
-  for i in "${config[@]}"
+  for local i in "${config[@]}"
   do
-		 echo "~~~ Line: $i ~~~"
+		
      local pname=$(echo $i | cut -d "=" -f1 | tr -d ' ')
      local pvalue=$(echo $i | cut -d "=" -f2 | tr -d ' ')
 
@@ -73,11 +72,10 @@ deploy_resource_config(){
             pvalue=$(get_config_resource_id $pvalue)
          fi
          if [[ $pvalue == :ssm:* ]]; then
-						echo "Get ssm parameter value from $pvalue"
 						parm=$(echo $pvalue | cut -d ":" -f3)
             pvalue=$(get_ssm_parameter_value $parm)
          fi
-				 echo "add_parameter $pname $pvalue $p"
+				
          p=$(add_parameter $pname $pvalue $p)
 		 fi
      
@@ -86,14 +84,12 @@ deploy_resource_config(){
    validate_set $f "env" $env
    validate_set $f "region" $region
 	 
-	 echo "~~~"
 	 if [ "$rname" != "$env" ]; then rname=$env'-'$rname; fi
-	 echo "add_parameter "cfparamName" $rname $p"
    p=$(add_parameter "cfparamName" $rname $p)
-	 echo "~~~"
-
+	 
 	 echo "deploy_stack $rname $rcat $rtype $env $region $p"
    deploy_stack $rname $rcat $rtype $env $region $p
+
 }
 
 deploy() {
@@ -136,16 +132,13 @@ deploy_stack_config(){
 			
      if [[ $pname == /job/* ]]; then
         if [ "$job_parameter" != "" ] && [ "$pname" != "$job_parameter" ]; then
-             echo "~~~~"
-             echo "Deploy job $job_parameter $parallel"
 						 if [ "$parallel" == "P" ]; then
-							echo "Deploy parallel"
+  						echo "Deploy job $job_parameter $parallel"
 							deploy_resource_config $job_parameter "${job_config[@]}"
 						 else
-							echo "Deploy sequential"
+							echo "Deploy job $job_parameter sequential"
 							deploy_resource_config $job_parameter "${job_config[@]}"
 						 fi
-             echo "~~~"
         fi
 
 				echo "Set job_parameter = $pname"
