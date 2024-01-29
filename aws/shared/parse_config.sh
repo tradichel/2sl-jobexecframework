@@ -130,16 +130,19 @@ deploy_stack_config(){
      local pname=$(echo $i | cut -d "=" -f1 | tr -d ' ') 
      local pvalue=$(echo $i | cut -d "=" -f2 | tr -d ' ')
 
-     if [ "$pname" == "Sequential:" ]; then parallel=""; wait; continue; fi
-     if [ "$pname" == "Parallel:" ]; then parallel="&"; wait; continue; fi
+     if [ "$pname" == "Sequential:" ]; then echo "S"; wait; continue; fi
+
+     if [ "$pname" == "Parallel:" ]; then echo "P"; wait; continue; fi
 			
      if [[ $pname == /job/* ]]; then
         if [ "$job_parameter" != "" ] && [ "$pname" != "$job_parameter" ]; then
              echo "~~~~"
              echo "Deploy job $job_parameter $parallel"
-						 if [ "$parallel" == "&" ]; then
-							deploy_resource_config $job_parameter "${job_config[@]}" &
+						 if [ "$parallel" == "P" ]; then
+							echo "Deploy parallel"
+							deploy_resource_config $job_parameter "${job_config[@]}"
 						 else
+							echo "Deploy sequential"
 							deploy_resource_config $job_parameter "${job_config[@]}"
 						 fi
              echo "~~~"
