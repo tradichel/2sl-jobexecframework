@@ -126,14 +126,17 @@ deploy_stack_config(){
    for i in "${stack_config[@]}"
    do
 
+		 echo "Stack Config Line: $i"
+
      local pname=$(echo $i | cut -d "=" -f1 | tr -d ' ') 
      local pvalue=$(echo $i | cut -d "=" -f2 | tr -d ' ')
 
      if [ "$pname" == "Sequential:" ]; then echo "S"; wait; continue; fi
-
      if [ "$pname" == "Parallel:" ]; then echo "P"; wait; continue; fi
 			
      if [[ $pname == /job/* ]]; then
+
+				#deploy the job
         if [ "$job_parameter" != "" ] && [ "$pname" != "$job_parameter" ]; then
 						 if [ "$parallel" == "P" ]; then
   						echo "Deploy job $job_parameter $parallel"
@@ -141,6 +144,7 @@ deploy_stack_config(){
 						 else
 							echo "Deploy job $job_parameter sequential"
 							deploy_resource_config $job_parameter "${job_config[@]}"
+							wait
 						 fi
         fi
 
@@ -148,6 +152,7 @@ deploy_stack_config(){
         job_parameter=$pname
         declare -a job_config
         continue
+
      fi
 
      if [[ $pname ==  cfparam* ]]; then job_config+=($i); fi
