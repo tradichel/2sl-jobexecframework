@@ -32,12 +32,9 @@ deploy_resource_config(){
 	local job_parameter="$1"	
   local config=("$@")
 
-	echo "~~~"
 	echo "job parameter in deploy_resource_config: $job_parameter"
 	validate_job_param_name	$job_parameter
-	echo "~~~"
-
-	echo "Get values from job parmeter name"
+	
 	local resource=$(echo $job_parameter | cut -d "/" -f5)
   local rcat=$(echo $resource | cut -d "-" -f1)
   local rtype=$(echo $resource | cut -d "-" -f2)
@@ -54,8 +51,9 @@ deploy_resource_config(){
 	local region=""
 	local p=""
 	local parm=""
+	local i=""
 
-  for local i in "${config[@]}"
+  for i in "${config[@]}"
   do
 		
      local pname=$(echo $i | cut -d "=" -f1 | tr -d ' ')
