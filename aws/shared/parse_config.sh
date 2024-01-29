@@ -35,9 +35,6 @@ deploy_resource_config(){
 	echo "job parameter in deploy_resource_config: $job_parameter"
 	validate_job_param_name	$job_parameter
 	echo "~~~"
-	echo "Config in deploy_resource_config:"
-	declare -p $config
-	echo "~~~"
 
 	echo "Get values from job parmeter name"
 	local resource=$(echo $job_parameter | cut -d "/" -f5)
