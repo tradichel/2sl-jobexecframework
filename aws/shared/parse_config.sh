@@ -25,9 +25,7 @@ get_config_resource_id(){
   #trying the following when multiple files have get_id
  	c="PROFILE=$PROFILE; source $file; get_id $name"
   id=$(sh -c $c)
-
 	if [ "$id" == "" ]; then echo "Error getting ID for $value using command: $c"; exit 1; fi
-
   echo $id
 }
 
@@ -37,9 +35,6 @@ deploy_resource_config(){
 
 	echo "job parameter in deploy_resource_config: $job_parameter"
 	validate_job_param_name	$job_parameter
-
-	echo "Resourc config:"	
-	declare -p $config
 
 	local resource=$(echo $job_parameter | cut -d "/" -f5)
   local rcat=$(echo $resource | cut -d "-" -f1)
