@@ -33,10 +33,6 @@ deploy_resource_config(){
 	local job_parameter="$1"	
   local config=("$@")
 
-  echo "~~~~~ Resource Config ~~~~~"
-  declare -p config
-  echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-
 	echo "job parameter in deploy_resource_config: $job_parameter"
 	validate_job_param_name	$job_parameter
 
@@ -158,10 +154,8 @@ deploy_stack_config(){
         continue
 
      fi
-		
-		 job_config+=($i)
 
-     #if [[ $pname ==  cfparam* ]]; then job_config+=($i); fi
+     if [[ $pname ==  cfparam* ]]; then job_config+=($i); fi
 
    done
 
