@@ -145,7 +145,7 @@ deploy_stack_config(){
         if [ "$job_parameter" != "" ] && [ "$pname" != "$job_parameter" ]; then
 						 if [ "$parallel" == "P" ]; then
   						echo "Deploy job $job_parameter $parallel"
-							deploy_resource_config $job_parameter "${job_config[@]}"
+							deploy_resource_config $job_parameter "${job_config[@]}" &
 						 else
 							echo "Deploy job $job_parameter sequential"
 							deploy_resource_config $job_parameter "${job_config[@]}"
