@@ -20,12 +20,12 @@ get_config_resource_id(){
   local file='resources/'$category'/'$resource_type'/'$resource_type'_functions.sh'
   
 	#may have problems if multiple files have get_id
-	source $file
-  id=$(get_id $name)
- 
-	#not working:
-	#id=$(sh -c 'PROFILE=PROFILE;source $file; get_id $name')
-	 
+	#source $file
+  #id=$(get_id $name)
+ 	 
+  c="PROFILE=$PROFILE;source $file;get_id $name"
+  id=$(sh -c "$c")
+
 	if [ "$id" == "" ]; then echo "Error getting ID for $value using command: $c"; exit 1; fi
   echo $id
 }
